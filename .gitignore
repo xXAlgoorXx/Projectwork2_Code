@@ -1,0 +1,35 @@
+# STM32CubeIDE specific
+*.launch
+*.log
+*.bin
+*.elf
+*.hex
+*.map
+
+# Build artifacts
+/Debug/
+/Release/
+/build/
+/out/
+
+# Generated files
+*.o
+*.d
+*.lst
+*.dep
+
+# IDE files (Eclipse, STM32CubeIDE, VSCode, etc.)
+*.swp
+*.swo
+*.swn
+*.bak
+*.tmp
+*.user
+*.workspace
+.vscode/
+
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
