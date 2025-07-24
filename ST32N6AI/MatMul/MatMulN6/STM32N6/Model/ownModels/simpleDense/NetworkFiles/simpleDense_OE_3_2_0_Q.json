@@ -1,0 +1,132 @@
+{
+    "version": "4.0",
+    "environment": {
+        "generated_model": {
+            "model_files": [
+                {
+                    "name": "simpleDense_OE_3_2_0.onnx",
+                    "signature": "0x62692c670786583762dd091a9569379b"
+                }
+            ],
+            "name": "network",
+            "generated_time": "2025-06-12T08:53:22+0200"
+        },
+        "tools": [
+            {
+                "name": "ST.EdgeAI.Core",
+                "version": "2.1.0-20194 329b0e98d",
+                "arguments": "analyze --model ownModels/simpleDense/simpleDense.tflite --target stm32n6 --st-neural-art default@user_neuralart_NUCLEO-N657X0-Q.json --input-data-type float32 -w ownModels/simpleDense/NetworkFiles/",
+                "environment": [],
+                "input_model": {
+                    "model_files": [
+                        {
+                            "name": "simpleDense.tflite",
+                            "signature": "0x2edd2fb48aec9991e25932bb13e9b20a"
+                        }
+                    ],
+                    "name": "simpleDense",
+                    "type": "tflite",
+                    "size": 400,
+                    "n_params": 100
+                }
+            }
+        ],
+        "test_name": "",
+        "network_signature": "0xa6915e68fea25b3e"
+    },
+    "model_info": {
+        "original_inputs": [
+            {
+                "name": "serving_default_args_00",
+                "data_format": {
+                    "type": "FLOAT",
+                    "size": 32,
+                    "scale": [],
+                    "zero": [],
+                    "quantizer": "NONE"
+                },
+                "shape": [
+                    1,
+                    10
+                ],
+                "shape_map": [
+                    "BATCH",
+                    "CH"
+                ],
+                "c_shape_map": [
+                    "BATCH",
+                    "CH"
+                ]
+            }
+        ],
+        "original_outputs": [
+            {
+                "name": "gemm_0",
+                "data_format": {
+                    "type": "FLOAT",
+                    "size": 32,
+                    "scale": [],
+                    "zero": [],
+                    "quantizer": "NONE"
+                },
+                "shape": [
+                    1,
+                    10
+                ],
+                "shape_map": [
+                    "BATCH",
+                    "CH"
+                ],
+                "c_shape_map": [
+                    "BATCH",
+                    "CH"
+                ]
+            }
+        ]
+    },
+    "tensors": {
+        "Input_0_out_0": {
+            "format": {
+                "params": [
+                    null,
+                    null
+                ],
+                "class": "float32",
+                "type": "FLOAT32"
+            },
+            "data_channel_position": "CHFIRST",
+            "data_channel_batch": 1,
+            "user_allocated": false
+        },
+        "Gemm_1_out_0": {
+            "format": {
+                "params": [
+                    null,
+                    null
+                ],
+                "class": "float32",
+                "type": "FLOAT32"
+            },
+            "data_channel_position": "CHFIRST",
+            "data_channel_batch": 1,
+            "user_allocated": false
+        },
+        "Gemm_1_weights": {
+            "format": {
+                "params": [
+                    null,
+                    null
+                ],
+                "class": "float32",
+                "type": "FLOAT32"
+            }
+        }
+    },
+    "nodes": {
+        "Gemm_1": {
+            "names": [
+                "FULLY_CONNECTED_0"
+            ]
+        }
+    }
+}

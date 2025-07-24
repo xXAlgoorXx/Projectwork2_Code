@@ -1,0 +1,208 @@
+{
+    "version": "4.0",
+    "environment": {
+        "generated_model": {
+            "model_files": [
+                {
+                    "name": "matmulModel_17_10_int8_OE_3_2_0.onnx",
+                    "signature": "0x24eccf04dfdb05d806f59c8b52cbd514"
+                }
+            ],
+            "name": "network",
+            "generated_time": "2025-07-22T10:38:54+0200"
+        },
+        "tools": [
+            {
+                "name": "ST.EdgeAI.Core",
+                "version": "2.1.0-20194 329b0e98d",
+                "arguments": "generate --model ownModels/matmulModel_17_10_int8/matmulModel_17_10_int8.tflite --target stm32n6 --st-neural-art default@user_neuralart_RamOnlyNUCLEO_N6.json --input-data-type int8 -w ownModels/matmulModel_17_10_int8/NetworkFiles/ -o ownModels/matmulModel_17_10_int8/NetworkFiles/output/",
+                "environment": [],
+                "input_model": {
+                    "model_files": [
+                        {
+                            "name": "matmulModel_17_10_int8.tflite",
+                            "signature": "0x3dfa0e6522494842ef5fadf1041f8232"
+                        }
+                    ],
+                    "name": "matmulModel_17_10_int8",
+                    "type": "tflite",
+                    "size": 170,
+                    "n_params": 170
+                }
+            }
+        ],
+        "test_name": "",
+        "network_signature": "0x0237b88209d3642d"
+    },
+    "model_info": {
+        "original_inputs": [
+            {
+                "name": "serving_default_args_00",
+                "data_format": {
+                    "type": "SIGNED",
+                    "size": 8,
+                    "scale": [
+                        0.0078004938550293446
+                    ],
+                    "zero": [
+                        0
+                    ],
+                    "quantizer": "UNIFORM"
+                },
+                "shape": [
+                    1,
+                    17
+                ],
+                "shape_map": [
+                    "BATCH",
+                    "CH"
+                ],
+                "c_shape_map": [
+                    "BATCH",
+                    "CH"
+                ]
+            }
+        ],
+        "original_outputs": [
+            {
+                "name": "gemm_0",
+                "data_format": {
+                    "type": "SIGNED",
+                    "size": 8,
+                    "scale": [
+                        0.019428880885243416
+                    ],
+                    "zero": [
+                        13
+                    ],
+                    "quantizer": "UNIFORM"
+                },
+                "shape": [
+                    1,
+                    10
+                ],
+                "shape_map": [
+                    "BATCH",
+                    "CH"
+                ],
+                "c_shape_map": [
+                    "BATCH",
+                    "CH"
+                ]
+            }
+        ]
+    },
+    "tensors": {
+        "Input_0_out_0": {
+            "format": {
+                "params": [
+                    [
+                        0.0078004938550293446
+                    ],
+                    [
+                        0
+                    ]
+                ],
+                "class": "integer",
+                "type": "S8"
+            },
+            "data_channel_position": "CHFIRST",
+            "data_channel_batch": 1,
+            "user_allocated": false
+        },
+        "Dequantize_1_out_0": {
+            "format": {
+                "params": [
+                    [
+                        0.0078004938550293446
+                    ],
+                    [
+                        0
+                    ]
+                ],
+                "class": "integer",
+                "type": "S8"
+            }
+        },
+        "Gemm_2_out_0": {
+            "format": {
+                "params": [
+                    [
+                        0.019428880885243416
+                    ],
+                    [
+                        13
+                    ]
+                ],
+                "class": "integer",
+                "type": "S8"
+            }
+        },
+        "Gemm_2_weights": {
+            "format": {
+                "params": [
+                    [
+                        0.007119475398212671,
+                        0.007713243830949068,
+                        0.007562378421425819,
+                        0.007791588548570871,
+                        0.007443401031196117,
+                        0.007392042316496372,
+                        0.006108500063419342,
+                        0.007679636124521494,
+                        0.007144622970372438,
+                        0.007803500164300203
+                    ],
+                    [
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0
+                    ]
+                ],
+                "class": "integer",
+                "type": "S8"
+            }
+        },
+        "Quantize_3_out_0": {
+            "format": {
+                "params": [
+                    [
+                        0.019428880885243416
+                    ],
+                    [
+                        13
+                    ]
+                ],
+                "class": "integer",
+                "type": "S8"
+            },
+            "data_channel_position": "CHFIRST",
+            "data_channel_batch": 1,
+            "user_allocated": false
+        }
+    },
+    "nodes": {
+        "Dequantize_1": {
+            "names": [
+                "__FE_GENERATED__"
+            ]
+        },
+        "Gemm_2": {
+            "names": [
+                "FULLY_CONNECTED_0"
+            ]
+        },
+        "Quantize_3": {
+            "names": [
+                "__FE_GENERATED__"
+            ]
+        }
+    }
+}

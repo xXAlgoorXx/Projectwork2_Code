@@ -1,0 +1,417 @@
+;; Start Blob '_ec_blob_1'
+;; Start Epoch 1
+label 0x1
+;; End Epoch 1
+;; Start Epoch 2
+label 0x2
+writefield 0 4 [18] 0x1
+write 23 0 0x8000000
+write 23 0 0x15000000
+write 23 13 0x10411041
+write 23 2 0x70000
+write 23 7 0x4000
+write 23 8 0x20
+write 23 12 0x0
+writefield 0 4 [3] 0x1
+write 8 0 0x80104
+write 8 2 0x342e0000
+write 8 3 0x64
+write 8 8 0x0
+write 8 7 0x0
+write 8 6 0x64
+write 8 12 0x6
+write 8 12 0x7
+write 8 14 0x342e00a7
+write 8 13 0x1
+write 8 9 0x24
+write 8 5 0x0
+write 8 18 0x0
+write 8 10 0x100000
+write 8 17 0x0
+writefield 0 4 [9] 0x1
+write 14 0 0x8010c
+write 14 2 0x342e0070
+write 14 3 0x64
+write 14 8 0x0
+write 14 7 0x0
+write 14 6 0x64
+write 14 12 0x6
+write 14 12 0x7
+write 14 14 0x342e0117
+write 14 13 0x1
+write 14 9 0x24
+write 14 5 0x0
+write 14 18 0x0
+write 14 10 0x100000
+write 14 17 0x0
+write 4 0 0x2
+poll 4 0 [1] 0x0 100
+write 4 0 0x40000000
+poll 4 0 [30] 0x0 100
+write 4 0 0x1
+write 4 30 0x7
+write 4 11 0x25
+writefield 14 0 [0] 0x1
+writefield 23 0 [0] 0x1
+writefield 8 0 [0] 0x1
+poll 14 0 [31] 0x0 100
+write 4 30 0x0
+write 4 11 0x0
+write 14 0 0x2
+poll 14 0 [1] 0x0 100
+write 14 0 0x40000000
+poll 14 0 [30] 0x0 100
+writefield 0 4 [9] 0x0
+write 23 0 0x8000002
+poll 23 0 [1] 0x0 100
+write 23 0 0x48000000
+poll 23 0 [30] 0x0 100
+writefield 0 4 [18] 0x0
+write 8 0 0x2
+poll 8 0 [1] 0x0 100
+write 8 0 0x40000000
+poll 8 0 [30] 0x0 100
+writefield 0 4 [3] 0x0
+;; End Epoch 2
+;; Start Epoch 3
+label 0x3
+writefield 0 4 [10] 0x1
+write 15 0 0x10d00034
+write 15 4 0x10e34404
+write 15 5 0x10064
+write 15 2 0x14640101
+write 15 10 0x0
+write 15 3 0x1100
+write 15 6 0xffff0000
+write 15 7 0xffff0000
+write 15 13 0x0
+writefield 0 4 [19] 0x1
+write 24 0 0x8000000
+write 24 0 0x96000fc
+write 24 13 0x20422042
+write 24 2 0x80000
+write 24 7 0x1
+write 24 8 0x0
+write 24 12 0x0
+write 24 3 0x0
+write 24 4 0x13
+write 24 5 0x13
+write 24 6 0x63
+write 24 10 0x1
+write 24 9 0x67403ed
+;; Block ECASM optimizations to move reg writes pass this point
+write 24 11 0x1
+write 24 256 0x5b3e
+write 24 257 0x0
+write 24 258 0x5d81
+write 24 259 0x0
+write 24 260 0x5bab
+write 24 261 0x0
+write 24 262 0x5a00
+write 24 263 0x0
+write 24 264 0x5dd2
+write 24 265 0x0
+write 24 266 0x5a0f
+write 24 267 0x0
+write 24 268 0x5a09
+write 24 269 0x0
+write 24 270 0x5c43
+write 24 271 0x0
+write 24 272 0x5eaa
+write 24 273 0x0
+write 24 274 0x5cbb
+write 24 275 0x0
+write 24 276 0x5c66
+write 24 277 0x0
+write 24 278 0x5d13
+write 24 279 0x0
+write 24 280 0x5ea2
+write 24 281 0x0
+write 24 282 0x5b3b
+write 24 283 0x0
+write 24 284 0x59e6
+write 24 285 0x0
+write 24 286 0x55c6
+write 24 287 0x0
+write 24 288 0x5f49
+write 24 289 0x0
+write 24 290 0x5e25
+write 24 291 0x0
+write 24 292 0x5a9b
+write 24 293 0x0
+write 24 294 0x5d3a
+write 24 295 0x0
+write 24 296 0x576b
+write 24 297 0x0
+write 24 298 0x5caa
+write 24 299 0x0
+write 24 300 0x5f5f
+write 24 301 0x0
+write 24 302 0x5e78
+write 24 303 0x0
+write 24 304 0x5adf
+write 24 305 0x0
+write 24 306 0x5f15
+write 24 307 0x0
+write 24 308 0x5bef
+write 24 309 0x0
+write 24 310 0x5f3d
+write 24 311 0x0
+write 24 312 0x58d7
+write 24 313 0x0
+write 24 314 0x5e56
+write 24 315 0x0
+write 24 316 0x5df9
+write 24 317 0x0
+write 24 318 0x589c
+write 24 319 0x0
+write 24 320 0x5c28
+write 24 321 0x0
+write 24 322 0x588b
+write 24 323 0x0
+write 24 324 0x5c6d
+write 24 325 0x0
+write 24 326 0x5d39
+write 24 327 0x0
+write 24 328 0x58a2
+write 24 329 0x0
+write 24 330 0x5dc8
+write 24 331 0x0
+write 24 332 0x585a
+write 24 333 0x0
+write 24 334 0x5959
+write 24 335 0x0
+write 24 336 0x5d2a
+write 24 337 0x0
+write 24 338 0x57fe
+write 24 339 0x0
+write 24 340 0x5b9e
+write 24 341 0x0
+write 24 342 0x5722
+write 24 343 0x0
+write 24 344 0x5b80
+write 24 345 0x0
+write 24 346 0x5a5a
+write 24 347 0x0
+write 24 348 0x5c6a
+write 24 349 0x0
+write 24 350 0x5e1b
+write 24 351 0x0
+write 24 352 0x5b54
+write 24 353 0x0
+write 24 354 0x5ca1
+write 24 355 0x0
+write 24 356 0x5948
+write 24 357 0x0
+write 24 358 0x5fbe
+write 24 359 0x0
+write 24 360 0x5b5a
+write 24 361 0x0
+write 24 362 0x5f45
+write 24 363 0x0
+write 24 364 0x56c8
+write 24 365 0x0
+write 24 366 0x599a
+write 24 367 0x0
+write 24 368 0x5efd
+write 24 369 0x0
+write 24 370 0x5ca5
+write 24 371 0x0
+write 24 372 0x57ae
+write 24 373 0x0
+write 24 374 0x5f47
+write 24 375 0x0
+write 24 376 0x5f10
+write 24 377 0x0
+write 24 378 0x5d5d
+write 24 379 0x0
+write 24 380 0x57a1
+write 24 381 0x0
+write 24 382 0x5c96
+write 24 383 0x0
+write 24 384 0x5c26
+write 24 385 0x0
+write 24 386 0x5ec0
+write 24 387 0x0
+write 24 388 0x5e98
+write 24 389 0x0
+write 24 390 0x5863
+write 24 391 0x0
+write 24 392 0x5dcf
+write 24 393 0x0
+write 24 394 0x5a0a
+write 24 395 0x0
+write 24 396 0x58a2
+write 24 397 0x0
+write 24 398 0x5bde
+write 24 399 0x0
+write 24 400 0x5acf
+write 24 401 0x0
+write 24 402 0x5ce1
+write 24 403 0x0
+write 24 404 0x5dbd
+write 24 405 0x0
+write 24 406 0x5e1a
+write 24 407 0x0
+write 24 408 0x5de2
+write 24 409 0x0
+write 24 410 0x5e3d
+write 24 411 0x0
+write 24 412 0x5ace
+write 24 413 0x0
+write 24 414 0x58ef
+write 24 415 0x0
+write 24 416 0x5892
+write 24 417 0x0
+write 24 418 0x5f29
+write 24 419 0x0
+write 24 420 0x5c45
+write 24 421 0x0
+write 24 422 0x5bd9
+write 24 423 0x0
+write 24 424 0x5d86
+write 24 425 0x0
+write 24 426 0x5aee
+write 24 427 0x0
+write 24 428 0x5e80
+write 24 429 0x0
+write 24 430 0x5cb2
+write 24 431 0x0
+write 24 432 0x5dad
+write 24 433 0x0
+write 24 434 0x5ed7
+write 24 435 0x0
+write 24 436 0x58a5
+write 24 437 0x0
+write 24 438 0x5df6
+write 24 439 0x0
+write 24 440 0x5f6a
+write 24 441 0x0
+write 24 442 0x5be7
+write 24 443 0x0
+write 24 444 0x5ddb
+write 24 445 0x0
+write 24 446 0x5dba
+write 24 447 0x0
+write 24 448 0x5ee4
+write 24 449 0x0
+write 24 450 0x5b77
+write 24 451 0x0
+write 24 452 0x5e01
+write 24 453 0x0
+write 24 454 0x5da1
+write 24 455 0x0
+writefield 0 4 [20] 0x1
+write 25 0 0x8000000
+write 25 0 0x15000060
+write 25 13 0x20422042
+write 25 2 0xa0000
+write 25 7 0x5041
+write 25 8 0x10
+write 25 12 0x0
+writefield 0 4 [0] 0x1
+write 5 0 0x8880300
+write 5 2 0x342e0070
+write 5 3 0x22
+write 5 8 0x64
+write 5 7 0x5
+write 5 6 0x0
+write 5 12 0x6
+write 5 12 0x7
+write 5 14 0x342e0117
+write 5 13 0x5
+write 5 9 0x24
+write 5 5 0x0
+write 5 18 0x0
+write 5 10 0x100000
+write 5 17 0x0
+writefield 0 4 [6] 0x1
+write 11 0 0x8880184
+write 11 2 0x70380000
+write 11 3 0xd07
+write 11 8 0x0
+write 11 7 0x0
+write 11 6 0x0
+write 11 12 0x6
+write 11 12 0x7
+write 11 14 0x70382757
+write 11 13 0x1
+write 11 9 0x24
+write 11 5 0x0
+write 11 18 0x8
+write 11 10 0x100000
+write 11 17 0x0
+writefield 0 4 [7] 0x1
+write 12 0 0x80108
+write 12 2 0x342e0000
+write 12 3 0x14
+write 12 8 0x0
+write 12 7 0x0
+write 12 6 0x14
+write 12 12 0x6
+write 12 12 0x7
+write 12 14 0x342e00a7
+write 12 13 0x5
+write 12 9 0x24
+write 12 5 0x0
+write 12 18 0x0
+write 12 10 0x100000
+write 12 17 0x0
+write 4 0 0x2
+poll 4 0 [1] 0x0 100
+write 4 0 0x40000000
+poll 4 0 [30] 0x0 100
+write 4 0 0x1
+write 4 12 0x1
+write 4 13 0xd
+write 4 32 0x15
+write 4 34 0x27
+write 4 9 0x29
+writefield 12 0 [0] 0x1
+write 15 0 0x10d00035
+writefield 24 0 [0] 0x1
+writefield 25 0 [0] 0x1
+writefield 5 0 [0] 0x1
+writefield 11 0 [0] 0x1
+poll 12 0 [31] 0x0 100
+write 4 12 0x0
+write 4 13 0x0
+write 4 32 0x0
+write 4 34 0x0
+write 4 9 0x0
+write 12 0 0x2
+poll 12 0 [1] 0x0 100
+write 12 0 0x40000000
+poll 12 0 [30] 0x0 100
+writefield 0 4 [7] 0x0
+write 15 0 0x2
+poll 15 0 [1] 0x0 100
+write 15 0 0x40000000
+poll 15 0 [30] 0x0 100
+writefield 0 4 [10] 0x0
+write 24 0 0x8000002
+poll 24 0 [1] 0x0 100
+write 24 0 0x48000000
+poll 24 0 [30] 0x0 100
+writefield 0 4 [19] 0x0
+write 25 0 0x8000002
+poll 25 0 [1] 0x0 100
+write 25 0 0x48000000
+poll 25 0 [30] 0x0 100
+writefield 0 4 [20] 0x0
+write 5 0 0x2
+poll 5 0 [1] 0x0 100
+write 5 0 0x40000000
+poll 5 0 [30] 0x0 100
+writefield 0 4 [0] 0x0
+write 11 0 0x2
+poll 11 0 [1] 0x0 100
+write 11 0 0x40000000
+poll 11 0 [30] 0x0 100
+writefield 0 4 [6] 0x0
+;; End Epoch 3
+;; Start Epoch 4
+label 0x4
+;; End Epoch 4
+irq 0x0
+;; End Blob '_ec_blob_1'

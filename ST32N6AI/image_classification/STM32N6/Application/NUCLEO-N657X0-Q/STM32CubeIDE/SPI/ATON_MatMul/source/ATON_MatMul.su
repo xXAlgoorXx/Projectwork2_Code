@@ -1,0 +1,7 @@
+../../../../Middlewares/AI_Runtime/Npu/ll_aton/ll_aton_NN_interface.h:569:32:LL_Buffer_addr_base	24	static
+../../../../Middlewares/AI_Runtime/Npu/ll_aton/ll_aton_NN_interface.h:579:32:LL_Buffer_addr_start	16	static
+../../../../Middlewares/AI_Runtime/Npu/ll_aton/ll_aton_NN_interface.h:594:26:LL_Buffer_len	16	static
+../ATON_MatMul/source/ATON_MatMul.c:39:6:update_weights_float	24	static
+../ATON_MatMul/source/ATON_MatMul.c:44:6:update_weights_int8	40	static,ignoring_inline_asm
+../ATON_MatMul/source/ATON_MatMul.c:82:9:getIdentityWeights_int8	32	static
+../ATON_MatMul/source/ATON_MatMul.c:119:6:NeuralNetwork_init	48	static

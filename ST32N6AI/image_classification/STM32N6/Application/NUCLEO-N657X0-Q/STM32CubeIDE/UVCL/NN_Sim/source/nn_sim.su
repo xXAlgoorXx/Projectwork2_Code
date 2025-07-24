@@ -1,0 +1,2 @@
+../NN_Sim/source/nn_sim.c:5:6:nn_simulation_float	0	static
+../NN_Sim/source/nn_sim.c:30:6:nn_simulation_int8	0	static

@@ -1,6 +1,6 @@
 ################################################################################
 # Automatically-generated file. Do not edit!
-# Toolchain: GNU Tools for STM32 (13.3.rel1)
+# Toolchain: GNU Tools for STM32 (12.3.rel1)
 ################################################################################
 
 -include ../makefile.init
@@ -64,7 +64,7 @@ main-build: G4_Matmul.elf secondary-outputs
 
 # Tool invocations
 G4_Matmul.elf G4_Matmul.map: $(OBJS) $(USER_OBJS) /home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/STM32/G4_Matmul/STM32G474RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "G4_Matmul.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/STM32/G4_Matmul/STM32G474RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="G4_Matmul.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+	arm-none-eabi-gcc -o "G4_Matmul.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/STM32/G4_Matmul/STM32G474RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="G4_Matmul.map" -Wl,--gc-sections -static -L../Middlewares/ST/ARM/DSP/Lib --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

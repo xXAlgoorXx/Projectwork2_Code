@@ -1,0 +1,65 @@
+digraph G {
+graph [ fontsize=11 ];
+node [ fontsize=11 ];
+edge [ fontsize=10 ];
+rankdir=BU
+ranksep=1.5
+nodesep=1
+splines=spline
+compound=true
+Graphinfo [ label="" shape=plaintext, style=rounded, color=black, fontname="Arial-Bold" ];
+subgraph cluster_1 { label="epoch 1"; fontsize=14; 
+subgraph cluster_1_nodes { label="nodes "; peripheries=0;
+Gemm_2_reshape_x_2 ;  }
+
+subgraph cluster_dma_1_in { label=""; peripheries=0;
+dummy_1[ style=invis ];  };
+ }
+subgraph cluster_2 { label="epoch 2"; fontsize=14; 
+subgraph cluster_2_nodes { label="nodes "; peripheries=0;
+Gemm_2_conv_4 ; Gemm_2_conv_4_mul_scale_6 ; Gemm_2_conv_4_off_bias_9 ; Gemm_2_squeeze_y_5 ;  }
+
+subgraph cluster_dma_2_in { label="dma inputs "; peripheries=0;
+dma_3i2 ; dma_9i2 ;  };
+
+subgraph cluster_dma_2_out { label="dma outputs "; peripheries=0;
+dma_7i2 ;  }
+ }
+Gemm_2_reshape_x_2:s -> dma_3i2:n [ltail="cluster_1" lhead=cluster_2 strength=1000 penwidth=5];
+subgraph cluster_3 { label="epoch 3"; fontsize=14; 
+subgraph cluster_3_nodes { label="nodes "; peripheries=0;
+__NN__RETURN__ ;  }
+
+subgraph cluster_dma_3_in { label=""; peripheries=0;
+dummy_3[ style=invis ];  };
+ }
+dma_7i2:s -> dummy_3:n [ltail="cluster_2" lhead=cluster_3 strength=1000 penwidth=5];
+Gemm_2_conv_4_off_bias_11 [ label="{ { <i0> 0} |  [11]\lGemm_2_conv_4_off_bias_11\l(bytes=2 , 1.1% of total)\l\l 0 | { <o0> 0} }", shape=record, fillcolor="aliceblue", style="rounded,filled"  ] ;
+Gemm_2_conv_4_mul_scale_8 [ label="{ { <i0> 0} |  [9]\lGemm_2_conv_4_mul_scale_8\l(bytes=10 , 5.5% of total)\l\l 5.55354e-05 6.01671e-05 5.89903e-05 6.07782e-05 ... | { <o0> 0} }", shape=record, fillcolor="aliceblue", style="rounded,filled"  ] ;
+Input_0_out_0 [ label="{ { <i0> 0} |  [2]\lInput_0_out_0 | { <o0> 0} }", shape=record, fillcolor="aliceblue", style="rounded,filled"  ] ;
+Gemm_2_weights_transposed_3 [ label="{ { <i0> 0} |  [7]\lGemm_2_weights_transposed_3\l(bytes=170 , 93% of total)\l\l 0.868576 0.484124 0.441407 0.484124 ... | { <o0> 0} }", shape=record, fillcolor="aliceblue", style="rounded,filled"  ] ;
+Gemm_2_reshape_x_2 [ label="{ { < i0>  0 M } | id=[6] tid=[4]\lGemm_2_reshape_x_2\lkind=Reshape\lsched epoch=1.\lhw unit=NULL_UNIT\l | { < o0>  0 M } }", shape=record, fillcolor="aquamarine", style="rounded,filled"  ] ;
+dma_9i2 [ label="Dma in\nepoch=2.\nmem=17-> sw=17
+ axi port=1\nSTREAM_ENG_V2 9", shape=ellipse, width=0.1, fillcolor="burlywood1", style="rounded,filled"  ]
+dma_3i2 [ label="Dma in\nepoch=2.\nmem=17-> sw=17
+ axi port=0\nSTREAM_ENG_V2 3", shape=ellipse, width=0.1, fillcolor="burlywood1", style="rounded,filled"  ]
+Gemm_2_conv_4 [ label="{ { < i0>  0 M  | < i1>  1 M } | id=[8] tid=[5]\lGemm_2_conv_4\lkind=Conv\lNUM_OPS = 340 OPS( 1e+02% of total )\llatency = 170 cycles\lOPS/cycle = 2\lsched epoch=2.\lsched unit= CONV_ACC_V2 0\lconv mode=K outer, F inner\lchoked ports=( weights  )\lshifts: f=0 a=4 o=4\lsimd mode:8x8\lunit max power % 27\lkernel_shape is 1 1\lgroup i 1\lstrides is 1 1\lpads is 0 0 0 0\ldilations is 1 1\l | { < o0>  0 S } }", shape=record, fillcolor="burlywood1", style="rounded,filled"  ] ;
+Gemm_2_conv_4_mul_scale_6 [ label="{ { < i0>  0 S  | < i1>  1 P } | id=[10] tid=[6]\lGemm_2_conv_4_mul_scale_6\lkind=Mul\lNUM_OPS = 10 OPS\llatency = 10 cycles\lOPS/cycle = 1\lsched epoch=2.\lsched unit= ARITH_ACC_V2 0\lA=1 B=0 C=0\lshifts: x=0 y=0 AX_RS=0 BY_RS=0 C_LS=0 o=14\lunit max power % 100\l | { < o0>  0 S } }", shape=record, fillcolor="burlywood1", style="rounded,filled"  ] ;
+dma_7i2 [ label="Dma out\nepoch=2.\nsw=10-> mem=10
+ axi port=1\nSTREAM_ENG_V2 7", shape=ellipse, width=0.1, fillcolor="burlywood1", style="rounded,filled"  ]
+Gemm_2_conv_4_off_bias_9:o0:s->dma_7i2:n [ label="edge id=[12]\ltid=88 89\lbatch: 10(in) 10(out,L) 0(mem,L) \l1x10x1x1\lbits=8\lin=out: (S8)\lscale=(0.0194289, )\loffset=(13, )\lGemm_2_conv_4_off_bias_out_10 FLOAT( 1 10 1 1 )\lGemm_2_conv_4_off_bias_out_10 live(2, 3, id=7)\lpool=6[256, 266]=10 B\lnpuRAM3_npuRAM4_npuRAM5_npuRAM6 edge bs=10\l context[0](1,0)\lout bw=10 B\l" ]; 
+Gemm_2_conv_4_off_bias_9 [ label="{ { < i0>  0 S  | < i1>  1 P } | id=[12] tid=[7]\lGemm_2_conv_4_off_bias_9\lkind=Add\lNUM_OPS = 10 OPS\llatency = 10 cycles\lOPS/cycle = 1\lsched epoch=2.\lsched unit= ARITH_ACC_V2 1\lA=26353 B=208 C=0 B C combined= 13631488\lshifts: x=0 y=0 AX_RS=0 BY_RS=0 C_LS=0 o=20\lunit max power % 35\l | { < o0>  0 M } }", shape=record, fillcolor="burlywood1", style="rounded,filled"  ] ;
+Gemm_2_squeeze_y_5 [ label="{ { < i0>  0 M } | id=[14] tid=[8]\lGemm_2_squeeze_y_5\lkind=Reshape\lsched epoch=2.\lhw unit=NULL_UNIT\l | { < o0>  0 M } }", shape=record, fillcolor="burlywood1", style="rounded,filled"  ] ;
+__NN__RETURN__ [ label="{ { < i0>  0 M } | id=[18] tid=[9]\l__NN__RETURN__\lkind=Return\lsched epoch=3.\lsched unit= PROCESSOR 0\l}", shape=record, fillcolor="cadetblue1", style="rounded,filled"  ] ;
+Gemm_2_reshape_x_2:o0:s->dma_9i2:n [ penwidth=2, style=dashed  ]; 
+dma_9i2:s->Gemm_2_conv_4:i0:n [ label="cloned=0\ledge id=[6]\ltid=49 50\lbatch: 17(in,L) 0(out,L) 0(mem,L) \l1x17x1x1\lbits=8\lin=out: (S8)\lscale=(0.00780049, )\loffset=(0, )\lGemm_2_reshape_x_2 FLOAT( 1 17 1 1 )\lGemm_2_reshape_x_2 live(0, 2, id=1)\lpool=6[224, 241]=17 B\lnpuRAM3_npuRAM4_npuRAM5_npuRAM6 edge bs=17\l context[0](1,0)\lin bw=17 B\lbatch depth=17\lbatch iter=1\ltotal iter=1\l"   ]; 
+Gemm_2_weights_transposed_3:o0:s->dma_3i2:n [ penwidth=2, style=dashed  ]; 
+dma_3i2:s->Gemm_2_conv_4:i1:n [ label="cloned=0\ledge id=[7]\ltid=53 54\lbatch: 17(in,L) 17(out,L) 17(mem,L) \l10(nkern) \l10x17x1x1\lbits=8\lin=out: (S8)\lscale=(0.00711948, 0.00771324, 0.00756238, 0.00779159, 0.0074434, 0.00739204, 0.0061085, 0.00767964, 0.00714462, 0.0078035, \l)\loffset=(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \l)\lGemm_2_weights_transposed_3 FLOAT( 10 17 1 1 )\lGemm_2_weights_transposed_3 live(0, inf, id=2)\lpool=6[0, 170]=170 B\lnpuRAM3_npuRAM4_npuRAM5_npuRAM6 edge bs=170\l context[0](1,0)\lin bw=170 B\l"   ]; 
+Gemm_2_conv_4:o0:s->Gemm_2_conv_4_mul_scale_6:i0:n [ label="edge id=[8]\ltid=62 63\lbatch: 10(in) 10(out,L) \l1x10x1x1\lin=out Q[19S.-4]\lin=out: (S8) M=19 N=-4 sign=true\lGemm_2_conv_4 FLOAT( 1 10 1 1 )\lGemm_2_conv_4 live(2, 2, id=5) edge bs=20\l context[0](1,0)\lout bw=?\l" ]; 
+Gemm_2_conv_4_mul_scale_8:o0:s->Gemm_2_conv_4_mul_scale_6:i1:n [ label="edge id=[9]\ltid=66 67\lbatch: 10(in,L) 10(out,L) 10(mem,L) \l10x1x1\lin=out Q[-14S.29]\lin=out: (S8) M=-14 N=29 sign=true\lGemm_2_conv_4_mul_scale_8 FLOAT( 10 1 1 )\lGemm_2_conv_4_mul_scale_8 live(0, inf, id=3)\lpool=6[176, 196]=20 B\lnpuRAM3_npuRAM4_npuRAM5_npuRAM6 edge bs=20\l context[0](1,0)\lout bw=?\l" ]; 
+Gemm_2_conv_4_mul_scale_6:o0:s->Gemm_2_conv_4_off_bias_9:i0:n [ label="edge id=[10]\ltid=75 76\lbatch: 10(in) 10(out,L) \l1x10x1x1\lin=out Q[4S.11]\lin=out: (S8) M=4 N=11 sign=true\lGemm_2_conv_4_mul_scale_out_7 FLOAT( 1 10 1 1 )\lGemm_2_conv_4_mul_scale_out_7 live(2, 2, id=6) edge bs=20\l context[0](1,0)\lout bw=?\l" ]; 
+Gemm_2_conv_4_off_bias_11:o0:s->Gemm_2_conv_4_off_bias_9:i1:n [ label="edge id=[11]\ltid=79 80\l1\lin=out Q[4S.11]\lin=out: (S16) M=4 N=11 sign=true\lGemm_2_conv_4_off_bias_11 FLOAT( 1 )\lGemm_2_conv_4_off_bias_11 live(0, inf, id=4)\lpool=6[208, 210]=2 B\lnpuRAM3_npuRAM4_npuRAM5_npuRAM6 edge bs=2\l context[0](1,0)\lout bw=?\l" ]; 
+Gemm_2_conv_4_off_bias_9:o0:s->Gemm_2_squeeze_y_5:i0:n [ label="edge id=[12]\ltid=88 89\lbatch: 10(in) 10(out,L) 0(mem,L) \l1x10x1x1\lbits=8\lin=out: (S8)\lscale=(0.0194289, )\loffset=(13, )\lGemm_2_conv_4_off_bias_out_10 FLOAT( 1 10 1 1 )\lGemm_2_conv_4_off_bias_out_10 live(2, 3, id=7)\lpool=6[256, 266]=10 B\lnpuRAM3_npuRAM4_npuRAM5_npuRAM6 edge bs=10\lout bw=10 B\l" ]; 
+Input_0_out_0:o0:s->Gemm_2_reshape_x_2:i0:n [ label="edge id=[19]\ltid=13 121\lbatch: 1(out,L) 1(mem,L) \l1x17\lbits=8\lin=out: (S8)\lscale=(0.00780049, )\loffset=(0, )\lDequantize_1_out_0 FLOAT( 1 17 )\lInput_0_out_0 live(0, 2, id=1)\lpool=6[224, 241]=17 B\lnpuRAM3_npuRAM4_npuRAM5_npuRAM6 edge bs=17\lout bw=?\l" ]; 
+Gemm_2_squeeze_y_5:o0:s->__NN__RETURN__:i0:n [ label="edge id=[20]\ltid=104 119\lbatch: 0(out,L) 0(mem,L) \l1x10\lbits=8\lin=out: (S8)\lscale=(0.0194289, )\loffset=(13, )\lQuantize_3_out_0 INT8( 1 10 )\lQuantize_3_out_0 live(2, 3, id=7)\lpool=6[256, 266]=10 B\lnpuRAM3_npuRAM4_npuRAM5_npuRAM6 edge bs=10\l context[0](1,0)\lout bw=?\l" ]; 
+}

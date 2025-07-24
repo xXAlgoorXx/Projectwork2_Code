@@ -1,0 +1,53 @@
+digraph G {
+graph [ fontsize=11 ];
+node [ fontsize=11 ];
+edge [ fontsize=10 ];
+rankdir=BU
+ranksep=1.5
+nodesep=1
+splines=spline
+compound=true
+Graphinfo [ label="" shape=plaintext, style=rounded, color=black, fontname="Arial-Bold" ];
+subgraph cluster_1 { label="epoch 1"; fontsize=14; 
+subgraph cluster_1_nodes { label="nodes "; peripheries=0;
+Gemm_1_reshape_x_2 ;  }
+
+subgraph cluster_dma_1_in { label=""; peripheries=0;
+dummy_1[ style=invis ];  };
+ }
+subgraph cluster_2 { label="epoch 2"; fontsize=14; 
+subgraph cluster_2_nodes { label="nodes "; peripheries=0;
+Gemm_1_conv_4 ;  }
+
+subgraph cluster_dma_2_in { label=""; peripheries=0;
+dummy_2[ style=invis ];  };
+ }
+Gemm_1_reshape_x_2:s -> dummy_2:n [ltail="cluster_1" lhead=cluster_2 strength=1000 penwidth=5];
+subgraph cluster_3 { label="epoch 3"; fontsize=14; 
+subgraph cluster_3_nodes { label="nodes "; peripheries=0;
+Gemm_1_squeeze_y_5 ;  }
+
+subgraph cluster_dma_3_in { label=""; peripheries=0;
+dummy_3[ style=invis ];  };
+ }
+Gemm_1_conv_4:s -> dummy_3:n [ltail="cluster_2" lhead=cluster_3 strength=1000 penwidth=5];
+subgraph cluster_4 { label="epoch 4"; fontsize=14; 
+subgraph cluster_4_nodes { label="nodes "; peripheries=0;
+__NN__RETURN__ ;  }
+
+subgraph cluster_dma_4_in { label=""; peripheries=0;
+dummy_4[ style=invis ];  };
+ }
+Gemm_1_squeeze_y_5:s -> dummy_4:n [ltail="cluster_3" lhead=cluster_4 strength=1000 penwidth=5];
+Gemm_1_weights_transposed_3 [ label="{ { <i0> 0} |  [4]\lGemm_1_weights_transposed_3\l(bytes=400 , 1e+02% of total)\l\l 0.155026 -0.192363 -0.166651 0.457785 ... | { <o0> 0} }", shape=record, fillcolor="aliceblue", style="rounded,filled"  ] ;
+Input_0_out_0 [ label="{ { <i0> 0} |  [0]\lInput_0_out_0 | { <o0> 0} }", shape=record, fillcolor="aliceblue", style="rounded,filled"  ] ;
+Gemm_1_reshape_x_2 [ label="{ { < i0>  0 M } | id=[3] tid=[2]\lGemm_1_reshape_x_2\lkind=Reshape\lsched epoch=1.\lhw unit=NULL_UNIT\l | { < o0>  0 M } }", shape=record, fillcolor="aquamarine", style="rounded,filled"  ] ;
+Gemm_1_conv_4 [ label="{ { < i0>  0 M  | < i1>  1 M } | id=[5] tid=[3]\lGemm_1_conv_4\lkind=Conv\lNUM_OPS = 200 OPS( 1e+02% of total )\lsched epoch=2.\lsched unit= PROCESSOR 0\lkernel_shape is 1 1\lgroup i 1\lstrides is 1 1\lpads is 0 0 0 0\ldilations is 1 1\l | { < o0>  0 M } }", shape=record, fillcolor="burlywood1", style="rounded,filled"  ] ;
+Gemm_1_squeeze_y_5 [ label="{ { < i0>  0 M } | id=[7] tid=[4]\lGemm_1_squeeze_y_5\lkind=Reshape\lsched epoch=3.\lhw unit=NULL_UNIT\l | { < o0>  0 M } }", shape=record, fillcolor="cadetblue1", style="rounded,filled"  ] ;
+__NN__RETURN__ [ label="{ { < i0>  0 M } | id=[8] tid=[5]\l__NN__RETURN__\lkind=Return\lsched epoch=4.\lsched unit= PROCESSOR 0\l}", shape=record, fillcolor="chartreuse", style="rounded,filled"  ] ;
+Gemm_1_reshape_x_2:o0:s->Gemm_1_conv_4:i0:n [ label="edge id=[3]\ltid=29 30\lbatch: 0(in,L) 0(out,L) 0(mem,L) \l1x10x1x1\lbits=32\lin=out: Float\lGemm_1_reshape_x_2 FLOAT( 1 10 1 1 ) edge bs=40\l context[0](1,0)\lout bw=?\l" ]; 
+Gemm_1_weights_transposed_3:o0:s->Gemm_1_conv_4:i1:n [ label="edge id=[4]\ltid=33 34\lbatch: 0(in,L) 0(mem,L) \l10x10x1x1\lbits=32\lin=out: Float\lGemm_1_weights_transposed_3 FLOAT( 10 10 1 1 ) edge bs=400\l context[0](1,0)\lout bw=?\l" ]; 
+Gemm_1_conv_4:o0:s->Gemm_1_squeeze_y_5:i0:n [ label="edge id=[5]\ltid=42 43\lbatch: 0(out,L) 0(mem,L) \l1x10x1x1\lbits=32\lin=out: Float\lGemm_1_conv_4 FLOAT( 1 10 1 1 ) edge bs=40\lout bw=40 B\l" ]; 
+Gemm_1_squeeze_y_5:o0:s->__NN__RETURN__:i0:n [ label="edge id=[7]\ltid=52 53\lbatch: 0(out,L) 0(mem,L) \l1x10\lbits=32\lin=out: Float\lGemm_1_out_0 FLOAT( 1 10 ) edge bs=40\l context[0](1,0)\lout bw=?\l" ]; 
+Input_0_out_0:o0:s->Gemm_1_reshape_x_2:i0:n [ label="edge id=[8]\ltid=54 55\lbatch: 1(in) 1(out,L) 1(mem,L) \l1x10\lbits=32\lin=out: Float\lInput_0_out_0 FLOAT( 1 10 ) edge bs=40\lout bw=?\l" ]; 
+}

@@ -1,0 +1,17 @@
+/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/MatMul/MatMulN6/STM32N6/Middlewares/screenl/uvcl/Src/usbx/uvcl_usbx.c:227:13:UVCL_instance_activate	0	static
+/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/MatMul/MatMulN6/STM32N6/Middlewares/screenl/uvcl/Src/usbx/uvcl_usbx.c:234:13:UVCL_instance_deactivate	0	static
+/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/MatMul/MatMulN6/STM32N6/Middlewares/screenl/uvcl/Src/usbx/uvcl_usbx.c:167:12:UVCL_usbd_start_streaming	8	static
+/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/MatMul/MatMulN6/STM32N6/Middlewares/screenl/uvcl/Src/usbx/uvcl_usbx.c:159:12:UVCL_usbd_stop_streaming	8	static
+/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/MatMul/MatMulN6/STM32N6/Middlewares/screenl/uvcl/Src/usbx/uvcl_usbx.c:187:12:UVCL_usbx_receive_data	8	static
+/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/MatMul/MatMulN6/STM32N6/Middlewares/screenl/uvcl/Src/usbx/uvcl_usbx.c:68:13:UVCL_SendPacket	24	static
+/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/MatMul/MatMulN6/STM32N6/Middlewares/screenl/uvcl/Src/usbx/uvcl_usbx.c:175:12:UVCL_usbx_send_data	16	static
+/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/MatMul/MatMulN6/STM32N6/Middlewares/screenl/uvcl/Src/usbx/uvcl_usbx.c:49:12:is_hs	8	static
+/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/MatMul/MatMulN6/STM32N6/Middlewares/screenl/uvcl/Src/usbx/uvcl_usbx.c:83:13:UVCL_DataIn	16	static
+/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/MatMul/MatMulN6/STM32N6/Middlewares/screenl/uvcl/Src/usbx/uvcl_usbx.c:222:13:UVCL_stream_payload_done	0	static
+/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/MatMul/MatMulN6/STM32N6/Middlewares/screenl/uvcl/Src/usbx/uvcl_usbx.c:199:13:UVCL_stream_request	48	static
+/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/MatMul/MatMulN6/STM32N6/Middlewares/screenl/uvcl/Src/usbx/uvcl_usbx.c:239:12:UVCL_usbx_extract_string.constprop	20	static
+/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/MatMul/MatMulN6/STM32N6/Middlewares/screenl/uvcl/Src/usbx/uvcl_usbx.c:144:13:UVCL_stream_change	16	static
+/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/MatMul/MatMulN6/STM32N6/Middlewares/screenl/uvcl/Src/usbx/uvcl_usbx.c:322:5:UVCL_usbx_init	280	static
+/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/MatMul/MatMulN6/STM32N6/Middlewares/screenl/uvcl/Src/usbx/uvcl_usbx.c:411:12:_ux_utility_interrupt_disable	0	static,ignoring_inline_asm
+/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/MatMul/MatMulN6/STM32N6/Middlewares/screenl/uvcl/Src/usbx/uvcl_usbx.c:420:6:_ux_utility_interrupt_restore	0	static,ignoring_inline_asm
+/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/MatMul/MatMulN6/STM32N6/Middlewares/screenl/uvcl/Src/usbx/uvcl_usbx.c:427:6:UVCL_stm32_usbx_IRQHandler	8	static

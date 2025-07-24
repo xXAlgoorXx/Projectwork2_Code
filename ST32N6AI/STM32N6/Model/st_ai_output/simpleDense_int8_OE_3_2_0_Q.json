@@ -1,0 +1,208 @@
+{
+    "version": "4.0",
+    "environment": {
+        "generated_model": {
+            "model_files": [
+                {
+                    "name": "simpleDense_int8_OE_3_2_0.onnx",
+                    "signature": "0xbb209cb059dd782e2ebc615fb6904223"
+                }
+            ],
+            "name": "network",
+            "generated_time": "2025-05-30T13:46:47+0200"
+        },
+        "tools": [
+            {
+                "name": "ST.EdgeAI.Core",
+                "version": "2.1.0-20194 329b0e98d",
+                "arguments": "generate --model simpleDense_int8.tflite --target stm32n6 --st-neural-art default@user_neuralart.json --name simpleDense",
+                "environment": [],
+                "input_model": {
+                    "model_files": [
+                        {
+                            "name": "simpleDense_int8.tflite",
+                            "signature": "0x6a2f81e7f5fae113e19854f54415eb6a"
+                        }
+                    ],
+                    "name": "simpleDense_int8",
+                    "type": "tflite",
+                    "size": 100,
+                    "n_params": 100
+                }
+            }
+        ],
+        "test_name": "",
+        "network_signature": "0xc42fdd70be477dd5"
+    },
+    "model_info": {
+        "original_inputs": [
+            {
+                "name": "serving_default_args_00",
+                "data_format": {
+                    "type": "SIGNED",
+                    "size": 8,
+                    "scale": [
+                        0.00391542399302125
+                    ],
+                    "zero": [
+                        -128
+                    ],
+                    "quantizer": "UNIFORM"
+                },
+                "shape": [
+                    1,
+                    10
+                ],
+                "shape_map": [
+                    "BATCH",
+                    "CH"
+                ],
+                "c_shape_map": [
+                    "BATCH",
+                    "CH"
+                ]
+            }
+        ],
+        "original_outputs": [
+            {
+                "name": "gemm_0",
+                "data_format": {
+                    "type": "SIGNED",
+                    "size": 8,
+                    "scale": [
+                        0.00818763766437769
+                    ],
+                    "zero": [
+                        5
+                    ],
+                    "quantizer": "UNIFORM"
+                },
+                "shape": [
+                    1,
+                    10
+                ],
+                "shape_map": [
+                    "BATCH",
+                    "CH"
+                ],
+                "c_shape_map": [
+                    "BATCH",
+                    "CH"
+                ]
+            }
+        ]
+    },
+    "tensors": {
+        "Input_0_out_0": {
+            "format": {
+                "params": [
+                    [
+                        0.00391542399302125
+                    ],
+                    [
+                        -128
+                    ]
+                ],
+                "class": "integer",
+                "type": "S8"
+            },
+            "data_channel_position": "CHFIRST",
+            "data_channel_batch": 1,
+            "user_allocated": false
+        },
+        "Dequantize_1_out_0": {
+            "format": {
+                "params": [
+                    [
+                        0.00391542399302125
+                    ],
+                    [
+                        -128
+                    ]
+                ],
+                "class": "integer",
+                "type": "S8"
+            }
+        },
+        "Gemm_2_out_0": {
+            "format": {
+                "params": [
+                    [
+                        0.00818763766437769
+                    ],
+                    [
+                        5
+                    ]
+                ],
+                "class": "integer",
+                "type": "S8"
+            }
+        },
+        "Gemm_2_weights": {
+            "format": {
+                "params": [
+                    [
+                        0.0043091136030852795,
+                        0.003826236817985773,
+                        0.00365935149602592,
+                        0.0033664393704384565,
+                        0.003901806892827153,
+                        0.0035670767538249493,
+                        0.0037196846678853035,
+                        0.0042610387317836285,
+                        0.004186214413493872,
+                        0.0038262666203081608
+                    ],
+                    [
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0
+                    ]
+                ],
+                "class": "integer",
+                "type": "S8"
+            }
+        },
+        "Quantize_3_out_0": {
+            "format": {
+                "params": [
+                    [
+                        0.00818763766437769
+                    ],
+                    [
+                        5
+                    ]
+                ],
+                "class": "integer",
+                "type": "S8"
+            },
+            "data_channel_position": "CHFIRST",
+            "data_channel_batch": 1,
+            "user_allocated": false
+        }
+    },
+    "nodes": {
+        "Dequantize_1": {
+            "names": [
+                "__FE_GENERATED__"
+            ]
+        },
+        "Gemm_2": {
+            "names": [
+                "FULLY_CONNECTED_0"
+            ]
+        },
+        "Quantize_3": {
+            "names": [
+                "__FE_GENERATED__"
+            ]
+        }
+    }
+}

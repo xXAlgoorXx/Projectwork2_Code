@@ -1,0 +1,17 @@
+../../../../STM32Cube_FW_N6/Drivers/STM32N6xx_HAL_Driver/Inc/stm32n6xx_ll_bus.h:679:22:LL_MEM_EnableClock	1
+../../../../STM32Cube_FW_N6/Drivers/STM32N6xx_HAL_Driver/Inc/stm32n6xx_ll_bus.h:785:22:LL_MEM_EnableClockLowPower	1
+../../../../STM32Cube_FW_N6/Drivers/STM32N6xx_HAL_Driver/Inc/stm32n6xx_ll_bus.h:2065:22:LL_AHB5_GRP1_EnableClockLowPower	1
+/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/MatMul/MatMulN6/STM32N6/Application/NUCLEO-N657X0-Q/Src/main.c:453:13:SystemClock_Config	4
+/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/MatMul/MatMulN6/STM32N6/Application/NUCLEO-N657X0-Q/Src/main.c:67:6:enableTiming_Cyc	1
+/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/MatMul/MatMulN6/STM32N6/Application/NUCLEO-N657X0-Q/Src/main.c:72:6:startTiming_Cyc	1
+/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/MatMul/MatMulN6/STM32N6/Application/NUCLEO-N657X0-Q/Src/main.c:76:10:getTiming_Cyc	1
+/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/MatMul/MatMulN6/STM32N6/Application/NUCLEO-N657X0-Q/Src/main.c:87:5:main	12
+/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/MatMul/MatMulN6/STM32N6/Application/NUCLEO-N657X0-Q/Src/main.c:224:6:nn_simulation_int	1
+/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/MatMul/MatMulN6/STM32N6/Application/NUCLEO-N657X0-Q/Src/main.c:249:6:update_dense_weights	1
+/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/MatMul/MatMulN6/STM32N6/Application/NUCLEO-N657X0-Q/Src/main.c:261:5:_write	1
+/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/MatMul/MatMulN6/STM32N6/Application/NUCLEO-N657X0-Q/Src/main.c:397:6:IAC_IRQHandler	1
+/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/MatMul/MatMulN6/STM32N6/Application/NUCLEO-N657X0-Q/Src/main.c:408:6:Error_Handler	1
+/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/MatMul/MatMulN6/STM32N6/Application/NUCLEO-N657X0-Q/Src/main.c:426:19:MX_DCMIPP_ClockConfig	2
+/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/MatMul/MatMulN6/STM32N6/Application/NUCLEO-N657X0-Q/Src/main.c:558:6:HAL_CACHEAXI_MspInit	1
+/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/MatMul/MatMulN6/STM32N6/Application/NUCLEO-N657X0-Q/Src/main.c:566:6:HAL_CACHEAXI_MspDeInit	1
+/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/MatMul/MatMulN6/STM32N6/Application/NUCLEO-N657X0-Q/Src/main.c:582:6:assert_failed	1

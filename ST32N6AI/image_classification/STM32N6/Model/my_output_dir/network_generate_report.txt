@@ -1,0 +1,49 @@
+ST Edge AI Core v2.1.0-20194 329b0e98d
+Created date          : 2025-07-10 14:34:37
+Parameters            : generate --model ownModels/matmulModel_16_int8/matmulModel_16_int8.tflite --target stm32n6 --input-data-type int8 --output-data-type int8 --st-neural-art default@flagTesting.json -o my_output_dir -w my_output_dir/ws
+
+Model name - matmulModel_16_int8
+------ ---------------------------- ------------- ------------ ------ ------------------------- 
+m_id   layer (original)             oshape        param/size     macc              connected to 
+------ ---------------------------- ------------- ------------ ------ ------------------------- 
+0      serving_default_args_00 ()   [b:1,c:16]                                                  
+       tfl_pseudo_qconst ()         [b:16,c:16]   256/256                                       
+       gemm_0 (FULLY_CONNECTED)     [b:1,c:16]                    272   serving_default_args_00 
+                                                                              tfl_pseudo_qconst 
+------ ---------------------------- ------------- ------------ ------ ------------------------- 
+model: macc=272 weights=256 activations=-- io=--
+
+
+
+
+
+Compilation details
+------------------------------------------------------------------------------------
+Compiler version: 1.1.0-31
+Compiler arguments:  -i /home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/image_classification/STM32N6/Model/my_output_dir/matmulModel_16_int8_OE_3_2_0.onnx --json-quant-file /home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/image_classification/STM32N6/Model/my_output_dir/matmulModel_16_int8_OE_3_2_0_Q.json -g network.c --load-mdesc /opt/ST/STEdgeAI/2.1/Utilities/configs/stm32n6.mdesc --load-mpool /home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/image_classification/STM32N6/Model/my_mpools/ramOnly_NUCLEO-N657X0-Q.mpool --save-mpool-file /home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/image_classification/STM32N6/Model/my_output_dir/ws/neural_art__network/ramOnly_NUCLEO-N657X0-Q.mpool --out-dir-prefix /home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/image_classification/STM32N6/Model/my_output_dir/ws/neural_art__network/ --output-info-file c_info.json
+====================================================================================
+
+Memory usage information  (input/output buffers are included in activations)
+------------------------------------------------------------------------------------
+	npuRAM3    [0x34200000 - 0x34270000]:          0  B /    448.000 kB  (  0.00 % used) -- weights:          0  B (  0.00 % used)  activations:          0  B (  0.00 % used)
+	npuRAM4    [0x34270000 - 0x342E0000]:          0  B /    448.000 kB  (  0.00 % used) -- weights:          0  B (  0.00 % used)  activations:          0  B (  0.00 % used)
+	npuRAM5    [0x342E0000 - 0x34350000]:        337  B /    448.000 kB  (  0.07 % used) -- weights:        305  B (  0.07 % used)  activations:         32  B (  0.01 % used)
+	npuRAM6    [0x34350000 - 0x343C0000]:          0  B /    448.000 kB  (  0.00 % used) -- weights:          0  B (  0.00 % used)  activations:          0  B (  0.00 % used)
+---
+Total:                                               337  B                                  -- weights:        305  B                  activations:         32  B                   
+====================================================================================
+
+
+Used memory ranges
+------------------------------------------------------------------------------------
+	npuRAM5    [0x342E0000 - 0x34350000]: 0x342E0000-0x342E0160
+====================================================================================
+
+Epochs details
+------------------------------------------------------------------------------------
+Total number of epochs: 2 of which 0 implemented in software
+---
+epoch ID   HW/SW/EC Operation (SW only)
+epoch 1       HW    
+epoch 2       HW    
+====================================================================================

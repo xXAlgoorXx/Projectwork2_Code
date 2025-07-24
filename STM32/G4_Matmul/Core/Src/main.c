@@ -68,7 +68,7 @@ static void MX_USART2_UART_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+void multiplyMatrix(int m1[][C1], int m2[][C2]);
 /* USER CODE END 0 */
 
 /**
@@ -158,11 +158,7 @@ int main(void)
 
 		DWT->CYCCNT = 0;                    // Reset counter
 		DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;  // Enable cycle counter
-
-    /* USER CODE END WHILE */
-
-    /* USER CODE BEGIN 3 */
-      //printf("Hello World\n\r");
+		//printf("Hello World\n\r");
 		multiplyMatrix(m1, m2);
 		uint32_t cycles = DWT->CYCCNT;
 		float time = ((float)cycles / SystemCoreClock) * 1000.0;//milli seconds
@@ -170,11 +166,16 @@ int main(void)
 		HAL_Delay(500);
 
 		DWT->CYCCNT = 0;
-		arm_status status = arm_mat_mult_q31(&matA, &matB, &matOut);
+		//arm_status status = arm_mat_mult_q31(&matA, &matB, &matOut);
+		arm_mat_mult_q31(&matA, &matB, &matOut);
 		cycles = DWT->CYCCNT;
 		time = ((float)cycles / SystemCoreClock) * 1000.0;//milli seconds
 		printf("Time CMSIS: %f msec, Cycles: %lu\r\n", time, cycles);
 		HAL_Delay(500);
+
+    /* USER CODE END WHILE */
+
+    /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
 }
@@ -187,11 +188,6 @@ void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
-
-  if (HAL_RCC_DeInit() != HAL_OK)
-  {
-    Error_Handler();
-  }
 
   /** Configure the main internal regulator output voltage
   */

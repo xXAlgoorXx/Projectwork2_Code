@@ -1,0 +1,57 @@
+ST Edge AI Core v2.1.0-20194 329b0e98d
+Created date          : 2025-05-30 13:47:34
+Parameters            : generate --model matmul_two_inputs_model.tflite --target stm32n6 --st-neural-art default@user_neuralart.json --name two_inputs_matmul
+
+Model name - matmul_two_inputs_model
+------ ------------------------------ --------------- ------------ ------ --------------------------- 
+m_id   layer (original)               oshape          param/size     macc                connected to 
+------ ------------------------------ --------------- ------------ ------ --------------------------- 
+0      serving_default_inputs0 ()     [b:1,h:3,c:4]                                                   
+       serving_default_inputs_10 ()   [b:1,h:4,c:2]                                                   
+       gemm_0 (BATCH_MATMUL)          [b:1,h:3,c:2]                    78     serving_default_inputs0 
+                                                                            serving_default_inputs_10 
+------ ------------------------------ --------------- ------------ ------ --------------------------- 
+model: macc=78 weights=0 activations=-- io=--
+
+
+
+
+
+Compilation details
+------------------------------------------------------------------------------------
+Compiler version: 1.1.0-31
+Compiler arguments:  -i /home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/STM32N6/Model/st_ai_output/matmul_two_inputs_model_OE_3_2_0.onnx --json-quant-file /home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/STM32N6/Model/st_ai_output/matmul_two_inputs_model_OE_3_2_0_Q.json -g two_inputs_matmul.c --load-mdesc /opt/ST/STEdgeAI/2.1/Utilities/configs/stm32n6.mdesc --load-mpool /home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/STM32N6/Model/my_mpools/stm32n6-app2.mpool --save-mpool-file /home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/STM32N6/Model/st_ai_ws/neural_art__two_inputs_matmul/stm32n6-app2.mpool --out-dir-prefix /home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/STM32N6/Model/st_ai_ws/neural_art__two_inputs_matmul/ --all-buffers-info --no-hw-sw-parallelism --cache-maintenance --enable-virtual-mem-pools --native-float --optimization 3 --Os --Omax-ca-pipe 4 --Ocache-opt --enable-epoch-controller --output-info-file c_info.json --network-name two_inputs_matmul
+====================================================================================
+
+Memory usage information  (input/output buffers are included in activations)
+------------------------------------------------------------------------------------
+	flexMEM    [0x34000000 - 0x34000000]:          0  B /          0  B  (  0.00 % used) -- weights:          0  B (  0.00 % used)  activations:          0  B (  0.00 % used)
+	cpuRAM1    [0x34080000 - 0x34080000]:          0  B /          0  B  (  0.00 % used) -- weights:          0  B (  0.00 % used)  activations:          0  B (  0.00 % used)
+	cpuRAM2    [0x34100000 - 0x34200000]:          0  B /      1.000 MB  (  0.00 % used) -- weights:          0  B (  0.00 % used)  activations:          0  B (  0.00 % used)
+	npuRAM3    [0x34200000 - 0x34270000]:          0  B /    448.000 kB  (  0.00 % used) -- weights:          0  B (  0.00 % used)  activations:          0  B (  0.00 % used)
+	npuRAM4    [0x34270000 - 0x342E0000]:          0  B /    448.000 kB  (  0.00 % used) -- weights:          0  B (  0.00 % used)  activations:          0  B (  0.00 % used)
+	npuRAM5    [0x342E0000 - 0x34350000]:        112  B /    448.000 kB  (  0.02 % used) -- weights:          0  B (  0.00 % used)  activations:        112  B (  0.02 % used)
+	npuRAM6    [0x34350000 - 0x343C0000]:          0  B /    448.000 kB  (  0.00 % used) -- weights:          0  B (  0.00 % used)  activations:          0  B (  0.00 % used)
+	octoFlash  [0x70380000 - 0x74080000]:          0  B /     61.000 MB  (  0.00 % used) -- weights:          0  B (  0.00 % used)  activations:          0  B (  0.00 % used)
+	hyperRAM   [0x90000000 - 0x91000000]:          0  B /     16.000 MB  (  0.00 % used) -- weights:          0  B (  0.00 % used)  activations:          0  B (  0.00 % used)
+---
+Total:                                               112  B                                  -- weights:          0  B                  activations:        112  B                   
+====================================================================================
+
+
+Used memory ranges
+------------------------------------------------------------------------------------
+	npuRAM5    [0x342E0000 - 0x34350000]: 0x342E0000-0x342E0070
+====================================================================================
+
+Epochs details
+------------------------------------------------------------------------------------
+Total number of epochs: 5 of which 1 implemented in software
+---
+epoch ID   HW/SW/EC Operation (SW only)
+epoch 1       EC    
+epoch 2       EC    
+epoch 3      -SW-   (        Conv        )
+epoch 4       EC    
+epoch 5       EC    
+====================================================================================

@@ -1,0 +1,28 @@
+digraph G {
+graph [ fontsize=11 ];
+node [ fontsize=11 ];
+edge [ fontsize=10 ];
+rankdir=BU
+ranksep=1.5
+nodesep=1
+splines=spline
+compound=true
+Graphinfo [ label="" shape=plaintext, style=rounded, color=black, fontname="Arial-Bold" ];
+Input_1_out_0 [ label="{ { <i0> 0} |  [4]\lInput_1_out_0 | { <o0> 0} }", shape=record, color=black, style=rounded  ] ;
+Input_0_out_0 [ label="{ { <i0> 0} |  [1]\lInput_0_out_0 | { <o0> 0} }", shape=record, color=black, style=rounded  ] ;
+Gemm_2_gemm_7_0_reshape_w_15 [ label="{ { < i0>  0 S } | id=[9] tid=[2]\lGemm_2_gemm_7_0_reshape_w_15\lkind=Reshape\lhw unit=NULL_UNIT\l | { < o0>  0 M } }", shape=record, color=black, style=rounded  ] ;
+Gemm_2_gemm_7_0_reshape_x_13 [ label="{ { < i0>  0 S } | id=[7] tid=[3]\lGemm_2_gemm_7_0_reshape_x_13\lkind=Reshape\lhw unit=NULL_UNIT\l | { < o0>  0 M } }", shape=record, color=black, style=rounded  ] ;
+Identity_inserted_id19 [ label="{ { < i0>  0 M } | id=[19] tid=[4]\lIdentity_inserted_id19\lkind=Identity\lhw conf name=\lhw unit=NULL_UNIT\l | { < o0>  0 M } }", shape=record, color=black, style=rounded  ] ;
+Gemm_2_gemm_7_0_conv_16 [ label="{ { < i0>  0 M  | < i1>  1 M } | id=[10] tid=[5]\lGemm_2_gemm_7_0_conv_16\lkind=Conv\lNUM_OPS = 48 OPS( 1e+02% of total )\lhw unit=NULL_UNIT\lkernel_shape is 1 1\lgroup i 1\lstrides is 1 1\lpads is 0 0 0 0\ldilations is 1 1\l | { < o0>  0 M } }", shape=record, color=black, style=rounded  ] ;
+Gemm_2_out_0_0_10 [ label="{ { < i0>  0 M } | id=[14] tid=[6]\lGemm_2_out_0_0_10\lkind=Reshape\lhw conf name=\lhw unit=NULL_UNIT\l | { < o0>  0 M } }", shape=record, color=black, style=rounded  ] ;
+Gemm_2_matmul_concat_5 [ label="{ { < i0>  0 M } | id=[15] tid=[7]\lGemm_2_matmul_concat_5\lkind=Concat\lhw conf name=\lhw unit=NULL_UNIT\laxis i 0\l | { < o0>  0 M } }", shape=record, color=black, style=rounded  ] ;
+__NN__RETURN__ [ label="{ { < i0>  0 M } | id=[18] tid=[8]\l__NN__RETURN__\lkind=Return\lhw unit=NULL_UNIT\l}", shape=record, color=black, style=rounded  ] ;
+Gemm_2_gemm_7_0_reshape_w_15:o0:s->Gemm_2_gemm_7_0_conv_16:i1:n [ label="edge id=[9]\ltid=65 66\lbatch: 0(in,L) 0(out,L) 0(mem,L) \l3x4x1x1\lbits=32\lin=out: Float\lGemm_2_gemm_7_0_reshape_w_15 FLOAT( 3 4 1 1 ) edge bs=48\lout bw=?\l" ]; 
+Gemm_2_out_0_0_10:o0:s->Gemm_2_matmul_concat_5:i0:n [ label="edge id=[14]\ltid=97 98\lbatch: 1(in) 1(out,L) \l1x3x2\lbits=32\lin=out: Float\lGemm_2_out_0_0_10_o FLOAT( 1 3 2 ) edge bs=24\lout bw=?\l" ]; 
+Gemm_2_gemm_7_0_conv_16:o0:s->Gemm_2_out_0_0_10:i0:n [ label="edge id=[18]\ltid=118 119\lbatch: 1(in,L) 0(out,L) 0(mem,L) \l1x3x1x2\lbits=32\lin=out: Float\lGemm_2_gemm_7_0_conv_16 FLOAT( 1 3 1 2 ) edge bs=24\lout bw=?\l" ]; 
+Gemm_2_matmul_concat_5:o0:s->__NN__RETURN__:i0:n [ label="edge id=[19]\ltid=120 121\lbatch: 1(out) \l1x3x2\lbits=32\lin=out: Float\lGemm_2_matmul_concat_out_6 FLOAT( 1 3 2 ) edge bs=24\lout bw=?\l" ]; 
+Gemm_2_gemm_7_0_reshape_x_13:o0:s->Identity_inserted_id19:i0:n [ label="edge id=[20]\ltid=61 124\lbatch: 1(in) 1(out,L) 1(mem,L) \l1x4x1x2\lbits=32\lin=out: Float\lGemm_2_gemm_7_0_reshape_x_13 FLOAT( 1 4 1 2 ) edge bs=32\lout bw=?\l" ]; 
+Identity_inserted_id19:o0:s->Gemm_2_gemm_7_0_conv_16:i0:n [ label="edge id=[21]\ltid=125 62\lbatch: 0(in,L) 1(out) 0(mem,L) \l1x4x1x2\lbits=32\lin=out: Float\lGemm_2_gemm_7_0_reshape_x_13 FLOAT( 1 4 1 2 ) edge bs=32\lout bw=?\l" ]; 
+Input_1_out_0:o0:s->Gemm_2_gemm_7_0_reshape_w_15:i0:n [ label="edge id=[22]\ltid=25 52\lbatch: 1(in) 1(out,L) 1(mem,L) \l1x3x4\lbits=32\lin=out: Float\lInput_1_out_0_0_split_B_4_o_0 FLOAT( 1 3 4 ) edge bs=48\lout bw=?\l" ]; 
+Input_0_out_0:o0:s->Gemm_2_gemm_7_0_reshape_x_13:i0:n [ label="edge id=[23]\ltid=10 39\lbatch: 1(in) 1(out,L) 1(mem,L) \l1x4x2\lbits=32\lin=out: Float\lInput_0_out_0_0_split_A_3_o_0 FLOAT( 1 4 2 ) edge bs=32\lout bw=?\l" ]; 
+}

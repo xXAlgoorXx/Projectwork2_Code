@@ -1,0 +1,10 @@
+{
+    "Globals": {
+    },
+    "Profiles": {
+        "default": {
+            "memory_pool": "./my_mpools/ramOnly_NUCLEO-N657X0-Q.mpool",
+            "options" : "--fake-Qmn --w-bits 8 --f-bits 8"
+        }
+    }
+}

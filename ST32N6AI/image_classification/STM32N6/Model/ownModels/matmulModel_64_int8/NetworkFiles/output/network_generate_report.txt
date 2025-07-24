@@ -1,0 +1,50 @@
+ST Edge AI Core v2.1.0-20194 329b0e98d
+Created date          : 2025-07-14 08:24:34
+Parameters            : generate --model ownModels/matmulModel_64_int8/matmulModel_64_int8.tflite --target stm32n6 --st-neural-art default@user_neuralart_RamOnlyNUCLEO_N6.json --input-data-type int8 -w ownModels/matmulModel_64_int8/NetworkFiles/ -o ownModels/matmulModel_64_int8/NetworkFiles/output/
+
+Model name - matmulModel_64_int8
+------ ---------------------------- ------------- ------------- ------- ------------------------- 
+m_id   layer (original)             oshape        param/size       macc              connected to 
+------ ---------------------------- ------------- ------------- ------- ------------------------- 
+0      serving_default_args_00 ()   [b:1,c:64]                                                    
+       tfl_pseudo_qconst ()         [b:64,c:64]   4,096/4,096                                     
+       gemm_0 (FULLY_CONNECTED)     [b:1,c:64]                    4,160   serving_default_args_00 
+                                                                                tfl_pseudo_qconst 
+------ ---------------------------- ------------- ------------- ------- ------------------------- 
+model: macc=4,160 weights=4,096 activations=-- io=--
+
+
+
+
+
+Compilation details
+------------------------------------------------------------------------------------
+Compiler version: 1.1.0-31
+Compiler arguments:  -i /home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/image_classification/STM32N6/Model/ownModels/matmulModel_64_int8/NetworkFiles/output/matmulModel_64_int8_OE_3_2_0.onnx --json-quant-file /home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/image_classification/STM32N6/Model/ownModels/matmulModel_64_int8/NetworkFiles/output/matmulModel_64_int8_OE_3_2_0_Q.json -g network.c --load-mdesc /opt/ST/STEdgeAI/2.1/Utilities/configs/stm32n6.mdesc --load-mpool /home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/image_classification/STM32N6/Model/my_mpools/ramOnly_NUCLEO-N657X0-Q.mpool --save-mpool-file /home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/image_classification/STM32N6/Model/ownModels/matmulModel_64_int8/NetworkFiles/neural_art__network/ramOnly_NUCLEO-N657X0-Q.mpool --out-dir-prefix /home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/image_classification/STM32N6/Model/ownModels/matmulModel_64_int8/NetworkFiles/neural_art__network/ -O3 --all-buffers-info --mvei --cache-maintenance --Oalt-sched --enable-virtual-mem-pools --Omax-ca-pipe 4 --Ocache-opt --Os --output-info-file c_info.json
+====================================================================================
+
+Memory usage information  (input/output buffers are included in activations)
+------------------------------------------------------------------------------------
+	npuRAM3    [0x34200000 - 0x34270000]:      4.282 kB /    448.000 kB  (  0.96 % used) -- weights:      4.157 kB (  0.93 % used)  activations:        128  B (  0.03 % used)
+	npuRAM4    [0x34270000 - 0x342E0000]:          0  B /    448.000 kB  (  0.00 % used) -- weights:          0  B (  0.00 % used)  activations:          0  B (  0.00 % used)
+	npuRAM5    [0x342E0000 - 0x34350000]:          0  B /    448.000 kB  (  0.00 % used) -- weights:          0  B (  0.00 % used)  activations:          0  B (  0.00 % used)
+	npuRAM6    [0x34350000 - 0x343C0000]:          0  B /    448.000 kB  (  0.00 % used) -- weights:          0  B (  0.00 % used)  activations:          0  B (  0.00 % used)
+---
+Total:                                             4.282 kB                                  -- weights:      4.157 kB                  activations:        128  B                   
+====================================================================================
+
+
+Used memory ranges
+------------------------------------------------------------------------------------
+	npuRAM3    [0x34200000 - 0x34270000]: 0x34200000-0x34201130
+====================================================================================
+
+Epochs details
+------------------------------------------------------------------------------------
+Total number of epochs: 3 of which 0 implemented in software
+---
+epoch ID   HW/SW/EC Operation (SW only)
+epoch 1       HW    
+epoch 2       HW    
+epoch 3       HW    
+====================================================================================

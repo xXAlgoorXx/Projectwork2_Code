@@ -1,0 +1,4 @@
+../ATON_MatMul/source/ATON_MatMul.c:39:6:update_weights_float	0	static
+../ATON_MatMul/source/ATON_MatMul.c:44:6:update_weights_int8	16	static,ignoring_inline_asm
+../ATON_MatMul/source/ATON_MatMul.c:82:9:getIdentityWeights_int8	24	static
+../ATON_MatMul/source/ATON_MatMul.c:119:6:NeuralNetwork_init	32	static

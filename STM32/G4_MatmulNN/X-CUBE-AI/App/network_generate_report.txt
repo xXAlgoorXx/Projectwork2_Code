@@ -1,0 +1,140 @@
+ST Edge AI Core v2.0.0-20049
+Created date          : 2025-05-15 10:21:46
+Parameters            : generate --target stm32g4 --name network -m /home/lukasschoepf/Documents/ProjectWork_2/Networks/simpleDense_int8.tflite --compression none --verbosity 1 --workspace /tmp/mxAI_workspace86195500214063721437508352412624 --output /home/lukasschoepf/.stm32cubemx/network_output
+
+Exec/report summary (generate)
+----------------------------------------------------------------------------------------------------------------------
+model file         :   /home/lukasschoepf/Documents/ProjectWork_2/Networks/simpleDense_int8.tflite                    
+type               :   tflite                                                                                         
+c_name             :   network                                                                                        
+compression        :   none                                                                                           
+options            :   allocate-inputs, allocate-outputs                                                              
+optimization       :   balanced                                                                                       
+target/series      :   stm32g4                                                                                        
+workspace dir      :   /tmp/mxAI_workspace86195500214063721437508352412624                                            
+output dir         :   /home/lukasschoepf/.stm32cubemx/network_output                                                 
+model_fmt          :   ss/sa per channel                                                                              
+model_name         :   simpleDense_int8                                                                               
+model_hash         :   0x6a2f81e7f5fae113e19854f54415eb6a                                                             
+params #           :   100 items (100 B)                                                                              
+----------------------------------------------------------------------------------------------------------------------
+input 1/1          :   'serving_default_args_00', int8(1x10), 10 Bytes, QLinear(0.003915424,-128,int8), activations   
+output 1/1         :   'gemm_0', int8(1x10), 10 Bytes, QLinear(0.008187638,5,int8), activations                       
+macc               :   110                                                                                            
+weights (ro)       :   140 B (140 B) (1 segment) / -260(-65.0%) vs float model                                        
+activations (rw)   :   144 B (144 B) (1 segment) *                                                                    
+ram (total)        :   144 B (144 B) = 144 + 0 + 0                                                                    
+----------------------------------------------------------------------------------------------------------------------
+(*) 'input'/'output' buffers can be used from the activations buffer
+
+Model name - simpleDense_int8
+------ ----------------------------------- ------------- ------------ ------ ------------------------- --- --------------- --------------- -------------- 
+m_id   layer (type,original)               oshape        param/size     macc              connected to   | c_size          c_macc          c_type         
+------ ----------------------------------- ------------- ------------ ------ ------------------------- --- --------------- --------------- -------------- 
+0      serving_default_args_00 (Input, )   [b:1,c:10]                                                    | +140(+100.0%)   +110(+100.0%)   Dense_[o][0]   
+       tfl_pseudo_qconst (Placeholder, )   [b:10,c:10]   100/100                                         | -100(-100.0%)                   
+       gemm_0 (Gemm, FULLY_CONNECTED)      [b:1,c:10]                    110   serving_default_args_00   |                 -110(-100.0%)   
+                                                                                     tfl_pseudo_qconst   | 
+------ ----------------------------------- ------------- ------------ ------ ------------------------- --- --------------- --------------- -------------- 
+model/c-model: macc=110/110  weights=100/140 +40(+40.0%) activations=--/144 io=--/0
+
+
+
+Generated C-graph summary
+------------------------------------------------------------------------------------------------------------------------
+model name            : simpleDense_int8
+c-name                : network
+c-node #              : 1
+c-array #             : 5
+activations size      : 144 (1 segment)
+weights size          : 140 (1 segment)
+macc                  : 110
+inputs                : ['serving_default_args_00_output']
+outputs               : ['gemm_0_output']
+
+C-Arrays (5)
+------ -------------------------------- ----------- ------------------------- ----------- --------- 
+c_id   name (*_array)                   item/size   domain/mem-pool           c-type      comment   
+------ -------------------------------- ----------- ------------------------- ----------- --------- 
+0      gemm_0_bias                      10/40       weights/weights           const s32             
+1      gemm_0_output                    10/10       activations/**default**   s8          /output   
+2      gemm_0_scratch0                  60/120      activations/**default**   s16                   
+3      gemm_0_weights                   100/100     weights/weights           const s8              
+4      serving_default_args_00_output   10/10       activations/**default**   s8          /input    
+------ -------------------------------- ----------- ------------------------- ----------- --------- 
+
+C-Layers (1)
+------ ---------------- ---- ------------ ------ ----- ----------------------------------- ------------------ 
+c_id   name (*_layer)   id   layer_type   macc   rom   tensors                             shape (array id)   
+------ ---------------- ---- ------------ ------ ----- ----------------------------------- ------------------ 
+0      gemm_0           0    Dense        110    140   I: serving_default_args_00_output   int8(1x10) (4)     
+                                                       S: gemm_0_scratch0                                     
+                                                       W: gemm_0_weights                   int8(10x10) (3)    
+                                                       W: gemm_0_bias                      int32(10) (0)      
+                                                       O: gemm_0_output                    int8(1x10) (1)     
+------ ---------------- ---- ------------ ------ ----- ----------------------------------- ------------------ 
+
+
+
+Number of operations per c-layer
+------- ------ ---------------- ----- ------------ 
+c_id    m_id   name (type)        #op         type 
+------- ------ ---------------- ----- ------------ 
+0       0      gemm_0 (Dense)     110   smul_s8_s8 
+------- ------ ---------------- ----- ------------ 
+total                             110 
+
+Number of operation types
+---------------- ----- ----------- 
+operation type       #           % 
+---------------- ----- ----------- 
+smul_s8_s8         110      100.0% 
+
+Complexity report (model)
+------ ------------------------- ------------------------- ------------------------- ------ 
+m_id   name                      c_macc                    c_rom                     c_id   
+------ ------------------------- ------------------------- ------------------------- ------ 
+0      serving_default_args_00   |||||||||||||||| 100.0%   |||||||||||||||| 100.0%   [0]    
+------ ------------------------- ------------------------- ------------------------- ------ 
+macc=110 weights=140 act=144 ram_io=0
+ 
+ Requested memory size by section - "stm32g4" target
+ ------------------------------ ------- -------- ------ ----- 
+ module                            text   rodata   data   bss 
+ ------------------------------ ------- -------- ------ ----- 
+ NetworkRuntime1000_CM4_GCC.a     6,056        0      0     0 
+ network.o                          398      116    696   112 
+ network_data.o                      48       16     88     0 
+ lib (toolchain)*                     0        0      0     0 
+ ------------------------------ ------- -------- ------ ----- 
+ RT total**                       6,502      132    784   112 
+ ------------------------------ ------- -------- ------ ----- 
+ weights                              0      144      0     0 
+ activations                          0        0      0   144 
+ io                                   0        0      0     0 
+ ------------------------------ ------- -------- ------ ----- 
+ TOTAL                            6,502      276    784   256 
+ ------------------------------ ------- -------- ------ ----- 
+ *  toolchain objects (libm/libgcc*)
+ ** RT AI runtime objects (kernels+infrastructure)
+  
+  Summary - "stm32g4" target
+  ---------------------------------------------------
+               FLASH (ro)      %*   RAM (rw)       % 
+  ---------------------------------------------------
+  RT total          7,418   98.1%        896   86.2% 
+  ---------------------------------------------------
+  TOTAL             7,562              1,040         
+  ---------------------------------------------------
+  *  rt/total
+
+
+Generated files (7)
+---------------------------------------------------------------------- 
+/home/lukasschoepf/.stm32cubemx/network_output/network_data_params.h   
+/home/lukasschoepf/.stm32cubemx/network_output/network_data_params.c   
+/home/lukasschoepf/.stm32cubemx/network_output/network_data.h          
+/home/lukasschoepf/.stm32cubemx/network_output/network_data.c          
+/home/lukasschoepf/.stm32cubemx/network_output/network_config.h        
+/home/lukasschoepf/.stm32cubemx/network_output/network.h               
+/home/lukasschoepf/.stm32cubemx/network_output/network.c               
