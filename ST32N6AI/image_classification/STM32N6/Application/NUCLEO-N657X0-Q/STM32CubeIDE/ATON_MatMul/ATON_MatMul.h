@@ -13,5 +13,10 @@ void update_weights_float(float* NNweights, const float *new_weights,size_t Num_
 void update_weights_int8(int8_t* NNweights, const int8_t *new_weights,size_t Num_weights);
 int8_t* getIdentityWeights_int8(size_t insize,size_t outsize);
 
+void npu_matvec_int8_init(void); // initialize NN with correct size
+void npu_matvec_int8_run(void); // initialize NN with correct size
+void npu_matvec_float_init(void); // run NN with correct size
+void npu_matvec_float_run(void); // run NN with correct size
+
 bool npu_matvec_run(int size, const int8_t* input, const int8_t* weights, int8_t* output);
 

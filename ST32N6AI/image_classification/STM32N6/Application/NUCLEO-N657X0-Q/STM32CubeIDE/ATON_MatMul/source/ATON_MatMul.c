@@ -77,7 +77,28 @@ void update_weights_int8(int8_t* NNweights, const int8_t *new_weights,size_t Num
 //    return true;
 //}
 
+void npu_matvec_int8_init(void){
+	LL_ATON_DECLARE_NAMED_NN_INSTANCE_AND_INTERFACE(int8);
+	// Load right epockblock array
+	// EpochBlock_ItemTypeDef *LL_ATON_EpochBlockItems_int8()
+	return NULL;
+}
 
+void npu_matvec_int8_run(void){
+
+
+	return NULL;
+}
+
+void npu_matvec_float_init(void){
+	LL_ATON_DECLARE_NAMED_NN_INSTANCE_AND_INTERFACE(Float);
+	// Load right epockblock array
+	return NULL;
+}
+
+void npu_matvec_float_run(void){
+	return NULL;
+}
 
 int8_t* getIdentityWeights_int8(size_t insize, size_t outsize) {
     int8_t* identity = malloc(insize * outsize * sizeof(int8_t));

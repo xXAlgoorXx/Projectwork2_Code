@@ -164,7 +164,7 @@ static void LL_ATON_Start_EpochBlock_3(const void *epoch_block)
 	.offset_start = 1096,
 	.offset_end = 1128,
 	.offset_limit = 1160,
-    .frame_count =0,
+    .frame_count = 0,
     .fwidth = 0,
     .fheight = 0,
 	.frame_count = 0, // 0 else infloop
