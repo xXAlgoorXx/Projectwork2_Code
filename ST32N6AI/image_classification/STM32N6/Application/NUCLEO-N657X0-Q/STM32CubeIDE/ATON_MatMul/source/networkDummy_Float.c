@@ -135,7 +135,7 @@ static void LL_ATON_End_EpochBlock_Float(const void *epoch_block)
     .general.input.dim.tensor_h = 1,
     .general.input.dim.tensor_w = 1,
     .general.input.dim.tensor_c = matmulInfo_Float.insize,
-    .general.input.dim.num_elem = matmulInfo_Float.outsize,
+    .general.input.dim.num_elem = matmulInfo_Float.insize,
     .general.input.stride.b = matmulInfo_Float.insize * matmulInfo_Float.bytes,
     .general.input.stride.h = matmulInfo_Float.insize * matmulInfo_Float.bytes,
     .general.input.stride.w = matmulInfo_Float.insize * matmulInfo_Float.bytes,
@@ -143,11 +143,11 @@ static void LL_ATON_End_EpochBlock_Float(const void *epoch_block)
     .general.input.mem.start_offset = ((unsigned char *)(ATON_LIB_PHYSICAL_TO_VIRTUAL_ADDR(0x34200000UL + matmulInfo_Float.input_start))) /* Equivalent hex address = 0x34200400UL */,
     .general.input.format.is_signed = 0,
     /* "weights" tensor-related info: */
-    .weights.dim.tensor_b = matmulInfo_Float.insize,
+    .weights.dim.tensor_b = matmulInfo_Float.outsize,
     .weights.dim.tensor_h = 1,
     .weights.dim.tensor_w = 1,
-    .weights.dim.tensor_c = matmulInfo_Float.outsize,
-    .weights.dim.num_elem = matmulInfo_Float.insize * matmulInfo_Float.insize,
+    .weights.dim.tensor_c = matmulInfo_Float.insize,
+    .weights.dim.num_elem = matmulInfo_Float.insize * matmulInfo_Float.outsize,
     .weights.stride.b = matmulInfo_Float.insize * matmulInfo_Float.bytes,
     .weights.stride.h = matmulInfo_Float.insize * matmulInfo_Float.bytes,
     .weights.stride.w = matmulInfo_Float.insize * matmulInfo_Float.bytes,
@@ -158,13 +158,13 @@ static void LL_ATON_End_EpochBlock_Float(const void *epoch_block)
     .general.output.dim.tensor_b = 1,
     .general.output.dim.tensor_h = 1,
     .general.output.dim.tensor_w = 1,
-    .general.output.dim.tensor_c = 16,
-    .general.output.dim.num_elem = 16,
-    .general.output.stride.b = 64,
-    .general.output.stride.h = 64,
-    .general.output.stride.w = 64,
+    .general.output.dim.tensor_c = matmulInfo_Float.outsize,
+    .general.output.dim.num_elem = matmulInfo_Float.outsize,
+    .general.output.stride.b = matmulInfo_Float.outsize * matmulInfo_Float.bytes,
+    .general.output.stride.h = matmulInfo_Float.outsize * matmulInfo_Float.bytes,
+    .general.output.stride.w = matmulInfo_Float.outsize * matmulInfo_Float.bytes,
     .general.output.stride.c = matmulInfo_Float.bytes,
-    .general.output.mem.start_offset = ((unsigned char *)(ATON_LIB_PHYSICAL_TO_VIRTUAL_ADDR(0x34200000UL + 1088))) /* Equivalent hex address = 0x34200440UL */,
+    .general.output.mem.start_offset = ((unsigned char *)(ATON_LIB_PHYSICAL_TO_VIRTUAL_ADDR(0x34200000UL + matmulInfo_Float.output_start))) /* Equivalent hex address = 0x34200440UL */,
     .general.output.format.is_signed = 1,
     /* Node-specific Hyper-parameters: */
     .ngroup = 1,
@@ -181,7 +181,7 @@ static void LL_ATON_End_EpochBlock_Float(const void *epoch_block)
   /*     memory pool: 6 */
   /*     start: ((uintptr_t)(ATON_LIB_PHYSICAL_TO_VIRTUAL_ADDR(0x34200000UL + 1088))) */
   /*     end:   ((uintptr_t)(ATON_LIB_PHYSICAL_TO_VIRTUAL_ADDR(0x34200000UL + 1152))) */
-  LL_ATON_Cache_MCU_Clean_Range(((uintptr_t)(ATON_LIB_PHYSICAL_TO_VIRTUAL_ADDR(0x34200000UL + 1088))) /* Equivalent hex address = 0x34200440UL */, 64);
+  LL_ATON_Cache_MCU_Clean_Range(((uintptr_t)(ATON_LIB_PHYSICAL_TO_VIRTUAL_ADDR(0x34200000UL + matmulInfo_Float.input_start))) /* Equivalent hex address = 0x34200440UL */, matmulInfo_Float.output_end - matmulInfo_Float.input_start);
 
 }
 
