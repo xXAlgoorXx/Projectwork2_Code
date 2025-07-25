@@ -29,27 +29,27 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  12 .ARM.attributes 0000003a  00000000  00000000  00012a10  2**0
                   CONTENTS, READONLY
- 13 .debug_info   00066146  00000000  00000000  00012a4a  2**0
+ 13 .debug_info   00066d35  00000000  00000000  00012a4a  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_abbrev 00009c18  00000000  00000000  00078b90  2**0
+ 14 .debug_abbrev 00009d4b  00000000  00000000  0007977f  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_loclists 00020f69  00000000  00000000  000827a8  2**0
+ 15 .debug_loclists 00021468  00000000  00000000  000834ca  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_aranges 00002940  00000000  00000000  000a3718  2**3
+ 16 .debug_aranges 00002968  00000000  00000000  000a4938  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_rnglists 00003372  00000000  00000000  000a6058  2**0
+ 17 .debug_rnglists 000033ce  00000000  00000000  000a72a0  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_macro  00095b9c  00000000  00000000  000a93ca  2**0
+ 18 .debug_macro  0007f4af  00000000  00000000  000aa66e  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_line   0004b77b  00000000  00000000  0013ef66  2**0
+ 19 .debug_line   0004bb54  00000000  00000000  00129b1d  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .debug_str    003b1a7f  00000000  00000000  0018a6e1  2**0
+ 20 .debug_str    003b1d6d  00000000  00000000  00175671  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 21 .comment      00000043  00000000  00000000  0053c160  2**0
+ 21 .comment      00000043  00000000  00000000  005273de  2**0
                   CONTENTS, READONLY
- 22 .debug_frame  000081f0  00000000  00000000  0053c1a4  2**2
+ 22 .debug_frame  0000827c  00000000  00000000  00527424  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 23 .debug_line_str 00000156  00000000  00000000  00544394  2**0
+ 23 .debug_line_str 00000156  00000000  00000000  0052f6a0  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -410,9 +410,9 @@ Disassembly of section .text:
 34000b1a:	bf00      	nop
 
 34000b1c <update_weights_int8>:
-void update_weights_float(float* NNweights, const float *new_weights,size_t Num_weights) {
     memcpy(NNweights, new_weights, Num_weights * sizeof(float));
-    //    SCB_CleanDCache_by_Addr(weights, NUM_WEIGHTS * sizeof(float));
+    printf("Cleaning weights at %p, size %d\n\r", NNweights, Num_weights);
+    SCB_CleanDCache_by_Addr(NNweights, Num_weights * sizeof(float));
 }
 
 void update_weights_int8(int8_t* NNweights, const int8_t *new_weights,size_t Num_weights) {
@@ -421,7 +421,7 @@ void update_weights_int8(int8_t* NNweights, const int8_t *new_weights,size_t Num
 34000b20:	4604      	mov	r4, r0
     memcpy(NNweights, new_weights, Num_weights * sizeof(int8_t));
 34000b22:	f00e f94e 	bl	3400edc2 <memcpy>
-    printf("Cleaning weights at %p, size %lu\n\r", NNweights, Num_weights);
+    printf("Cleaning weights at %p, size %d\n\r", NNweights, Num_weights);
 34000b26:	462a      	mov	r2, r5
 34000b28:	4621      	mov	r1, r4
 34000b2a:	4811      	ldr	r0, [pc, #68]	@ (34000b70 <update_weights_int8+0x54>)
@@ -479,10 +479,10 @@ __STATIC_FORCEINLINE void __DSB(void)
 34000b74:	e000ed00 	.word	0xe000ed00
 
 34000b78 <getIdentityWeights_int8>:
-//    return true;
-//}
+	LL_ATON_RT_Main(&NN_Instance_int8);
 
-
+	return (float*)(matmulInfo_Float.output_start);
+}
 
 int8_t* getIdentityWeights_int8(size_t insize, size_t outsize) {
 34000b78:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
@@ -605,7 +605,7 @@ void NeuralNetwork_init(int8_t **nn_in, uint32_t *nnin_length, int8_t *nn_out[],
 34000bf8:	2d01      	cmp	r5, #1
 34000bfa:	f8c8 5000 	str.w	r5, [r8]
 34000bfe:	dd07      	ble.n	34000c10 <NeuralNetwork_init+0x4c>
-34000c00:	2186      	movs	r1, #134	@ 0x86
+34000c00:	21b8      	movs	r1, #184	@ 0xb8
 34000c02:	4b0c      	ldr	r3, [pc, #48]	@ (34000c34 <NeuralNetwork_init+0x70>)
 34000c04:	4a0c      	ldr	r2, [pc, #48]	@ (34000c38 <NeuralNetwork_init+0x74>)
 34000c06:	480d      	ldr	r0, [pc, #52]	@ (34000c3c <NeuralNetwork_init+0x78>)
@@ -650,9 +650,9 @@ void NeuralNetwork_init(int8_t **nn_in, uint32_t *nnin_length, int8_t *nn_out[],
 34000c2e:	6033      	str	r3, [r6, #0]
 }
 34000c30:	e8bd 83f8 	ldmia.w	sp!, {r3, r4, r5, r6, r7, r8, r9, pc}
-34000c34:	34010663 	.word	0x34010663
-34000c38:	340120df 	.word	0x340120df
-34000c3c:	34010687 	.word	0x34010687
+34000c34:	34010662 	.word	0x34010662
+34000c38:	340120de 	.word	0x340120de
+34000c3c:	34010686 	.word	0x34010686
 
 34000c40 <LL_ATON_End_EpochBlock_3>:
   LL_ATON_EnableUnits_Init(Enable_epoch_3_all_units, 4);
@@ -1216,9 +1216,9 @@ void controllOutput(int8_t* in, int8_t* weights, size_t insize, size_t outsize) 
     printf("\n\r");
 34000efa:	f00d bb8b 	b.w	3400e614 <iprintf>
 34000efe:	bf00      	nop
-34000f00:	340106ca 	.word	0x340106ca
-34000f04:	340106fc 	.word	0x340106fc
-34000f08:	340106de 	.word	0x340106de
+34000f00:	340106c9 	.word	0x340106c9
+34000f04:	340106fb 	.word	0x340106fb
+34000f08:	340106dd 	.word	0x340106dd
 
 34000f0c <main>:
 {
@@ -1703,15 +1703,15 @@ __STATIC_INLINE void LL_APB5_GRP1_EnableClockLowPower(uint32_t Periphs)
 340012a0:	30000008 	.word	0x30000008
 340012a4:	10000018 	.word	0x10000018
 340012a8:	e0001000 	.word	0xe0001000
-340012ac:	340106e3 	.word	0x340106e3
-340012b0:	340106ff 	.word	0x340106ff
-340012b4:	34010719 	.word	0x34010719
-340012b8:	34010734 	.word	0x34010734
-340012bc:	34010745 	.word	0x34010745
-340012c0:	34010757 	.word	0x34010757
-340012c4:	34010773 	.word	0x34010773
-340012c8:	34010796 	.word	0x34010796
-340012cc:	340106fc 	.word	0x340106fc
+340012ac:	340106e2 	.word	0x340106e2
+340012b0:	340106fe 	.word	0x340106fe
+340012b4:	34010718 	.word	0x34010718
+340012b8:	34010733 	.word	0x34010733
+340012bc:	34010744 	.word	0x34010744
+340012c0:	34010756 	.word	0x34010756
+340012c4:	34010772 	.word	0x34010772
+340012c8:	34010795 	.word	0x34010795
+340012cc:	340106fb 	.word	0x340106fb
 340012d0:	34200000 	.word	0x34200000
        int32_t op_size = dsize + (((uint32_t)addr) & (__SCB_DCACHE_LINE_SIZE - 1U));
 340012d4:	6bbb      	ldr	r3, [r7, #56]	@ 0x38
@@ -1855,11 +1855,11 @@ __STATIC_INLINE void LL_APB5_GRP1_EnableClockLowPower(uint32_t Periphs)
 340013dc:	e7cf      	b.n	3400137e <main+0x472>
 340013de:	bf00      	nop
 340013e0:	e000ed00 	.word	0xe000ed00
-340013e4:	34010789 	.word	0x34010789
+340013e4:	34010788 	.word	0x34010788
 340013e8:	34200000 	.word	0x34200000
 340013ec:	e0001000 	.word	0xe0001000
 340013f0:	340127f4 	.word	0x340127f4
-340013f4:	3401079a 	.word	0x3401079a
+340013f4:	34010799 	.word	0x34010799
 
 340013f8 <_write>:
 {
@@ -5233,7 +5233,7 @@ HAL_StatusTypeDef HAL_BSEC_OTP_Reload(BSEC_HandleTypeDef *hbsec, uint32_t FuseId
 340026d4:	2304      	movs	r3, #4
 340026d6:	e7b2      	b.n	3400263e <HAL_BSEC_OTP_Program+0x1e>
 340026d8:	56009000 	.word	0x56009000
-340026dc:	340107b3 	.word	0x340107b3
+340026dc:	340107b2 	.word	0x340107b2
 
 340026e0 <HAL_CACHEAXI_Enable>:
   * @param  hcacheaxi Pointer to a CACHEAXI_HandleTypeDef structure that contains
@@ -5319,7 +5319,7 @@ HAL_StatusTypeDef HAL_CACHEAXI_Enable(CACHEAXI_HandleTypeDef *hcacheaxi)
 3400273c:	2001      	movs	r0, #1
 3400273e:	e7ea      	b.n	34002716 <HAL_CACHEAXI_Enable+0x36>
 34002740:	580dfc00 	.word	0x580dfc00
-34002744:	3401085c 	.word	0x3401085c
+34002744:	3401085b 	.word	0x3401085b
 
 34002748 <HAL_CACHEAXI_Init>:
 {
@@ -5361,7 +5361,7 @@ HAL_StatusTypeDef HAL_CACHEAXI_Enable(CACHEAXI_HandleTypeDef *hcacheaxi)
 34002784:	bd10      	pop	{r4, pc}
 34002786:	bf00      	nop
 34002788:	580dfc00 	.word	0x580dfc00
-3400278c:	3401085c 	.word	0x3401085c
+3400278c:	3401085b 	.word	0x3401085b
 
 34002790 <HAL_NVIC_SetPriorityGrouping>:
   * @retval None
@@ -5413,7 +5413,7 @@ __STATIC_INLINE void __NVIC_SetPriorityGrouping(uint32_t PriorityGroup)
 }
 340027c0:	bd10      	pop	{r4, pc}
 340027c2:	bf00      	nop
-340027c4:	34010909 	.word	0x34010909
+340027c4:	34010908 	.word	0x34010908
 340027c8:	e000ed00 	.word	0xe000ed00
 
 340027cc <HAL_NVIC_SetPriority>:
@@ -5524,7 +5524,7 @@ __STATIC_INLINE uint32_t __NVIC_GetPriorityGrouping(void)
   NVIC_SetPriority(IRQn, NVIC_EncodePriority(prioritygroup, PreemptPriority, SubPriority));
 }
 34002878:	e8bd 81f0 	ldmia.w	sp!, {r4, r5, r6, r7, r8, pc}
-3400287c:	34010909 	.word	0x34010909
+3400287c:	34010908 	.word	0x34010908
 34002880:	e000ed00 	.word	0xe000ed00
 34002884:	e000ed14 	.word	0xe000ed14
 
@@ -5554,7 +5554,7 @@ void HAL_NVIC_EnableIRQ(IRQn_Type IRQn)
 340028a2:	4802      	ldr	r0, [pc, #8]	@ (340028ac <HAL_NVIC_EnableIRQ+0x24>)
 340028a4:	f7fe bdd0 	b.w	34001448 <assert_failed>
 340028a8:	e000e100 	.word	0xe000e100
-340028ac:	34010909 	.word	0x34010909
+340028ac:	34010908 	.word	0x34010908
 
 340028b0 <HAL_SYSTICK_Config>:
            function <b>SysTick_Config</b> is not included. In this case, the file <b><i>device</i>.h</b>
@@ -7341,7 +7341,7 @@ void HAL_GPIO_Init(GPIO_TypeDef  *GPIOx, const GPIO_InitTypeDef *GPIO_Init)
 34003448:	56023800 	.word	0x56023800
 3400344c:	56023c00 	.word	0x56023c00
 34003450:	56024000 	.word	0x56024000
-34003454:	340109b4 	.word	0x340109b4
+34003454:	340109b3 	.word	0x340109b3
 34003458:	56025000 	.word	0x56025000
     iocurrent = (GPIO_Init->Pin) & (1uL << position);
 3400345c:	f04f 0b01 	mov.w	fp, #1
@@ -7659,7 +7659,7 @@ void HAL_GPIO_Init(GPIO_TypeDef  *GPIOx, const GPIO_InitTypeDef *GPIO_Init)
 340036f6:	e7b5      	b.n	34003664 <HAL_GPIO_Init+0x364>
 340036f8:	230a      	movs	r3, #10
 340036fa:	e7b3      	b.n	34003664 <HAL_GPIO_Init+0x364>
-340036fc:	340109b4 	.word	0x340109b4
+340036fc:	340109b3 	.word	0x340109b3
 34003700:	46020000 	.word	0x46020000
 34003704:	56020400 	.word	0x56020400
 34003708:	56020800 	.word	0x56020800
@@ -7716,7 +7716,7 @@ void HAL_GPIO_WritePin(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin, GPIO_PinState Pin
 }
 3400375c:	e7fa      	b.n	34003754 <HAL_GPIO_WritePin+0x24>
 3400375e:	bf00      	nop
-34003760:	340109b4 	.word	0x340109b4
+34003760:	340109b3 	.word	0x340109b3
 
 34003764 <HAL_GPIO_TogglePin>:
   * @param  GPIO_Pin specifies the pin to be toggled.
@@ -7749,7 +7749,7 @@ void HAL_GPIO_TogglePin(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin)
 34003784:	61ac      	str	r4, [r5, #24]
 }
 34003786:	bd38      	pop	{r3, r4, r5, pc}
-34003788:	340109b4 	.word	0x340109b4
+34003788:	340109b3 	.word	0x340109b3
 
 3400378c <HAL_PCD_EP_Open>:
   * @param  ep_type endpoint type
@@ -9155,7 +9155,7 @@ void HAL_PWREx_ConfigVddIORange(uint32_t VddIOPort, uint32_t VoltageRange)
 }
 34004094:	e7e0      	b.n	34004058 <HAL_PWREx_ConfigVddIORange+0x44>
 34004096:	bf00      	nop
-34004098:	34010a5d 	.word	0x34010a5d
+34004098:	34010a5c 	.word	0x34010a5c
 3400409c:	56024800 	.word	0x56024800
 
 340040a0 <HAL_PWREx_EnableVddIO3>:
@@ -9235,7 +9235,7 @@ void HAL_RAMCFG_EnableAXISRAM(const RAMCFG_HandleTypeDef *hramcfg)
 34004120:	bd10      	pop	{r4, pc}
 34004122:	bf00      	nop
 34004124:	52023080 	.word	0x52023080
-34004128:	34010b08 	.word	0x34010b08
+34004128:	34010b07 	.word	0x34010b07
 
 3400412c <LL_RCC_HSI_IsReady>:
   return ((READ_BIT(RCC->SR, RCC_SR_HSIRDY) != 0UL) ? 1UL : 0UL);
@@ -9697,7 +9697,7 @@ static uint32_t RCC_PLL_IsNewConfig(uint32_t PLLnumber, const RCC_PLLInitTypeDef
 3400442a:	bf00      	nop
 3400442c:	56028080 	.word	0x56028080
 34004430:	56028088 	.word	0x56028088
-34004434:	34010bb3 	.word	0x34010bb3
+34004434:	34010bb2 	.word	0x34010bb2
 34004438:	56029000 	.word	0x56029000
 3400443c:	56028084 	.word	0x56028084
 34004440:	8c0000ff 	.word	0x8c0000ff
@@ -10131,7 +10131,7 @@ __STATIC_INLINE uint32_t LL_RCC_PLL4_IsEnabledBypass(void)
 }
 34004760:	e6fa      	b.n	34004558 <HAL_RCC_OscConfig+0x60>
 34004762:	bf00      	nop
-34004764:	34010bb3 	.word	0x34010bb3
+34004764:	34010bb2 	.word	0x34010bb2
 34004768:	56028000 	.word	0x56028000
 3400476c:	00018010 	.word	0x00018010
 34004770:	56029000 	.word	0x56029000
@@ -10501,7 +10501,7 @@ __STATIC_INLINE uint32_t LL_RCC_IC11_GetSource(void)
 34004a58:	f7ff fbc2 	bl	340041e0 <RCC_PLL_Enable>
 34004a5c:	e7f2      	b.n	34004a44 <HAL_RCC_OscConfig+0x54c>
 34004a5e:	bf00      	nop
-34004a60:	34010bb3 	.word	0x34010bb3
+34004a60:	34010bb2 	.word	0x34010bb2
 34004a64:	56028000 	.word	0x56028000
 34004a68:	56029000 	.word	0x56029000
 34004a6c:	00018002 	.word	0x00018002
@@ -11088,7 +11088,7 @@ __STATIC_INLINE uint32_t LL_RCC_IC11_GetSource(void)
   return HAL_InitTick(uwTickPrio);
 34004f52:	6818      	ldr	r0, [r3, #0]
 34004f54:	f7fd baaa 	b.w	340024ac <HAL_InitTick>
-34004f58:	34010bb3 	.word	0x34010bb3
+34004f58:	34010bb2 	.word	0x34010bb2
 34004f5c:	56028000 	.word	0x56028000
 34004f60:	3401282c 	.word	0x3401282c
 34004f64:	34012834 	.word	0x34012834
@@ -11319,7 +11319,7 @@ __STATIC_INLINE uint32_t LL_RCC_IC11_GetSource(void)
 34005162:	430b      	orrcc	r3, r1
 34005164:	6253      	strcc	r3, [r2, #36]	@ 0x24
 34005166:	e68a      	b.n	34004e7e <HAL_RCC_ClockConfig+0x18e>
-34005168:	34010bb3 	.word	0x34010bb3
+34005168:	34010bb2 	.word	0x34010bb2
 3400516c:	56028000 	.word	0x56028000
 
 34005170 <HAL_RCC_GetSysClockFreq>:
@@ -11941,7 +11941,7 @@ static uint32_t RCCEx_CalcPLLFreq(uint32_t PLLInputFreq, uint32_t M, uint32_t N,
 340055e6:	2503      	movs	r5, #3
 340055e8:	e7d3      	b.n	34005592 <HAL_RCCEx_PeriphCLKConfig+0x13e>
 340055ea:	bf00      	nop
-340055ec:	34010c5b 	.word	0x34010c5b
+340055ec:	34010c5a 	.word	0x34010c5a
 340055f0:	00010300 	.word	0x00010300
 340055f4:	0003e300 	.word	0x0003e300
 340055f8:	56028000 	.word	0x56028000
@@ -12271,7 +12271,7 @@ __STATIC_INLINE void LL_RCC_IC20_Enable(void)
 340058f8:	f7fb fda6 	bl	34001448 <assert_failed>
 340058fc:	e018      	b.n	34005930 <HAL_RCCEx_PeriphCLKConfig+0x4dc>
 340058fe:	bf00      	nop
-34005900:	34010c5b 	.word	0x34010c5b
+34005900:	34010c5a 	.word	0x34010c5a
 34005904:	56028000 	.word	0x56028000
 34005908:	03000014 	.word	0x03000014
 3400590c:	03020014 	.word	0x03020014
@@ -12597,7 +12597,7 @@ __STATIC_INLINE void LL_RCC_IC20_Enable(void)
 34005c48:	4a02      	ldr	r2, [pc, #8]	@ (34005c54 <HAL_RCCEx_PeriphCLKConfig+0x800>)
 34005c4a:	f8d4 10d4 	ldr.w	r1, [r4, #212]	@ 0xd4
 34005c4e:	e003      	b.n	34005c58 <HAL_RCCEx_PeriphCLKConfig+0x804>
-34005c50:	34010c5b 	.word	0x34010c5b
+34005c50:	34010c5a 	.word	0x34010c5a
 34005c54:	56028000 	.word	0x56028000
 34005c58:	f8d2 3148 	ldr.w	r3, [r2, #328]	@ 0x148
 34005c5c:	f423 1380 	bic.w	r3, r3, #1048576	@ 0x100000
@@ -12918,7 +12918,7 @@ __STATIC_INLINE void LL_RCC_IC20_Enable(void)
 34005f78:	f7fb fa66 	bl	34001448 <assert_failed>
 34005f7c:	e012      	b.n	34005fa4 <HAL_RCCEx_PeriphCLKConfig+0xb50>
 34005f7e:	bf00      	nop
-34005f80:	34010c5b 	.word	0x34010c5b
+34005f80:	34010c5a 	.word	0x34010c5a
 34005f84:	56028000 	.word	0x56028000
 34005f88:	0700000c 	.word	0x0700000c
 34005f8c:	0702000c 	.word	0x0702000c
@@ -13235,7 +13235,7 @@ __STATIC_INLINE void LL_RCC_IC20_Enable(void)
 3400629a:	f44f 4380 	mov.w	r3, #16384	@ 0x4000
 3400629e:	e019      	b.n	340062d4 <HAL_RCCEx_PeriphCLKConfig+0xe80>
 340062a0:	07020c0c 	.word	0x07020c0c
-340062a4:	34010c5b 	.word	0x34010c5b
+340062a4:	34010c5a 	.word	0x34010c5a
 340062a8:	56028000 	.word	0x56028000
 340062ac:	0700100c 	.word	0x0700100c
 340062b0:	0702100c 	.word	0x0702100c
@@ -13558,7 +13558,7 @@ __STATIC_INLINE void LL_RCC_IC20_Enable(void)
 340065ee:	f8d4 00a0 	ldr.w	r0, [r4, #160]	@ 0xa0
 340065f2:	e00b      	b.n	3400660c <HAL_RCCEx_PeriphCLKConfig+0x11b8>
 340065f4:	0700142c 	.word	0x0700142c
-340065f8:	34010c5b 	.word	0x34010c5b
+340065f8:	34010c5a 	.word	0x34010c5a
 340065fc:	0702142c 	.word	0x0702142c
 34006600:	56028000 	.word	0x56028000
 34006604:	0700182c 	.word	0x0700182c
@@ -13884,7 +13884,7 @@ __STATIC_INLINE void LL_RCC_IC20_Enable(void)
 3400691a:	bf00      	nop
 3400691c:	56028000 	.word	0x56028000
 34006920:	07001418 	.word	0x07001418
-34006924:	34010c5b 	.word	0x34010c5b
+34006924:	34010c5a 	.word	0x34010c5a
 34006928:	07021418 	.word	0x07021418
 3400692c:	07001818 	.word	0x07001818
 34006930:	07021818 	.word	0x07021818
@@ -14205,7 +14205,7 @@ __STATIC_INLINE void LL_RCC_IC20_Enable(void)
 34006c40:	f8d2 30e4 	ldr.w	r3, [r2, #228]	@ 0xe4
 34006c44:	6ca0      	ldr	r0, [r4, #72]	@ 0x48
 34006c46:	e017      	b.n	34006c78 <HAL_RCCEx_PeriphCLKConfig+0x1824>
-34006c48:	34010c5b 	.word	0x34010c5b
+34006c48:	34010c5a 	.word	0x34010c5a
 34006c4c:	56028000 	.word	0x56028000
 34006c50:	07001020 	.word	0x07001020
 34006c54:	07021020 	.word	0x07021020
@@ -14540,7 +14540,7 @@ __STATIC_INLINE void LL_RCC_IC20_Enable(void)
 34006f94:	e01a      	b.n	34006fcc <HAL_RCCEx_PeriphCLKConfig+0x1b78>
 34006f96:	bf00      	nop
 34006f98:	07000830 	.word	0x07000830
-34006f9c:	34010c5b 	.word	0x34010c5b
+34006f9c:	34010c5a 	.word	0x34010c5a
 34006fa0:	07020830 	.word	0x07020830
 34006fa4:	56028000 	.word	0x56028000
 34006fa8:	07000c30 	.word	0x07000c30
@@ -14850,7 +14850,7 @@ __STATIC_INLINE void LL_RCC_IC20_Enable(void)
 340072b8:	4801      	ldr	r0, [pc, #4]	@ (340072c0 <HAL_RCCEx_PeriphCLKConfig+0x1e6c>)
 340072ba:	f7fa f8c5 	bl	34001448 <assert_failed>
 340072be:	e019      	b.n	340072f4 <HAL_RCCEx_PeriphCLKConfig+0x1ea0>
-340072c0:	34010c5b 	.word	0x34010c5b
+340072c0:	34010c5a 	.word	0x34010c5a
 340072c4:	07021c30 	.word	0x07021c30
 340072c8:	56028000 	.word	0x56028000
 340072cc:	07000034 	.word	0x07000034
@@ -15167,7 +15167,7 @@ __STATIC_INLINE void LL_RCC_CLKP_Enable(void)
 340075c0:	f8c3 2a48 	streq.w	r2, [r3, #2632]	@ 0xa48
 }
 340075c4:	f7fe b8fb 	b.w	340057be <HAL_RCCEx_PeriphCLKConfig+0x36a>
-340075c8:	34010c5b 	.word	0x34010c5b
+340075c8:	34010c5a 	.word	0x34010c5a
 340075cc:	56028000 	.word	0x56028000
 340075d0:	03030014 	.word	0x03030014
 340075d4:	03010014 	.word	0x03010014
@@ -15506,7 +15506,7 @@ __STATIC_INLINE void LL_RCC_CLKP_Enable(void)
 340078bc:	f8c3 2a48 	streq.w	r2, [r3, #2632]	@ 0xa48
 }
 340078c0:	f7fe baff 	b.w	34005ec2 <HAL_RCCEx_PeriphCLKConfig+0xa6e>
-340078c4:	34010c5b 	.word	0x34010c5b
+340078c4:	34010c5a 	.word	0x34010c5a
 340078c8:	56028000 	.word	0x56028000
 340078cc:	0303001c 	.word	0x0303001c
 340078d0:	0301001c 	.word	0x0301001c
@@ -15840,7 +15840,7 @@ __STATIC_INLINE void LL_RCC_CLKP_Enable(void)
 34007bae:	f7fe bd3b 	b.w	34006628 <HAL_RCCEx_PeriphCLKConfig+0x11d4>
 34007bb2:	bf00      	nop
 34007bb4:	0703080c 	.word	0x0703080c
-34007bb8:	34010c5b 	.word	0x34010c5b
+34007bb8:	34010c5a 	.word	0x34010c5a
 34007bbc:	56028000 	.word	0x56028000
 34007bc0:	0701080c 	.word	0x0701080c
 34007bc4:	07030c0c 	.word	0x07030c0c
@@ -16154,7 +16154,7 @@ __STATIC_INLINE void LL_RCC_CLKP_Enable(void)
 }
 34007e90:	f7fe bdc8 	b.w	34006a24 <HAL_RCCEx_PeriphCLKConfig+0x15d0>
 34007e94:	07031418 	.word	0x07031418
-34007e98:	34010c5b 	.word	0x34010c5b
+34007e98:	34010c5a 	.word	0x34010c5a
 34007e9c:	56028000 	.word	0x56028000
 34007ea0:	07011418 	.word	0x07011418
 34007ea4:	07031818 	.word	0x07031818
@@ -16470,7 +16470,7 @@ __STATIC_INLINE void LL_RCC_CLKP_Enable(void)
 34008176:	f7fe be65 	b.w	34006e44 <HAL_RCCEx_PeriphCLKConfig+0x19f0>
 3400817a:	bf00      	nop
 3400817c:	07031420 	.word	0x07031420
-34008180:	34010c5b 	.word	0x34010c5b
+34008180:	34010c5a 	.word	0x34010c5a
 34008184:	56028000 	.word	0x56028000
 34008188:	07011420 	.word	0x07011420
 3400818c:	07031820 	.word	0x07031820
@@ -16734,7 +16734,7 @@ __STATIC_INLINE void LL_RCC_CLKP_Enable(void)
 340083e6:	f7fe bfae 	b.w	34007346 <HAL_RCCEx_PeriphCLKConfig+0x1ef2>
 340083ea:	bf00      	nop
 340083ec:	07031430 	.word	0x07031430
-340083f0:	34010c5b 	.word	0x34010c5b
+340083f0:	34010c5a 	.word	0x34010c5a
 340083f4:	56028000 	.word	0x56028000
 340083f8:	07011430 	.word	0x07011430
 340083fc:	07031830 	.word	0x07031830
@@ -20286,7 +20286,7 @@ void HAL_RIF_RIMC_ConfigMasterAttributes(uint32_t MasterId, const RIMC_MasterCon
 3400a14e:	d1f5      	bne.n	3400a13c <HAL_RIF_RIMC_ConfigMasterAttributes+0x8c>
 3400a150:	e7c6      	b.n	3400a0e0 <HAL_RIF_RIMC_ConfigMasterAttributes+0x30>
 3400a152:	bf00      	nop
-3400a154:	34010d06 	.word	0x34010d06
+3400a154:	34010d05 	.word	0x34010d05
 3400a158:	10001011 	.word	0x10001011
 
 3400a15c <HAL_RIF_RISC_SetSlaveSecureAttributes>:
@@ -20419,7 +20419,7 @@ void HAL_RIF_RISC_SetSlaveSecureAttributes(uint32_t PeriphId, uint32_t SecPriv)
 3400a240:	4000001f 	.word	0x4000001f
 3400a244:	2000001e 	.word	0x2000001e
 3400a248:	1000001a 	.word	0x1000001a
-3400a24c:	34010d06 	.word	0x34010d06
+3400a24c:	34010d05 	.word	0x34010d05
 3400a250:	2e838c0b 	.word	0x2e838c0b
 3400a254:	77dff03b 	.word	0x77dff03b
 3400a258:	30000008 	.word	0x30000008
@@ -20837,7 +20837,7 @@ __STATIC_FORCEINLINE uint32_t __STREXW(uint32_t value, volatile uint32_t *addr)
 3400a584:	e79b      	b.n	3400a4be <UART_SetConfig+0x1fe>
 3400a586:	bf00      	nop
 3400a588:	00bebc1f 	.word	0x00bebc1f
-3400a58c:	34010dae 	.word	0x34010dae
+3400a58c:	34010dad 	.word	0x34010dad
 3400a590:	56000c00 	.word	0x56000c00
 3400a594:	cfff69f3 	.word	0xcfff69f3
 3400a598:	52001000 	.word	0x52001000
@@ -21092,7 +21092,7 @@ __STATIC_FORCEINLINE uint32_t __STREXW(uint32_t value, volatile uint32_t *addr)
 }
 3400a7b8:	bd10      	pop	{r4, pc}
 3400a7ba:	bf00      	nop
-3400a7bc:	34010dae 	.word	0x34010dae
+3400a7bc:	34010dad 	.word	0x34010dad
 3400a7c0:	52001000 	.word	0x52001000
 3400a7c4:	50004400 	.word	0x50004400
 3400a7c8:	50004800 	.word	0x50004800
@@ -21613,7 +21613,7 @@ __STATIC_FORCEINLINE uint32_t __STREXW(uint32_t value, volatile uint32_t *addr)
 3400aba4:	52001800 	.word	0x52001800
 3400aba8:	52001c00 	.word	0x52001c00
 3400abac:	56000c00 	.word	0x56000c00
-3400abb0:	34010dae 	.word	0x34010dae
+3400abb0:	34010dad 	.word	0x34010dad
 3400abb4:	42001000 	.word	0x42001000
 
 3400abb8 <XSPI_ConfigCmd>:
@@ -21941,7 +21941,7 @@ __STATIC_FORCEINLINE uint32_t __STREXW(uint32_t value, volatile uint32_t *addr)
       hxspi->ErrorCode = HAL_XSPI_ERROR_INVALID_PARAM;
 3400adb0:	65f3      	str	r3, [r6, #92]	@ 0x5c
 3400adb2:	e7c7      	b.n	3400ad44 <XSPI_ConfigCmd+0x18c>
-3400adb4:	34010de3 	.word	0x34010de3
+3400adb4:	34010de2 	.word	0x34010de2
 3400adb8:	f0ffc0c0 	.word	0xf0ffc0c0
 
 3400adbc <XSPI_WaitFlagStateUntilTimeout>:
@@ -22282,7 +22282,7 @@ __STATIC_FORCEINLINE uint32_t __STREXW(uint32_t value, volatile uint32_t *addr)
     status = HAL_ERROR;
 3400b070:	2001      	movs	r0, #1
 3400b072:	e7fb      	b.n	3400b06c <HAL_XSPI_Init+0x260>
-3400b074:	34010de3 	.word	0x34010de3
+3400b074:	34010de2 	.word	0x34010de2
 3400b078:	f8e0c0fc 	.word	0xf8e0c0fc
 3400b07c:	58025000 	.word	0x58025000
 3400b080:	5802a000 	.word	0x5802a000
@@ -22565,7 +22565,7 @@ __STATIC_FORCEINLINE uint32_t __STREXW(uint32_t value, volatile uint32_t *addr)
       status = HAL_BUSY;
 3400b2b0:	2002      	movs	r0, #2
 3400b2b2:	e7e0      	b.n	3400b276 <HAL_XSPI_Command+0x1ee>
-3400b2b4:	34010de3 	.word	0x34010de3
+3400b2b4:	34010de2 	.word	0x34010de2
 
 3400b2b8 <HAL_XSPI_Transmit>:
 {
@@ -22889,7 +22889,7 @@ __STATIC_FORCEINLINE uint32_t __STREXW(uint32_t value, volatile uint32_t *addr)
       status = HAL_BUSY;
 3400b4dc:	2002      	movs	r0, #2
 3400b4de:	e7ee      	b.n	3400b4be <HAL_XSPI_AutoPolling+0xd2>
-3400b4e0:	34010de3 	.word	0x34010de3
+3400b4e0:	34010de2 	.word	0x34010de2
 
 3400b4e4 <HAL_XSPI_MemoryMapped>:
 {
@@ -23001,7 +23001,7 @@ __STATIC_FORCEINLINE uint32_t __STREXW(uint32_t value, volatile uint32_t *addr)
 3400b5b6:	65eb      	str	r3, [r5, #92]	@ 0x5c
 3400b5b8:	e7e5      	b.n	3400b586 <HAL_XSPI_MemoryMapped+0xa2>
 3400b5ba:	bf00      	nop
-3400b5bc:	34010de3 	.word	0x34010de3
+3400b5bc:	34010de2 	.word	0x34010de2
 
 3400b5c0 <HAL_XSPI_SetClockPrescaler>:
   assert_param(IS_XSPI_CLK_PRESCALER(Prescaler));
@@ -23037,7 +23037,7 @@ __STATIC_FORCEINLINE uint32_t __STREXW(uint32_t value, volatile uint32_t *addr)
     hxspi->ErrorCode = HAL_XSPI_ERROR_INVALID_SEQUENCE;
 3400b5f0:	65e3      	str	r3, [r4, #92]	@ 0x5c
 3400b5f2:	e7fa      	b.n	3400b5ea <HAL_XSPI_SetClockPrescaler+0x2a>
-3400b5f4:	34010de3 	.word	0x34010de3
+3400b5f4:	34010de2 	.word	0x34010de2
 
 3400b5f8 <USB_SetTurnaroundTime>:
 
@@ -26000,16 +26000,16 @@ int LL_ATON_Init(void)
 3400c49c:	580e1000 	.word	0x580e1000
 3400c4a0:	580e4000 	.word	0x580e4000
 3400c4a4:	580e2000 	.word	0x580e2000
-3400c4a8:	34010fd6 	.word	0x34010fd6
-3400c4ac:	34010e91 	.word	0x34010e91
-3400c4b0:	34010f21 	.word	0x34010f21
-3400c4b4:	340111b4 	.word	0x340111b4
+3400c4a8:	34010fd5 	.word	0x34010fd5
+3400c4ac:	34010e90 	.word	0x34010e90
+3400c4b0:	34010f20 	.word	0x34010f20
+3400c4b4:	340111b3 	.word	0x340111b3
 3400c4b8:	34012446 	.word	0x34012446
-3400c4bc:	34010f85 	.word	0x34010f85
-3400c4c0:	34010e8c 	.word	0x34010e8c
-3400c4c4:	34010f8c 	.word	0x34010f8c
-3400c4c8:	34010f94 	.word	0x34010f94
-3400c4cc:	34010f99 	.word	0x34010f99
+3400c4bc:	34010f84 	.word	0x34010f84
+3400c4c0:	34010e8b 	.word	0x34010e8b
+3400c4c4:	34010f8b 	.word	0x34010f8b
+3400c4c8:	34010f93 	.word	0x34010f93
+3400c4cc:	34010f98 	.word	0x34010f98
   ASSERT_UNITS_VERS_W_MSG(ACTIV, t);
 3400c4d0:	f002 fc3c 	bl	3400ed4c <__errno>
 3400c4d4:	6803      	ldr	r3, [r0, #0]
@@ -26250,18 +26250,18 @@ int LL_ATON_Init(void)
 }
 3400c6e8:	b008      	add	sp, #32
 3400c6ea:	bd10      	pop	{r4, pc}
-3400c6ec:	34010f9f 	.word	0x34010f9f
-3400c6f0:	34010e91 	.word	0x34010e91
-3400c6f4:	34010f21 	.word	0x34010f21
-3400c6f8:	340111b4 	.word	0x340111b4
+3400c6ec:	34010f9e 	.word	0x34010f9e
+3400c6f0:	34010e90 	.word	0x34010e90
+3400c6f4:	34010f20 	.word	0x34010f20
+3400c6f8:	340111b3 	.word	0x340111b3
 3400c6fc:	34012446 	.word	0x34012446
-3400c700:	34010e8c 	.word	0x34010e8c
-3400c704:	34010fa5 	.word	0x34010fa5
-3400c708:	34010fab 	.word	0x34010fab
-3400c70c:	34010fb5 	.word	0x34010fb5
-3400c710:	34010fbc 	.word	0x34010fbc
-3400c714:	34010fc4 	.word	0x34010fc4
-3400c718:	34010fcc 	.word	0x34010fcc
+3400c700:	34010e8b 	.word	0x34010e8b
+3400c704:	34010fa4 	.word	0x34010fa4
+3400c708:	34010faa 	.word	0x34010faa
+3400c70c:	34010fb4 	.word	0x34010fb4
+3400c710:	34010fbb 	.word	0x34010fbb
+3400c714:	34010fc3 	.word	0x34010fc3
+3400c718:	34010fcb 	.word	0x34010fcb
 3400c71c:	580e3000 	.word	0x580e3000
 
 3400c720 <LL_ATON_DeInit>:
@@ -27656,11 +27656,11 @@ void LL_ATON_RT_Main(NN_Instance_TypeDef *network_instance)
   LL_ATON_RT_RuntimeDeInit();                  // De-initialize runtime
 3400cfc6:	f000 ba4f 	b.w	3400d468 <LL_ATON_RT_RuntimeDeInit>
 3400cfca:	bf00      	nop
-3400cfcc:	34010fdc 	.word	0x34010fdc
+3400cfcc:	34010fdb 	.word	0x34010fdb
 3400cfd0:	34012453 	.word	0x34012453
-3400cfd4:	34010ffc 	.word	0x34010ffc
-3400cfd8:	34011094 	.word	0x34011094
-3400cfdc:	340110bd 	.word	0x340110bd
+3400cfd4:	34010ffb 	.word	0x34010ffb
+3400cfd8:	34011093 	.word	0x34011093
+3400cfdc:	340110bc 	.word	0x340110bc
 
 3400cfe0 <__LL_ATON_RT_Init_Network>:
                           // wait for
@@ -27796,11 +27796,11 @@ static inline void __LL_ATON_RT_Init_Network(NN_Instance_TypeDef *nn_instance)
   }
 3400d056:	bd08      	pop	{r3, pc}
 3400d058:	3401328c 	.word	0x3401328c
-3400d05c:	340110d6 	.word	0x340110d6
+3400d05c:	340110d5 	.word	0x340110d5
 3400d060:	340125b1 	.word	0x340125b1
-3400d064:	34011102 	.word	0x34011102
+3400d064:	34011101 	.word	0x34011101
 3400d068:	34013288 	.word	0x34013288
-3400d06c:	3401119a 	.word	0x3401119a
+3400d06c:	34011199 	.word	0x34011199
 
 3400d070 <__LL_ATON_RT_SetWaitMask>:
     nn_instance->exec_state.current_epoch_block = &nn_instance->exec_state.first_epoch_block[index];
@@ -27843,9 +27843,9 @@ static inline void __LL_ATON_RT_Init_Network(NN_Instance_TypeDef *nn_instance)
   }
 3400d08e:	bd08      	pop	{r3, pc}
 3400d090:	3401328c 	.word	0x3401328c
-3400d094:	340111b6 	.word	0x340111b6
+3400d094:	340111b5 	.word	0x340111b5
 3400d098:	34012504 	.word	0x34012504
-3400d09c:	34011102 	.word	0x34011102
+3400d09c:	34011101 	.word	0x34011101
 3400d0a0:	34013288 	.word	0x34013288
 3400d0a4:	580e1000 	.word	0x580e1000
 
@@ -27871,9 +27871,9 @@ static inline void __LL_ATON_RT_Init_Network(NN_Instance_TypeDef *nn_instance)
 3400d0be:	68c0      	ldr	r0, [r0, #12]
 3400d0c0:	bd08      	pop	{r3, pc}
 3400d0c2:	bf00      	nop
-3400d0c4:	340111e0 	.word	0x340111e0
+3400d0c4:	340111df 	.word	0x340111df
 3400d0c8:	340124e5 	.word	0x340124e5
-3400d0cc:	340111fb 	.word	0x340111fb
+3400d0cc:	340111fa 	.word	0x340111fa
 
 3400d0d0 <__LL_ATON_RT_ExecEndEpochBlock>:
   if (nn_instance->exec_state.epoch_callback_function != NULL)
@@ -27987,13 +27987,13 @@ static inline void __LL_ATON_RT_Init_Network(NN_Instance_TypeDef *nn_instance)
 }
 3400d182:	e8bd 81f0 	ldmia.w	sp!, {r4, r5, r6, r7, r8, pc}
 3400d186:	bf00      	nop
-3400d188:	34011298 	.word	0x34011298
+3400d188:	34011297 	.word	0x34011297
 3400d18c:	340124c6 	.word	0x340124c6
-3400d190:	340112a1 	.word	0x340112a1
+3400d190:	340112a0 	.word	0x340112a0
 3400d194:	580fe000 	.word	0x580fe000
 3400d198:	3401328c 	.word	0x3401328c
-3400d19c:	34011363 	.word	0x34011363
-3400d1a0:	34011339 	.word	0x34011339
+3400d19c:	34011362 	.word	0x34011362
+3400d1a0:	34011338 	.word	0x34011338
 
 3400d1a4 <__LL_ATON_RT_DetermineNextEpochBlock>:
 {
@@ -28070,11 +28070,11 @@ static inline void __LL_ATON_RT_Init_Network(NN_Instance_TypeDef *nn_instance)
 3400d20e:	6043      	str	r3, [r0, #4]
 3400d210:	e7ef      	b.n	3400d1f2 <__LL_ATON_RT_DetermineNextEpochBlock+0x4e>
 3400d212:	bf00      	nop
-3400d214:	340113d1 	.word	0x340113d1
+3400d214:	340113d0 	.word	0x340113d0
 3400d218:	340124a1 	.word	0x340124a1
-3400d21c:	340112a1 	.word	0x340112a1
-3400d220:	340113ec 	.word	0x340113ec
-3400d224:	3401141c 	.word	0x3401141c
+3400d21c:	340112a0 	.word	0x340112a0
+3400d220:	340113eb 	.word	0x340113eb
+3400d224:	3401141b 	.word	0x3401141b
 
 3400d228 <dump_dma_state>:
 LL_ATON_WEAK void dump_dma_state(void){};
@@ -28266,26 +28266,26 @@ static void __LL_ATON_RT_IrqErr(uint32_t irqs)
 3400d2f6:	bd38      	pop	{r3, r4, r5, pc}
 3400d2f8:	000ffc00 	.word	0x000ffc00
 3400d2fc:	580e503c 	.word	0x580e503c
-3400d300:	3401145d 	.word	0x3401145d
-3400d304:	3401148a 	.word	0x3401148a
-3400d308:	340114b0 	.word	0x340114b0
-3400d30c:	340114d4 	.word	0x340114d4
-3400d310:	340114f4 	.word	0x340114f4
+3400d300:	3401145c 	.word	0x3401145c
+3400d304:	34011489 	.word	0x34011489
+3400d308:	340114af 	.word	0x340114af
+3400d30c:	340114d3 	.word	0x340114d3
+3400d310:	340114f3 	.word	0x340114f3
 3400d314:	580e2000 	.word	0x580e2000
-3400d318:	3401150c 	.word	0x3401150c
+3400d318:	3401150b 	.word	0x3401150b
 3400d31c:	580e3000 	.word	0x580e3000
-3400d320:	34011521 	.word	0x34011521
+3400d320:	34011520 	.word	0x34011520
 3400d324:	580fe000 	.word	0x580fe000
-3400d328:	34011539 	.word	0x34011539
-3400d32c:	3401156d 	.word	0x3401156d
-3400d330:	34011597 	.word	0x34011597
-3400d334:	340115b8 	.word	0x340115b8
-3400d338:	340115d9 	.word	0x340115d9
-3400d33c:	340115f4 	.word	0x340115f4
+3400d328:	34011538 	.word	0x34011538
+3400d32c:	3401156c 	.word	0x3401156c
+3400d330:	34011596 	.word	0x34011596
+3400d334:	340115b7 	.word	0x340115b7
+3400d338:	340115d8 	.word	0x340115d8
+3400d33c:	340115f3 	.word	0x340115f3
 3400d340:	34012854 	.word	0x34012854
-3400d344:	340111b4 	.word	0x340111b4
+3400d344:	340111b3 	.word	0x340111b3
 3400d348:	3401247d 	.word	0x3401247d
-3400d34c:	340112a1 	.word	0x340112a1
+3400d34c:	340112a0 	.word	0x340112a0
 
 3400d350 <LL_ATON_RT_Init_Network>:
 {
@@ -28322,10 +28322,10 @@ static void __LL_ATON_RT_IrqErr(uint32_t irqs)
 }
 3400d384:	bd10      	pop	{r4, pc}
 3400d386:	bf00      	nop
-3400d388:	3401161b 	.word	0x3401161b
+3400d388:	3401161a 	.word	0x3401161a
 3400d38c:	340125c7 	.word	0x340125c7
-3400d390:	340112a1 	.word	0x340112a1
-3400d394:	34011650 	.word	0x34011650
+3400d390:	340112a0 	.word	0x340112a0
+3400d394:	3401164f 	.word	0x3401164f
 
 3400d398 <LL_ATON_RT_DeInit_Network>:
 {
@@ -28841,30 +28841,30 @@ static void __LL_ATON_RT_IrqErr(uint32_t irqs)
 3400d6fe:	2002      	movs	r0, #2
 3400d700:	e71c      	b.n	3400d53c <LL_ATON_RT_RunEpochBlock+0x74>
 3400d702:	bf00      	nop
-3400d704:	340113d1 	.word	0x340113d1
+3400d704:	340113d0 	.word	0x340113d0
 3400d708:	34012598 	.word	0x34012598
-3400d70c:	340112a1 	.word	0x340112a1
-3400d710:	34011659 	.word	0x34011659
-3400d714:	34011694 	.word	0x34011694
-3400d718:	34011650 	.word	0x34011650
+3400d70c:	340112a0 	.word	0x340112a0
+3400d710:	34011658 	.word	0x34011658
+3400d714:	34011693 	.word	0x34011693
+3400d718:	3401164f 	.word	0x3401164f
 3400d71c:	3401328c 	.word	0x3401328c
-3400d720:	340116f6 	.word	0x340116f6
+3400d720:	340116f5 	.word	0x340116f5
 3400d724:	e000e100 	.word	0xe000e100
-3400d728:	340111b6 	.word	0x340111b6
+3400d728:	340111b5 	.word	0x340111b5
 3400d72c:	34012571 	.word	0x34012571
-3400d730:	34011102 	.word	0x34011102
-3400d734:	34011720 	.word	0x34011720
-3400d738:	340117bc 	.word	0x340117bc
-3400d73c:	34011808 	.word	0x34011808
+3400d730:	34011101 	.word	0x34011101
+3400d734:	3401171f 	.word	0x3401171f
+3400d738:	340117bb 	.word	0x340117bb
+3400d73c:	34011807 	.word	0x34011807
 3400d740:	34012550 	.word	0x34012550
-3400d744:	340113ec 	.word	0x340113ec
+3400d744:	340113eb 	.word	0x340113eb
 3400d748:	34012531 	.word	0x34012531
-3400d74c:	34011840 	.word	0x34011840
+3400d74c:	3401183f 	.word	0x3401183f
 3400d750:	3401251d 	.word	0x3401251d
-3400d754:	34011868 	.word	0x34011868
+3400d754:	34011867 	.word	0x34011867
 3400d758:	34013288 	.word	0x34013288
-3400d75c:	3401119a 	.word	0x3401119a
-3400d760:	34011298 	.word	0x34011298
+3400d75c:	34011199 	.word	0x34011199
+3400d760:	34011297 	.word	0x34011297
 3400d764:	580fe000 	.word	0x580fe000
 
 3400d768 <NPU0_IRQHandler>:
@@ -29046,11 +29046,11 @@ void ATON_STD_IRQHandler(void)
 3400d84a:	bf00      	nop
 3400d84c:	580e1000 	.word	0x580e1000
 3400d850:	3401328c 	.word	0x3401328c
-3400d854:	34011892 	.word	0x34011892
+3400d854:	34011891 	.word	0x34011891
 3400d858:	34012491 	.word	0x34012491
-3400d85c:	340112a1 	.word	0x340112a1
-3400d860:	340111b6 	.word	0x340111b6
-3400d864:	34011298 	.word	0x34011298
+3400d85c:	340112a0 	.word	0x340112a0
+3400d860:	340111b5 	.word	0x340111b5
+3400d864:	34011297 	.word	0x34011297
 3400d868:	580e503c 	.word	0x580e503c
 3400d86c:	34012463 	.word	0x34012463
 3400d870:	580fe000 	.word	0x580fe000
@@ -29190,9 +29190,9 @@ Infinite_Loop:
 3400d8fc:	e7f3      	b.n	3400d8e6 <__assert_func+0x12>
 3400d8fe:	bf00      	nop
 3400d900:	34012854 	.word	0x34012854
-3400d904:	340118dc 	.word	0x340118dc
-3400d908:	340118e9 	.word	0x340118e9
-3400d90c:	34010f84 	.word	0x34010f84
+3400d904:	340118db 	.word	0x340118db
+3400d908:	340118e8 	.word	0x340118e8
+3400d90c:	34010f83 	.word	0x34010f83
 
 3400d910 <malloc>:
 3400d910:	4b02      	ldr	r3, [pc, #8]	@ (3400d91c <malloc+0xc>)
@@ -29747,11 +29747,11 @@ Infinite_Loop:
 3400de36:	bf00      	nop
 3400de38:	ffffffff 	.word	0xffffffff
 3400de3c:	7fefffff 	.word	0x7fefffff
-3400de40:	3401191c 	.word	0x3401191c
-3400de44:	34011918 	.word	0x34011918
-3400de48:	34011924 	.word	0x34011924
-3400de4c:	34011920 	.word	0x34011920
-3400de50:	340111b4 	.word	0x340111b4
+3400de40:	3401191b 	.word	0x3401191b
+3400de44:	34011917 	.word	0x34011917
+3400de48:	34011923 	.word	0x34011923
+3400de4c:	3401191f 	.word	0x3401191f
+3400de50:	340111b3 	.word	0x340111b3
 3400de54:	6da3      	ldr	r3, [r4, #88]	@ 0x58
 3400de56:	f8dd a028 	ldr.w	sl, [sp, #40]	@ 0x28
 3400de5a:	4553      	cmp	r3, sl
@@ -30234,8 +30234,8 @@ Infinite_Loop:
 3400e2dc:	2500      	movs	r5, #0
 3400e2de:	f104 0619 	add.w	r6, r4, #25
 3400e2e2:	e7f5      	b.n	3400e2d0 <_printf_i+0x220>
-3400e2e4:	34011928 	.word	0x34011928
-3400e2e8:	34011939 	.word	0x34011939
+3400e2e4:	34011927 	.word	0x34011927
+3400e2e8:	34011938 	.word	0x34011938
 
 3400e2ec <__sflush_r>:
 3400e2ec:	f9b1 200c 	ldrsh.w	r2, [r1, #12]
@@ -31145,87 +31145,87 @@ Infinite_Loop:
 3400eb36:	e757      	b.n	3400e9e8 <_strerror_r+0x134>
 3400eb38:	4b50      	ldr	r3, [pc, #320]	@ (3400ec7c <_strerror_r+0x3c8>)
 3400eb3a:	e755      	b.n	3400e9e8 <_strerror_r+0x134>
-3400eb3c:	3401194a 	.word	0x3401194a
-3400eb40:	3401195c 	.word	0x3401195c
-3400eb44:	34011976 	.word	0x34011976
-3400eb48:	34011986 	.word	0x34011986
-3400eb4c:	3401199e 	.word	0x3401199e
-3400eb50:	340119a8 	.word	0x340119a8
-3400eb54:	340119c2 	.word	0x340119c2
-3400eb58:	340119d4 	.word	0x340119d4
-3400eb5c:	340119e6 	.word	0x340119e6
-3400eb60:	340119ff 	.word	0x340119ff
-3400eb64:	34011a0f 	.word	0x34011a0f
-3400eb68:	34011a1b 	.word	0x34011a1b
-3400eb6c:	34011a38 	.word	0x34011a38
-3400eb70:	34011a4a 	.word	0x34011a4a
-3400eb74:	34011a5b 	.word	0x34011a5b
-3400eb78:	34011a6d 	.word	0x34011a6d
-3400eb7c:	34011a79 	.word	0x34011a79
-3400eb80:	34011a91 	.word	0x34011a91
-3400eb84:	34011a9d 	.word	0x34011a9d
-3400eb88:	34011aaf 	.word	0x34011aaf
-3400eb8c:	34011abe 	.word	0x34011abe
-3400eb90:	34011ace 	.word	0x34011ace
-3400eb94:	34011adb 	.word	0x34011adb
-3400eb98:	34011afa 	.word	0x34011afa
-3400eb9c:	34011b09 	.word	0x34011b09
-3400eba0:	34011b1a 	.word	0x34011b1a
-3400eba4:	34011b3e 	.word	0x34011b3e
-3400eba8:	34011b5c 	.word	0x34011b5c
-3400ebac:	34011b7a 	.word	0x34011b7a
-3400ebb0:	34011b9a 	.word	0x34011b9a
-3400ebb4:	34011bb1 	.word	0x34011bb1
-3400ebb8:	34011bc0 	.word	0x34011bc0
-3400ebbc:	34011bcf 	.word	0x34011bcf
-3400ebc0:	34011be3 	.word	0x34011be3
-3400ebc4:	34011bfb 	.word	0x34011bfb
-3400ebc8:	34011c09 	.word	0x34011c09
-3400ebcc:	34011c16 	.word	0x34011c16
-3400ebd0:	34011c2c 	.word	0x34011c2c
-3400ebd4:	34011c3b 	.word	0x34011c3b
-3400ebd8:	34011c47 	.word	0x34011c47
-3400ebdc:	34011c76 	.word	0x34011c76
-3400ebe0:	34011c87 	.word	0x34011c87
-3400ebe4:	34011ca2 	.word	0x34011ca2
-3400ebe8:	34011cb5 	.word	0x34011cb5
-3400ebec:	34011ccb 	.word	0x34011ccb
-3400ebf0:	34011cd4 	.word	0x34011cd4
-3400ebf4:	34011ceb 	.word	0x34011ceb
-3400ebf8:	34011cf3 	.word	0x34011cf3
-3400ebfc:	34011d00 	.word	0x34011d00
-3400ec00:	34011d15 	.word	0x34011d15
-3400ec04:	34011d29 	.word	0x34011d29
-3400ec08:	34011d41 	.word	0x34011d41
-3400ec0c:	34011d50 	.word	0x34011d50
-3400ec10:	34011d61 	.word	0x34011d61
-3400ec14:	34011d74 	.word	0x34011d74
-3400ec18:	34011d80 	.word	0x34011d80
-3400ec1c:	34011d99 	.word	0x34011d99
-3400ec20:	34011dad 	.word	0x34011dad
-3400ec24:	34011dc8 	.word	0x34011dc8
-3400ec28:	34011de0 	.word	0x34011de0
-3400ec2c:	34011dfa 	.word	0x34011dfa
-3400ec30:	34011e02 	.word	0x34011e02
-3400ec34:	34011e32 	.word	0x34011e32
-3400ec38:	34011e51 	.word	0x34011e51
-3400ec3c:	34011e70 	.word	0x34011e70
-3400ec40:	34011e87 	.word	0x34011e87
-3400ec44:	34011e9a 	.word	0x34011e9a
-3400ec48:	34011eb3 	.word	0x34011eb3
-3400ec4c:	34011eca 	.word	0x34011eca
-3400ec50:	34011ee0 	.word	0x34011ee0
-3400ec54:	34011f01 	.word	0x34011f01
-3400ec58:	34011f19 	.word	0x34011f19
-3400ec5c:	34011f35 	.word	0x34011f35
-3400ec60:	34011f48 	.word	0x34011f48
-3400ec64:	34011f5e 	.word	0x34011f5e
-3400ec68:	34011f72 	.word	0x34011f72
-3400ec6c:	34011f94 	.word	0x34011f94
-3400ec70:	34011fba 	.word	0x34011fba
-3400ec74:	34011fcb 	.word	0x34011fcb
-3400ec78:	34010f84 	.word	0x34010f84
-3400ec7c:	34011952 	.word	0x34011952
+3400eb3c:	34011949 	.word	0x34011949
+3400eb40:	3401195b 	.word	0x3401195b
+3400eb44:	34011975 	.word	0x34011975
+3400eb48:	34011985 	.word	0x34011985
+3400eb4c:	3401199d 	.word	0x3401199d
+3400eb50:	340119a7 	.word	0x340119a7
+3400eb54:	340119c1 	.word	0x340119c1
+3400eb58:	340119d3 	.word	0x340119d3
+3400eb5c:	340119e5 	.word	0x340119e5
+3400eb60:	340119fe 	.word	0x340119fe
+3400eb64:	34011a0e 	.word	0x34011a0e
+3400eb68:	34011a1a 	.word	0x34011a1a
+3400eb6c:	34011a37 	.word	0x34011a37
+3400eb70:	34011a49 	.word	0x34011a49
+3400eb74:	34011a5a 	.word	0x34011a5a
+3400eb78:	34011a6c 	.word	0x34011a6c
+3400eb7c:	34011a78 	.word	0x34011a78
+3400eb80:	34011a90 	.word	0x34011a90
+3400eb84:	34011a9c 	.word	0x34011a9c
+3400eb88:	34011aae 	.word	0x34011aae
+3400eb8c:	34011abd 	.word	0x34011abd
+3400eb90:	34011acd 	.word	0x34011acd
+3400eb94:	34011ada 	.word	0x34011ada
+3400eb98:	34011af9 	.word	0x34011af9
+3400eb9c:	34011b08 	.word	0x34011b08
+3400eba0:	34011b19 	.word	0x34011b19
+3400eba4:	34011b3d 	.word	0x34011b3d
+3400eba8:	34011b5b 	.word	0x34011b5b
+3400ebac:	34011b79 	.word	0x34011b79
+3400ebb0:	34011b99 	.word	0x34011b99
+3400ebb4:	34011bb0 	.word	0x34011bb0
+3400ebb8:	34011bbf 	.word	0x34011bbf
+3400ebbc:	34011bce 	.word	0x34011bce
+3400ebc0:	34011be2 	.word	0x34011be2
+3400ebc4:	34011bfa 	.word	0x34011bfa
+3400ebc8:	34011c08 	.word	0x34011c08
+3400ebcc:	34011c15 	.word	0x34011c15
+3400ebd0:	34011c2b 	.word	0x34011c2b
+3400ebd4:	34011c3a 	.word	0x34011c3a
+3400ebd8:	34011c46 	.word	0x34011c46
+3400ebdc:	34011c75 	.word	0x34011c75
+3400ebe0:	34011c86 	.word	0x34011c86
+3400ebe4:	34011ca1 	.word	0x34011ca1
+3400ebe8:	34011cb4 	.word	0x34011cb4
+3400ebec:	34011cca 	.word	0x34011cca
+3400ebf0:	34011cd3 	.word	0x34011cd3
+3400ebf4:	34011cea 	.word	0x34011cea
+3400ebf8:	34011cf2 	.word	0x34011cf2
+3400ebfc:	34011cff 	.word	0x34011cff
+3400ec00:	34011d14 	.word	0x34011d14
+3400ec04:	34011d28 	.word	0x34011d28
+3400ec08:	34011d40 	.word	0x34011d40
+3400ec0c:	34011d4f 	.word	0x34011d4f
+3400ec10:	34011d60 	.word	0x34011d60
+3400ec14:	34011d73 	.word	0x34011d73
+3400ec18:	34011d7f 	.word	0x34011d7f
+3400ec1c:	34011d98 	.word	0x34011d98
+3400ec20:	34011dac 	.word	0x34011dac
+3400ec24:	34011dc7 	.word	0x34011dc7
+3400ec28:	34011ddf 	.word	0x34011ddf
+3400ec2c:	34011df9 	.word	0x34011df9
+3400ec30:	34011e01 	.word	0x34011e01
+3400ec34:	34011e31 	.word	0x34011e31
+3400ec38:	34011e50 	.word	0x34011e50
+3400ec3c:	34011e6f 	.word	0x34011e6f
+3400ec40:	34011e86 	.word	0x34011e86
+3400ec44:	34011e99 	.word	0x34011e99
+3400ec48:	34011eb2 	.word	0x34011eb2
+3400ec4c:	34011ec9 	.word	0x34011ec9
+3400ec50:	34011edf 	.word	0x34011edf
+3400ec54:	34011f00 	.word	0x34011f00
+3400ec58:	34011f18 	.word	0x34011f18
+3400ec5c:	34011f34 	.word	0x34011f34
+3400ec60:	34011f47 	.word	0x34011f47
+3400ec64:	34011f5d 	.word	0x34011f5d
+3400ec68:	34011f71 	.word	0x34011f71
+3400ec6c:	34011f93 	.word	0x34011f93
+3400ec70:	34011fb9 	.word	0x34011fb9
+3400ec74:	34011fca 	.word	0x34011fca
+3400ec78:	34010f83 	.word	0x34010f83
+3400ec7c:	34011951 	.word	0x34011951
 
 3400ec80 <strerror>:
 3400ec80:	4601      	mov	r1, r0
@@ -31776,14 +31776,14 @@ Infinite_Loop:
 3400f1ac:	3fc68a28 	.word	0x3fc68a28
 3400f1b0:	509f79fb 	.word	0x509f79fb
 3400f1b4:	3fd34413 	.word	0x3fd34413
-3400f1b8:	34011fed 	.word	0x34011fed
-3400f1bc:	34012004 	.word	0x34012004
+3400f1b8:	34011fec 	.word	0x34011fec
+3400f1bc:	34012003 	.word	0x34012003
 3400f1c0:	7ff00000 	.word	0x7ff00000
-3400f1c4:	34011fe9 	.word	0x34011fe9
-3400f1c8:	340111b5 	.word	0x340111b5
-3400f1cc:	340111b4 	.word	0x340111b4
+3400f1c4:	34011fe8 	.word	0x34011fe8
+3400f1c8:	340111b4 	.word	0x340111b4
+3400f1cc:	340111b3 	.word	0x340111b3
 3400f1d0:	34012618 	.word	0x34012618
-3400f1d4:	3401205c 	.word	0x3401205c
+3400f1d4:	3401205b 	.word	0x3401205b
 3400f1d8:	f8d9 201c 	ldr.w	r2, [r9, #28]
 3400f1dc:	f1ba 0f0e 	cmp.w	sl, #14
 3400f1e0:	6010      	str	r0, [r2, #0]
@@ -32544,8 +32544,8 @@ Infinite_Loop:
 3400f9b4:	f000 f8b2 	bl	3400fb1c <__multadd>
 3400f9b8:	9001      	str	r0, [sp, #4]
 3400f9ba:	e7ec      	b.n	3400f996 <_dtoa_r+0xa8e>
-3400f9bc:	3401205c 	.word	0x3401205c
-3400f9c0:	34011fe0 	.word	0x34011fe0
+3400f9bc:	3401205b 	.word	0x3401205b
+3400f9c0:	34011fdf 	.word	0x34011fdf
 
 3400f9c4 <_free_r>:
 3400f9c4:	b538      	push	{r3, r4, r5, lr}
@@ -32669,8 +32669,8 @@ Infinite_Loop:
 3400fac8:	e9c0 3303 	strd	r3, r3, [r0, #12]
 3400facc:	e7f7      	b.n	3400fabe <_Balloc+0x66>
 3400face:	bf00      	nop
-3400fad0:	34011fed 	.word	0x34011fed
-3400fad4:	3401206d 	.word	0x3401206d
+3400fad0:	34011fec 	.word	0x34011fec
+3400fad4:	3401206c 	.word	0x3401206c
 
 3400fad8 <_Bfree>:
 3400fad8:	b570      	push	{r4, r5, r6, lr}
@@ -32698,8 +32698,8 @@ Infinite_Loop:
 3400fb0c:	6021      	str	r1, [r4, #0]
 3400fb0e:	f843 4022 	str.w	r4, [r3, r2, lsl #2]
 3400fb12:	bd70      	pop	{r4, r5, r6, pc}
-3400fb14:	34011fed 	.word	0x34011fed
-3400fb18:	3401206d 	.word	0x3401206d
+3400fb14:	34011fec 	.word	0x34011fec
+3400fb18:	3401206c 	.word	0x3401206c
 
 3400fb1c <__multadd>:
 3400fb1c:	e92d 41f0 	stmdb	sp!, {r4, r5, r6, r7, r8, lr}
@@ -32753,8 +32753,8 @@ Infinite_Loop:
 3400fb9c:	6125      	str	r5, [r4, #16]
 3400fb9e:	4620      	mov	r0, r4
 3400fba0:	e8bd 81f0 	ldmia.w	sp!, {r4, r5, r6, r7, r8, pc}
-3400fba4:	3401205c 	.word	0x3401205c
-3400fba8:	3401206d 	.word	0x3401206d
+3400fba4:	3401205b 	.word	0x3401205b
+3400fba8:	3401206c 	.word	0x3401206c
 
 3400fbac <__hi0bits>:
 3400fbac:	f5b0 3f80 	cmp.w	r0, #65536	@ 0x10000
@@ -32844,8 +32844,8 @@ Infinite_Loop:
 3400fc62:	6103      	str	r3, [r0, #16]
 3400fc64:	bd10      	pop	{r4, pc}
 3400fc66:	bf00      	nop
-3400fc68:	3401205c 	.word	0x3401205c
-3400fc6c:	3401206d 	.word	0x3401206d
+3400fc68:	3401205b 	.word	0x3401205b
+3400fc6c:	3401206c 	.word	0x3401206c
 
 3400fc70 <__multiply>:
 3400fc70:	e92d 4ff0 	stmdb	sp!, {r4, r5, r6, r7, r8, r9, sl, fp, lr}
@@ -32964,8 +32964,8 @@ Infinite_Loop:
 3400fdaa:	3e01      	subs	r6, #1
 3400fdac:	e79f      	b.n	3400fcee <__multiply+0x7e>
 3400fdae:	bf00      	nop
-3400fdb0:	3401205c 	.word	0x3401205c
-3400fdb4:	3401206d 	.word	0x3401206d
+3400fdb0:	3401205b 	.word	0x3401205b
+3400fdb4:	3401206c 	.word	0x3401206c
 
 3400fdb8 <__pow5mult>:
 3400fdb8:	e92d 43f8 	stmdb	sp!, {r3, r4, r5, r6, r7, r8, r9, lr}
@@ -33034,8 +33034,8 @@ Infinite_Loop:
 3400fe5a:	e8bd 83f8 	ldmia.w	sp!, {r3, r4, r5, r6, r7, r8, r9, pc}
 3400fe5e:	bf00      	nop
 3400fe60:	340125e0 	.word	0x340125e0
-3400fe64:	34011fed 	.word	0x34011fed
-3400fe68:	3401206d 	.word	0x3401206d
+3400fe64:	34011fec 	.word	0x34011fec
+3400fe68:	3401206c 	.word	0x3401206c
 
 3400fe6c <__lshift>:
 3400fe6c:	e92d 47f0 	stmdb	sp!, {r4, r5, r6, r7, r8, r9, sl, lr}
@@ -33114,8 +33114,8 @@ Infinite_Loop:
 3400ff36:	d8f9      	bhi.n	3400ff2c <__lshift+0xc0>
 3400ff38:	e7ea      	b.n	3400ff10 <__lshift+0xa4>
 3400ff3a:	bf00      	nop
-3400ff3c:	3401205c 	.word	0x3401205c
-3400ff40:	3401206d 	.word	0x3401206d
+3400ff3c:	3401205b 	.word	0x3401205b
+3400ff40:	3401206c 	.word	0x3401206c
 
 3400ff44 <__mcmp>:
 3400ff44:	4603      	mov	r3, r0
@@ -33253,8 +33253,8 @@ Infinite_Loop:
 3401009e:	3f01      	subs	r7, #1
 340100a0:	e7e6      	b.n	34010070 <__mdiff+0xf4>
 340100a2:	bf00      	nop
-340100a4:	3401205c 	.word	0x3401205c
-340100a8:	3401206d 	.word	0x3401206d
+340100a4:	3401205b 	.word	0x3401205b
+340100a8:	3401206c 	.word	0x3401206c
 
 340100ac <__d2b>:
 340100ac:	e92d 43f7 	stmdb	sp!, {r0, r1, r2, r4, r5, r6, r7, r8, r9, lr}
@@ -33320,8 +33320,8 @@ Infinite_Loop:
 3401014a:	f7ff fd2f 	bl	3400fbac <__hi0bits>
 3401014e:	ebc0 1042 	rsb	r0, r0, r2, lsl #5
 34010152:	e7e5      	b.n	34010120 <__d2b+0x74>
-34010154:	3401205c 	.word	0x3401205c
-34010158:	3401206d 	.word	0x3401206d
+34010154:	3401205b 	.word	0x3401205b
+34010158:	3401206c 	.word	0x3401206c
 
 3401015c <__sfputc_r>:
 3401015c:	6893      	ldr	r3, [r2, #8]
@@ -33587,11 +33587,11 @@ Infinite_Loop:
 340103c4:	4b04      	ldr	r3, [pc, #16]	@ (340103d8 <_vfiprintf_r+0x228>)
 340103c6:	f7fd fe73 	bl	3400e0b0 <_printf_i>
 340103ca:	e7e4      	b.n	34010396 <_vfiprintf_r+0x1e6>
-340103cc:	340120c6 	.word	0x340120c6
-340103d0:	340120d0 	.word	0x340120d0
+340103cc:	340120c5 	.word	0x340120c5
+340103d0:	340120cf 	.word	0x340120cf
 340103d4:	3400db99 	.word	0x3400db99
 340103d8:	3401018b 	.word	0x3401018b
-340103dc:	340120cc 	.word	0x340120cc
+340103dc:	340120cb 	.word	0x340120cb
 
 340103e0 <__swhatbuf_r>:
 340103e0:	b570      	push	{r4, r5, r6, lr}

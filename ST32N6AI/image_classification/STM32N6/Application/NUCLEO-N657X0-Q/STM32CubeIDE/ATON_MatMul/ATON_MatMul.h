@@ -7,16 +7,35 @@
 
 extern int8_t *nn_in;
 
-void ActivationAdr(size_t* internal_lentgh, int8_t* internal_p);
+typedef struct
+{
+	int bytes;
+
+	int insize;
+	int outsize;
+
+	int weight_start;
+	int weight_end;
+	int weight_limit;
+
+	int input_start;
+	int input_end;
+	int input_limit;
+
+	int output_start;
+	int output_end;
+	int output_limit;
+}Matmul_info;
+
 void NeuralNetwork_init(int8_t **nn_in, uint32_t *nnin_length, int8_t *nn_out[], int *number_output, uint32_t nn_out_len[]);
 void update_weights_float(float* NNweights, const float *new_weights,size_t Num_weights);
 void update_weights_int8(int8_t* NNweights, const int8_t *new_weights,size_t Num_weights);
 int8_t* getIdentityWeights_int8(size_t insize,size_t outsize);
 
-void npu_matvec_int8_init(void); // initialize NN with correct size
-void npu_matvec_int8_run(void); // initialize NN with correct size
-void npu_matvec_float_init(void); // run NN with correct size
-void npu_matvec_float_run(void); // run NN with correct size
+void calcAdresses(size_t insize, size_t outsize,size_t bytesOfType,volatile Matmul_info* infoStruct);
+int npu_matvec_int8_init(size_t insize,size_t outsize); // initialize NN with correct size
+int8_t* npu_matvec_int8_run(int8_t *inVec, size_t insizeVec, size_t outSize, int8_t *inMat); // initialize NN with correct size
+int npu_matvec_float_init(size_t insize,size_t outsize); // run NN with correct size
+float* npu_matvec_float_run(float *inVec, size_t insizeVec, float*outVec, size_t outSize, float *inMat); // run NN with correct size
 
-bool npu_matvec_run(int size, const int8_t* input, const int8_t* weights, int8_t* output);
 

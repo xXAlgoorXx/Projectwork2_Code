@@ -135,7 +135,7 @@
 					</folderInfo>
 					<sourceEntries>
 						<entry excluding="ATON_MatMul/networkFiles|ATON_MatMul/source|NN_Sim/source|Application|Drivers/STM32N6xx_HAL_Driver|Application/app_camerapipeline.c|Middlewares/screenl/scrl_spi.c|Middlewares/screenl/ili9341/ili9341.c|Middlewares/screenl/ili9341/ili9341_reg.c|Inc|Src|Startup" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
-						<entry excluding="Testing.c|network_dummy.c|network_16.c|network_32_v2.c|network_64.c|network_512.c|network_256.c|network_128.c|network_1024.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="ATON_MatMul/source"/>
+						<entry excluding="network_16_float.c|DummyEpochBlock.c|Testing.c|network_dummy.c|network_16.c|network_32_v2.c|network_64.c|network_512.c|network_256.c|network_128.c|network_1024.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="ATON_MatMul/source"/>
 						<entry excluding="network.c|app_camerapipeline.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Application"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Drivers/STM32N6xx_HAL_Driver"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="NN_Sim/source"/>
@@ -274,7 +274,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="ATON_MatMul/source/Testing.c|ATON_MatMul/source/network_dummy.c|ATON_MatMul/source/network_16.c|ATON_MatMul/source/network_32_v2.c|ATON_MatMul/source/network_64.c|ATON_MatMul/source/network_512.c|ATON_MatMul/source/network_256.c|ATON_MatMul/source/network_128.c|ATON_MatMul/source/network_1024.c|Application/network.c|Application/app_camerapipeline.c|STM32Cube_FW_N6|Middlewares/screenl/uvcl|Middlewares/screenl/scrl_usb.c|Inc|Src|Startup" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="ATON_MatMul/source/network_16_float.c|ATON_MatMul/source/DummyEpochBlock.c|ATON_MatMul/source/Testing.c|ATON_MatMul/source/network_dummy.c|ATON_MatMul/source/network_16.c|ATON_MatMul/source/network_32_v2.c|ATON_MatMul/source/network_64.c|ATON_MatMul/source/network_512.c|ATON_MatMul/source/network_256.c|ATON_MatMul/source/network_128.c|ATON_MatMul/source/network_1024.c|Application/network.c|Application/app_camerapipeline.c|STM32Cube_FW_N6|Middlewares/screenl/uvcl|Middlewares/screenl/scrl_usb.c|Inc|Src|Startup" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

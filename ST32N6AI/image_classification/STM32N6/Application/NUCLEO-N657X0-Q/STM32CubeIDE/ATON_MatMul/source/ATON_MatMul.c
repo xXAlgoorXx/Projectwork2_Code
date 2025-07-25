@@ -4,100 +4,129 @@
  *  Created on: Jul 4, 2025
  *      Author: lukasschoepf
  */
+
 #include "ATON_MatMul.h"
 #include "ll_aton_runtime.h"
 #include "ll_aton_NN_interface.h"
-//#include "Testing.c"
-// pregenrated Networks
-//#include "network_16.c"
-//#include "network_32.c"
-//#include "network_64.c"
-//#include "network_128.c"
-//#include "network_256.c"
-//#include "network_512.c"
-//#include "network_1024.c"
-//
-//typedef struct {
-//    int size;
-//    LL_ATON_NN_Instance_t* instance;
-//    const LL_Buffer_InfoTypeDef* (*get_input_info)(void);
-//    const LL_Buffer_InfoTypeDef* (*get_output_info)(void);
-//} NPU_Network_Config;
-//
-//static const NPU_Network_Config matvec_models[] = {
-//    {16,    &NN_Instance_Size16,    LL_ATON_Input_Buffers_Info_Size16,    LL_ATON_Output_Buffers_Info_Size16},
-//    {32,    &NN_Instance_Size32,    LL_ATON_Input_Buffers_Info_Size32,    LL_ATON_Output_Buffers_Info_Size32},
-//    {64,    &NN_Instance_Size64,    LL_ATON_Input_Buffers_Info_Size64,    LL_ATON_Output_Buffers_Info_Size64},
-//    {128,   &NN_Instance_Size128,   LL_ATON_Input_Buffers_Info_Size128,   LL_ATON_Output_Buffers_Info_Size128},
-//    {256,   &NN_Instance_Size256,   LL_ATON_Input_Buffers_Info_Size256,   LL_ATON_Output_Buffers_Info_Size256},
-//    {512,   &NN_Instance_Size512,   LL_ATON_Input_Buffers_Info_Size512,   LL_ATON_Output_Buffers_Info_Size512},
-//	{1024,  &NN_Instance_Size1024,  LL_ATON_Input_Buffers_Info_Size1024,  LL_ATON_Output_Buffers_Info_Size1024},
-//	{0, NULL, NULL, NULL}
-//};
 
+volatile Matmul_info matmulInfo_int;
+volatile Matmul_info matmulInfo_Float;
+
+LL_ATON_DECLARE_NAMED_NN_INSTANCE_AND_INTERFACE(int8);
+LL_ATON_DECLARE_NAMED_NN_INSTANCE_AND_INTERFACE(Float);
 
 void update_weights_float(float* NNweights, const float *new_weights,size_t Num_weights) {
     memcpy(NNweights, new_weights, Num_weights * sizeof(float));
-    //    SCB_CleanDCache_by_Addr(weights, NUM_WEIGHTS * sizeof(float));
+    printf("Cleaning weights at %p, size %d\n\r", NNweights, Num_weights);
+    SCB_CleanDCache_by_Addr(NNweights, Num_weights * sizeof(float));
 }
 
 void update_weights_int8(int8_t* NNweights, const int8_t *new_weights,size_t Num_weights) {
     memcpy(NNweights, new_weights, Num_weights * sizeof(int8_t));
-    printf("Cleaning weights at %p, size %lu\n\r", NNweights, Num_weights);
+    printf("Cleaning weights at %p, size %d\n\r", NNweights, Num_weights);
 	SCB_CleanDCache_by_Addr(NNweights, Num_weights * sizeof(int8_t));
 }
 
-//bool npu_matvec_run(int size, const int8_t* input, const int8_t* weights, int8_t* output) {
-//    const NPU_Network_Config* config = NULL;
-//    for (int i = 0; matvec_models[i].size != 0; i++) {
-//        if (matvec_models[i].size == size) {
-//            config = &matvec_models[i];
-//            break;
-//        }
-//    }
-//    if (!config) return false;
-//
-//    const LL_Buffer_InfoTypeDef* in_info = config->get_input_info();
-//    const LL_Buffer_InfoTypeDef* out_info = config->get_output_info();
-//
-//    int8_t* nn_input = (int8_t*)LL_Buffer_addr_start(&in_info[0]);
-//    int8_t* nn_weights = (int8_t*)LL_Buffer_addr_start(&in_info[1]);
-//    int8_t* nn_output = (int8_t*)LL_Buffer_addr_start(&out_info[0]);
-//
-//    memcpy(nn_input, input, size);
-//    memcpy(nn_weights, weights, size * size);
-//
-//    SCB_CleanDCache_by_Addr(nn_input, size);
-//    SCB_CleanDCache_by_Addr(nn_weights, size * size);
-//
-//    LL_ATON_RT_Main(config->instance);
-//
-//    SCB_InvalidateDCache_by_Addr(nn_output, size);
-//    memcpy(output, nn_output, size);
-//    return true;
-//}
+void calcAdresses(size_t insize, size_t outsize,size_t bytesOfType,volatile Matmul_info* infoStruct){
+	infoStruct->bytes = bytesOfType;
+	infoStruct->insize = insize;
+	infoStruct->outsize = outsize;
 
-void npu_matvec_int8_init(void){
-	LL_ATON_DECLARE_NAMED_NN_INSTANCE_AND_INTERFACE(int8);
-	// Load right epockblock array
-	// EpochBlock_ItemTypeDef *LL_ATON_EpochBlockItems_int8()
-	return NULL;
+	int inBytes = bytesOfType * insize;
+	int outBytes = bytesOfType * outsize;
+
+	infoStruct->weight_start = 0;
+	infoStruct->weight_end   = infoStruct->weight_start + inBytes * outBytes;
+	infoStruct->weight_limit = infoStruct->weight_end + inBytes;
+
+	infoStruct->input_start = infoStruct->weight_limit ;
+	infoStruct->input_end   = infoStruct->input_start + inBytes;
+	infoStruct->input_limit = infoStruct->input_end + inBytes;
+
+	infoStruct->output_start = infoStruct->input_limit;
+	infoStruct->output_end   = infoStruct->output_start + outBytes;
+	infoStruct->output_limit = infoStruct->output_end + outBytes;
 }
 
-void npu_matvec_int8_run(void){
+int npu_matvec_int8_init(size_t insize,size_t outsize){
+	extern volatile Matmul_info matmulInfo_int;
+	size_t insizeNPU = 0;
+	size_t outsizeNPU = 0;
 
+	// Calculate valid insize and outsize. At the moment only 8,16,24 are valid
+	if((insize > 24) || (outsize > 24)){
+		printf("Insize or Outsize too big. Has to be lower or equal to 24");
+		return -1;
+	}
 
-	return NULL;
+	if((insize < 1) || (outsize < 1)){
+		printf("Insize or Outsize too small. Has to be higher or equal to 1");
+		return -1;
+	}
+
+	// Set insize to a valid size
+	if((insize % 8) != 0){
+		insizeNPU = ((insize/8) + 1) * 8;
+	}
+
+	else{
+		insizeNPU = insize;
+	}
+
+	// Set outsize to a valid size
+	if((outsize % 8) != 0){
+		outsizeNPU = ((outsize/8) + 1) * 8;
+	}
+
+	else{
+		outsizeNPU = outsize;
+	}
+
+	// Calculate Adresses
+	calcAdresses(insizeNPU,outsizeNPU,1,&matmulInfo_int);
+	return 0;
 }
 
-void npu_matvec_float_init(void){
-	LL_ATON_DECLARE_NAMED_NN_INSTANCE_AND_INTERFACE(Float);
-	// Load right epockblock array
-	return NULL;
+int8_t* npu_matvec_int8_run(int8_t *inVec, size_t insizeVec, size_t outSize, int8_t *inMat){
+	//LL_ATON_DECLARE_NAMED_NN_INSTANCE_AND_INTERFACE(int8);
+	extern volatile Matmul_info matmulInfo_int;
+
+	// Prepare input buffer: 0x34200000UL is the base address
+	memcpy((int8_t*)(0x34200000UL + matmulInfo_int.input_start), inVec, matmulInfo_int.insize);
+	SCB_CleanDCache_by_Addr((void*)(0x34200000UL + matmulInfo_int.input_start), insizeVec);
+
+	// Prepare Matrix
+	update_weights_int8((int8_t*)(0x34200000UL), inMat, insizeVec * outSize);
+
+	LL_ATON_RT_Main(&NN_Instance_int8);
+
+	return (int8_t*)(matmulInfo_int.output_start);
 }
 
-void npu_matvec_float_run(void){
-	return NULL;
+int npu_matvec_float_init(size_t insize,size_t outsize){
+	extern volatile Matmul_info matmulInfo_Float;
+	size_t insizeNPU = insize;
+	size_t outsizeNPU = outsize;
+
+	// Calculate Adresses
+	calcAdresses(insizeNPU,outsizeNPU,4,&matmulInfo_Float);
+	return 0;
+}
+
+float* npu_matvec_float_run(float *inVec, size_t insizeVec, float*outVec, size_t outSize, float *inMat){
+	//LL_ATON_DECLARE_NAMED_NN_INSTANCE_AND_INTERFACE(int8);
+	extern volatile Matmul_info matmulInfo_Float;
+
+	// Prepare input buffer: 0x34200000UL is the base address
+	memcpy((float*)(0x34200000UL + matmulInfo_Float.input_start), inVec, matmulInfo_Float.insize);
+	SCB_CleanDCache_by_Addr((void*)(0x34200000UL + matmulInfo_Float.input_start), insizeVec);
+
+	// Prepare Matrix
+	update_weights_float((float*)(0x34200000UL), inMat, insizeVec * outSize);
+
+	LL_ATON_RT_Main(&NN_Instance_int8);
+
+	return (float*)(matmulInfo_Float.output_start);
 }
 
 int8_t* getIdentityWeights_int8(size_t insize, size_t outsize) {
@@ -163,5 +192,6 @@ void NeuralNetwork_init(int8_t **nn_in, uint32_t *nnin_length, int8_t *nn_out[],
 
     *nnin_length = LL_Buffer_len(&nn_in_info[0]);
 }
+
 
 

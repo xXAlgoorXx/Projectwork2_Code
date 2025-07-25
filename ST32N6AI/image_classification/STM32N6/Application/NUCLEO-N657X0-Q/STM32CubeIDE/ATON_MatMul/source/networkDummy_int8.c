@@ -51,6 +51,7 @@
 #include "ll_aton_lib.h"
 #include "ll_aton_version.h"
 #include "ll_sw.h"
+#include "ATON_MatMul.h"
 
 #if LL_ATON_VERSION_MAJOR != 1 || LL_ATON_VERSION_MINOR != 1 || LL_ATON_VERSION_MICRO != 0 || LL_ATON_VERSION_DEV != 31
 #  warning "Possible mismatch in ll_aton library used"
@@ -112,28 +113,12 @@ bool LL_ATON_EC_Inference_Init_int8(void)
 /* scheduling epoch=0    nodes=5   ------------------------------------------------------------------- */
 
 /* scheduling epoch=1    nodes=1   ------------------------------------------------------------------- */
-#define dim 32
-// min:8 ,max:24 only values which are dividable by 8 -> more than max or less then min leads to inf-loop
-// d1 >= d2 else inf loop
-const int d1 = 8; // in size
-const int d2 = 8; // out size
 
-const int weight_start = 0;
-const int weight_end  = (d1 * d2);
-const int weight_limit = weight_end + d1;
-
-const int input_start = weight_limit;
-const int input_end   = input_start + d1;
-const int input_limit = input_end;
-
-const int output_start = input_limit;
-const int output_end   = output_start + d2;
-const int output_limit = output_end;
-
-/* scheduling epoch=2    nodes=5   ------------------------------------------------------------------- */
-static void LL_ATON_Start_EpochBlock_2_16(const void *epoch_block)
+static void LL_ATON_Start_EpochBlock_int8(const void *epoch_block)
 {
+
   LL_ATON_LIB_UNUSED(epoch_block);
+  extern volatile Matmul_info matmulInfo_int;
 
   /* CONV_ACC_V2 configuration */
   static const LL_Convacc_InitTypeDef conv_init = {
@@ -163,8 +148,8 @@ static void LL_ATON_Start_EpochBlock_2_16(const void *epoch_block)
     .fHeight = 1,
     .kernelWidth = 1,
     .kernelHeight = 1,
-    .nKernels = d1,
-    .batchDepth = d2,
+    .nKernels = 1,
+    .batchDepth = 1,
     .hstride = 1,
     .vstride = 1,
     .left_padding = 0,
@@ -179,16 +164,16 @@ static void LL_ATON_Start_EpochBlock_2_16(const void *epoch_block)
   LL_Convacc_Init(0, &conv_init);
 
   /* Input vector (1×16 int8) */
-  static const LL_Streng_TensorInitTypeDef input_tensor = {
+  LL_Streng_TensorInitTypeDef input_tensor = {
     .dir = 0,
     .raw = 1,
     .noblk = 0,
     .align_right = 0,
     .nbits_unsigned = 0,
     .addr_base = { (unsigned char *)(0x34200000UL) },
-    .offset_start = input_start,
-    .offset_end = input_end,
-    .offset_limit = input_limit,
+    .offset_start = matmulInfo_int.input_start,
+    .offset_end = matmulInfo_int.input_end,
+    .offset_limit = matmulInfo_int.input_limit,
     .frame_offset = 16,
     .frame_loop_cnt = 0,
     .frame_tot_cnt = 1,
@@ -198,7 +183,7 @@ static void LL_ATON_Start_EpochBlock_2_16(const void *epoch_block)
   LL_Streng_TensorInit(1, &input_tensor, 1);
 
   /* Weight matrix (16×16 int8) */
-  static const LL_Streng_TensorInitTypeDef weight_tensor = {
+  LL_Streng_TensorInitTypeDef weight_tensor = {
     .dir = 0,
     .raw = 1,
     .continuous = 1,
@@ -206,9 +191,9 @@ static void LL_ATON_Start_EpochBlock_2_16(const void *epoch_block)
     .align_right = 0,
     .nbits_unsigned = 0,
     .addr_base = { (unsigned char *)(0x34200000UL) },
-    .offset_start = weight_start,
-    .offset_end = weight_end,
-    .offset_limit = weight_limit,
+    .offset_start = matmulInfo_int.weight_start,
+    .offset_end = matmulInfo_int.weight_end,
+    .offset_limit = matmulInfo_int.weight_limit,
     .frame_offset = 0,
     .frame_loop_cnt = 0,
     .frame_tot_cnt = 1,
@@ -218,16 +203,16 @@ static void LL_ATON_Start_EpochBlock_2_16(const void *epoch_block)
   LL_Streng_TensorInit(9, &weight_tensor, 1);
 
   /* Output vector (16×1 int8) */
-  static const LL_Streng_TensorInitTypeDef output_tensor = {
+  LL_Streng_TensorInitTypeDef output_tensor = {
     .dir = 1,
     .raw = 1,
     .noblk = 0,
     .align_right = 0,
     .nbits_unsigned = 0,
     .addr_base = { (unsigned char *)(0x34200000UL) },
-    .offset_start = output_start,
-    .offset_end = output_end,
-    .offset_limit = output_limit,
+    .offset_start = matmulInfo_int.output_start,
+    .offset_end = matmulInfo_int.output_end,
+    .offset_limit = matmulInfo_int.output_limit,
     .frame_offset = 16,
     .frame_loop_cnt = 0,
     .frame_tot_cnt = 1,
@@ -255,7 +240,7 @@ static void LL_ATON_Start_EpochBlock_2_16(const void *epoch_block)
   };
   LL_Switch_Init(switch_init, 3);
 
-  LL_ATON_Cache_MCU_Invalidate_Range((uintptr_t)(0x34200000UL + input_start), output_end - input_start); /// Very Important!!
+  LL_ATON_Cache_MCU_Invalidate_Range((uintptr_t)(0x34200000UL + matmulInfo_int.input_start), matmulInfo_int.output_end - matmulInfo_int.input_start); /// Very Important!!
 
   static const LL_ATON_EnableUnits_InitTypeDef enable_units[] = {
     { {STRENG, 3} },
@@ -266,7 +251,7 @@ static void LL_ATON_Start_EpochBlock_2_16(const void *epoch_block)
   LL_ATON_EnableUnits_Init(enable_units, 4);
 }
 
-static void LL_ATON_End_EpochBlock_2_16(const void *epoch_block)
+static void LL_ATON_End_EpochBlock_int8(const void *epoch_block)
 {
   LL_ATON_LIB_UNUSED(epoch_block);
 
@@ -294,17 +279,12 @@ static void LL_ATON_End_EpochBlock_2_16(const void *epoch_block)
   LL_ATON_DisableUnits_Init(disable_units, 4);
 }
 
-
-/* scheduling epoch=3    nodes=1   ------------------------------------------------------------------- */
-
-/* scheduling DONE                 ------------------------------------------------------------------- */
-
 const EpochBlock_ItemTypeDef *LL_ATON_EpochBlockItems_int8(void) {
 
   static const EpochBlock_ItemTypeDef ll_atonn_rt_epoch_block_array[] = {
     {
-      .start_epoch_block = LL_ATON_Start_EpochBlock_2_16,
-      .end_epoch_block = LL_ATON_End_EpochBlock_2_16,
+      .start_epoch_block = LL_ATON_Start_EpochBlock_int8,
+      .end_epoch_block = LL_ATON_End_EpochBlock_int8,
       .wait_mask = 0x00000008,
       .flags = EpochBlock_Flags_epoch_start | EpochBlock_Flags_epoch_end | EpochBlock_Flags_pure_hw,
 #ifdef LL_ATON_EB_DBG_INFO
@@ -325,8 +305,9 @@ const EpochBlock_ItemTypeDef *LL_ATON_EpochBlockItems_int8(void) {
   return ll_atonn_rt_epoch_block_array;
 }
 
-const LL_Buffer_InfoTypeDef *LL_ATON_Input_Buffers_Info_int8(void)
+LL_Buffer_InfoTypeDef *LL_ATON_Input_Buffers_Info_int8(void)
 {
+	extern volatile Matmul_info matmulInfo_int;
   static const uint32_t buff_info__shape_1_16[] = { 1, 1, 16, 1 };
   static const uint32_t buff_info__mem_shape_U_1_16[] = { 1, 16 };
   static const float buff_info_Input_0_out_0_quant_scale[] = { 0.00392139703035355 };
@@ -343,13 +324,13 @@ const LL_Buffer_InfoTypeDef *LL_ATON_Input_Buffers_Info_int8(void)
   static const uint32_t buff_info__shape_16_1_1[] = { 1, 1, 1, 16 };
   static const uint32_t buff_info__mem_shape_F_16_1_1[] = { 16, 1, 1 };
 #endif // LL_ATON_DBG_BUFFER_INFO_EXCLUDED == 0
-  static const LL_Buffer_InfoTypeDef buff_info[] = {
+  LL_Buffer_InfoTypeDef buff_info[] = {
     {
       .name = "Input_0_out_0",
       .addr_base = {(unsigned char *)(0x34200000UL) /* Equivalent hex address = 0x34200000UL */},
-      .offset_start = input_start,
-      .offset_end = input_end,
-      .offset_limit = input_limit,
+      .offset_start = matmulInfo_int.input_start,
+      .offset_end = matmulInfo_int.input_end,
+      .offset_limit = matmulInfo_int.input_limit,
       .is_user_allocated = 0,
       .is_param = 0,
       .epoch = 0,
@@ -468,19 +449,20 @@ const LL_Buffer_InfoTypeDef *LL_ATON_Input_Buffers_Info_int8(void)
   return buff_info;
 }
 
-const LL_Buffer_InfoTypeDef *LL_ATON_Output_Buffers_Info_int8(void)
+LL_Buffer_InfoTypeDef *LL_ATON_Output_Buffers_Info_int8(void)
 {
+	extern volatile Matmul_info matmulInfo_int;
   static const uint32_t buff_info__shape_1_16[] = { 1, 1, 16, 1 };
   static const uint32_t buff_info__mem_shape_U_1_16[] = { 1, 16 };
   static const float buff_info_Quantize_3_out_0_quant_scale[] = { 0.0269236713647842 };
   static const int16_t buff_info_Quantize_3_out_0_quant_offset[] = { -128 };
-  static const LL_Buffer_InfoTypeDef buff_info[] = {
+  LL_Buffer_InfoTypeDef buff_info[] = {
     {
       .name = "Quantize_3_out_0",
       .addr_base = {(unsigned char *)(0x34200000UL) /* Equivalent hex address = 0x34200000UL */},
-      .offset_start = output_start,
-      .offset_end = output_end,
-      .offset_limit = output_limit,
+      .offset_start = matmulInfo_int.output_start,
+      .offset_end = matmulInfo_int.output_end,
+      .offset_limit = matmulInfo_int.output_limit,
       .is_user_allocated = 0,
       .is_param = 0,
       .epoch = 2,
@@ -507,21 +489,22 @@ const LL_Buffer_InfoTypeDef *LL_ATON_Output_Buffers_Info_int8(void)
   return buff_info;
 }
 
-const LL_Buffer_InfoTypeDef *LL_ATON_Internal_Buffers_Info_int8(void)
+LL_Buffer_InfoTypeDef *LL_ATON_Internal_Buffers_Info_int8(void)
 {
+	extern volatile Matmul_info matmulInfo_int;
   static const uint32_t buff_info__shape_1_16_1_1[] = { 1, 1, 1, 16 };
   static const uint32_t buff_info__mem_shape_F_1_16_1_1[] = { 1, 16, 1, 1 };
   static const float buff_info_Gemm_2_reshape_x_2_quant_scale[] = { 0.00392139703035355 };
   static const int16_t buff_info_Gemm_2_reshape_x_2_quant_offset[] = { -128 };
   static const float buff_info_Gemm_2_conv_4_off_bias_out_13_quant_scale[] = { 0.0269236713647842 };
   static const int16_t buff_info_Gemm_2_conv_4_off_bias_out_13_quant_offset[] = { -128 };
-  static const LL_Buffer_InfoTypeDef buff_info[] = {
+  LL_Buffer_InfoTypeDef buff_info[] = {
     {
       .name = "Gemm_2_reshape_x_2",
       .addr_base = {(unsigned char *)(0x34200000UL) /* Equivalent hex address = 0x34200000UL */},
-      .offset_start = input_start,
-      .offset_end = input_end,
-      .offset_limit = input_limit,
+      .offset_start = matmulInfo_int.input_start,
+      .offset_end = matmulInfo_int.input_end,
+      .offset_limit = matmulInfo_int.input_limit,
       .is_user_allocated = 0,
       .is_param = 0,
       .epoch = 1,
@@ -543,9 +526,9 @@ const LL_Buffer_InfoTypeDef *LL_ATON_Internal_Buffers_Info_int8(void)
     {
       .name = "Gemm_2_conv_4_off_bias_out_13",
       .addr_base = {(unsigned char *)(0x34200000UL) /* Equivalent hex address = 0x34200000UL */},
-      .offset_start = output_start,
-      .offset_end = output_end,
-      .offset_limit = output_limit,
+      .offset_start = matmulInfo_int.output_start,
+      .offset_end = matmulInfo_int.output_end,
+      .offset_limit = matmulInfo_int.output_limit,
       .is_user_allocated = 0,
       .is_param = 0,
       .epoch = 2,

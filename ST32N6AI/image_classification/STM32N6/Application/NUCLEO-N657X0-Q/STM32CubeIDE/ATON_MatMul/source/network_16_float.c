@@ -1,10 +1,4 @@
 /*
- * networkDummy_Float.c
- *
- *  Created on: Jul 24, 2025
- *      Author: lukasschoepf
- */
-/*
  * network_16_float.c
  *
  *  Created on: Jul 25, 2025
@@ -57,7 +51,6 @@
 #include "ll_aton_lib.h"
 #include "ll_aton_version.h"
 #include "ll_sw.h"
-#include "ATON_MatMul.h"
 
 #if LL_ATON_VERSION_MAJOR != 1 || LL_ATON_VERSION_MINOR != 1 || LL_ATON_VERSION_MICRO != 0 || LL_ATON_VERSION_DEV != 31
 #  warning "Possible mismatch in ll_aton library used"
@@ -78,40 +71,40 @@
 /* global pool 0 is ? */
 /* index=0 file postfix=AXISRAM6 name=npuRAM6 offset=0x34350000  absolute_mode size=458744 READ_WRITE THROUGHPUT=HIGH LATENCY=LOW byte width=8 freq ratio=1.25 burst max length=MAXINT burst penalty=0 pipelined=ON cacheable=OFF read_power=19.006 write_power=15.79 use4initializers=NO score=94  */
 
-LL_ATON_User_IO_Result_t LL_ATON_Set_User_Input_Buffer_Float(uint32_t num, void* buffer, uint32_t size)
+LL_ATON_User_IO_Result_t LL_ATON_Set_User_Input_Buffer_Default(uint32_t num, void* buffer, uint32_t size)
 {
   {
     return LL_ATON_User_IO_WRONG_INDEX;
   }
 }
 
-void *LL_ATON_Get_User_Input_Buffer_Float(uint32_t num)
+void *LL_ATON_Get_User_Input_Buffer_Default(uint32_t num)
 {
   {
     return NULL;
   }
 }
 
-LL_ATON_User_IO_Result_t LL_ATON_Set_User_Output_Buffer_Float(uint32_t num, void* buffer, uint32_t size)
+LL_ATON_User_IO_Result_t LL_ATON_Set_User_Output_Buffer_Default(uint32_t num, void* buffer, uint32_t size)
 {
   {
     return LL_ATON_User_IO_WRONG_INDEX;
   }
 }
 
-void *LL_ATON_Get_User_Output_Buffer_Float(uint32_t num)
+void *LL_ATON_Get_User_Output_Buffer_Default(uint32_t num)
 {
   {
     return NULL;
   }
 }
 
-bool LL_ATON_EC_Network_Init_Float(void)
+bool LL_ATON_EC_Network_Init_Default(void)
 {
   return true;
 }
 
-bool LL_ATON_EC_Inference_Init_Float(void)
+bool LL_ATON_EC_Inference_Init_Default(void)
 {
   return true;
 }
@@ -122,37 +115,37 @@ bool LL_ATON_EC_Inference_Init_Float(void)
 
 /* scheduling epoch=2    nodes=1   ------------------------------------------------------------------- */
 
-static void LL_ATON_End_EpochBlock_Float(const void *epoch_block)
+static void LL_ATON_End_EpochBlock_2(const void *epoch_block)
 {
   LL_ATON_LIB_UNUSED(epoch_block);
-  extern volatile Matmul_info matmulInfo_Float;
 
-	/* Unit= 27 [PROCESSOR 0] */
-	/* kind=Conv node=Gemm_1_conv_4 */
+
+/* Unit= 27 [PROCESSOR 0] */
+/* kind=Conv node=Gemm_1_conv_4 */
   Conv_sw_info conv1_sw_info = {
     /* "general.input" tensor-related info: */
     .general.input.dim.tensor_b = 1,
     .general.input.dim.tensor_h = 1,
     .general.input.dim.tensor_w = 1,
-    .general.input.dim.tensor_c = matmulInfo_Float.insize,
-    .general.input.dim.num_elem = matmulInfo_Float.outsize,
-    .general.input.stride.b = matmulInfo_Float.insize * matmulInfo_Float.bytes,
-    .general.input.stride.h = matmulInfo_Float.insize * matmulInfo_Float.bytes,
-    .general.input.stride.w = matmulInfo_Float.insize * matmulInfo_Float.bytes,
-    .general.input.stride.c = matmulInfo_Float.bytes,
-    .general.input.mem.start_offset = ((unsigned char *)(ATON_LIB_PHYSICAL_TO_VIRTUAL_ADDR(0x34200000UL + matmulInfo_Float.input_start))) /* Equivalent hex address = 0x34200400UL */,
+    .general.input.dim.tensor_c = 16,
+    .general.input.dim.num_elem = 16,
+    .general.input.stride.b = 64,
+    .general.input.stride.h = 64,
+    .general.input.stride.w = 64,
+    .general.input.stride.c = 4,
+    .general.input.mem.start_offset = ((unsigned char *)(ATON_LIB_PHYSICAL_TO_VIRTUAL_ADDR(0x34200000UL + 1024))) /* Equivalent hex address = 0x34200400UL */,
     .general.input.format.is_signed = 0,
     /* "weights" tensor-related info: */
-    .weights.dim.tensor_b = matmulInfo_Float.insize,
+    .weights.dim.tensor_b = 16,
     .weights.dim.tensor_h = 1,
     .weights.dim.tensor_w = 1,
-    .weights.dim.tensor_c = matmulInfo_Float.outsize,
-    .weights.dim.num_elem = matmulInfo_Float.insize * matmulInfo_Float.insize,
-    .weights.stride.b = matmulInfo_Float.insize * matmulInfo_Float.bytes,
-    .weights.stride.h = matmulInfo_Float.insize * matmulInfo_Float.bytes,
-    .weights.stride.w = matmulInfo_Float.insize * matmulInfo_Float.bytes,
-    .weights.stride.c = matmulInfo_Float.bytes,
-    .weights.mem.start_offset = ((unsigned char *)(ATON_LIB_PHYSICAL_TO_VIRTUAL_ADDR(0x34200000UL + matmulInfo_Float.weight_start))) /* Equivalent hex address = 0x34200000UL */,
+    .weights.dim.tensor_c = 16,
+    .weights.dim.num_elem = 256,
+    .weights.stride.b = 64,
+    .weights.stride.h = 64,
+    .weights.stride.w = 64,
+    .weights.stride.c = 4,
+    .weights.mem.start_offset = ((unsigned char *)(ATON_LIB_PHYSICAL_TO_VIRTUAL_ADDR(0x34200000UL + 0))) /* Equivalent hex address = 0x34200000UL */,
     .weights.format.is_signed = 0,
     /* "general.output" tensor-related info: */
     .general.output.dim.tensor_b = 1,
@@ -163,7 +156,7 @@ static void LL_ATON_End_EpochBlock_Float(const void *epoch_block)
     .general.output.stride.b = 64,
     .general.output.stride.h = 64,
     .general.output.stride.w = 64,
-    .general.output.stride.c = matmulInfo_Float.bytes,
+    .general.output.stride.c = 4,
     .general.output.mem.start_offset = ((unsigned char *)(ATON_LIB_PHYSICAL_TO_VIRTUAL_ADDR(0x34200000UL + 1088))) /* Equivalent hex address = 0x34200440UL */,
     .general.output.format.is_signed = 1,
     /* Node-specific Hyper-parameters: */
@@ -192,12 +185,12 @@ static void LL_ATON_End_EpochBlock_Float(const void *epoch_block)
 
 /* scheduling DONE                 ------------------------------------------------------------------- */
 
-const EpochBlock_ItemTypeDef *LL_ATON_EpochBlockItems_Float(void) {
+const EpochBlock_ItemTypeDef *LL_ATON_EpochBlockItems_Default(void) {
 
   static const EpochBlock_ItemTypeDef ll_atonn_rt_epoch_block_array[] = {
     {
       .start_epoch_block = NULL,
-      .end_epoch_block = LL_ATON_End_EpochBlock_Float,
+      .end_epoch_block = LL_ATON_End_EpochBlock_2,
       .wait_mask = 0x00000000,
       .flags = EpochBlock_Flags_epoch_start | EpochBlock_Flags_epoch_end | EpochBlock_Flags_pure_sw,
 #ifdef LL_ATON_EB_DBG_INFO
@@ -218,7 +211,7 @@ const EpochBlock_ItemTypeDef *LL_ATON_EpochBlockItems_Float(void) {
   return ll_atonn_rt_epoch_block_array;
 }
 
-const LL_Buffer_InfoTypeDef *LL_ATON_Input_Buffers_Info_Float(void)
+const LL_Buffer_InfoTypeDef *LL_ATON_Input_Buffers_Info_Default(void)
 {
   static const uint32_t buff_info__shape_1_16[] = { 1, 1, 16, 1 };
   static const uint32_t buff_info__mem_shape_U_1_16[] = { 1, 16 };
@@ -279,7 +272,7 @@ const LL_Buffer_InfoTypeDef *LL_ATON_Input_Buffers_Info_Float(void)
   return buff_info;
 }
 
-const LL_Buffer_InfoTypeDef *LL_ATON_Output_Buffers_Info_Float(void)
+const LL_Buffer_InfoTypeDef *LL_ATON_Output_Buffers_Info_Default(void)
 {
   static const uint32_t buff_info__shape_1_16[] = { 1, 1, 16, 1 };
   static const uint32_t buff_info__mem_shape_U_1_16[] = { 1, 16 };
@@ -313,7 +306,7 @@ const LL_Buffer_InfoTypeDef *LL_ATON_Output_Buffers_Info_Float(void)
   return buff_info;
 }
 
-const LL_Buffer_InfoTypeDef *LL_ATON_Internal_Buffers_Info_Float(void)
+const LL_Buffer_InfoTypeDef *LL_ATON_Internal_Buffers_Info_Default(void)
 {
   static const uint32_t buff_info__shape_1_16_1_1[] = { 1, 1, 1, 16 };
   static const uint32_t buff_info__mem_shape_F_1_16_1_1[] = { 1, 16, 1, 1 };
@@ -367,8 +360,6 @@ const LL_Buffer_InfoTypeDef *LL_ATON_Internal_Buffers_Info_Float(void)
 
   return buff_info;
 }
-
-
 
 
 

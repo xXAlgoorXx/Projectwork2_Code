@@ -29,9 +29,6 @@
 #include "app_config.h"
 #include "arm_math.h"
 
-
-// Lukas//#define SIZE 1024
-
 COM_InitTypeDef BspCOMInit;
 static void SystemClock_Config(void);
 static void NPURam_enable(void);
@@ -40,13 +37,6 @@ static void NPUCache_config(void);
 #include "ATON_MatMul.h"
 
 #define MAX_NUMBER_OUTPUT 1
-
-//#define SIZE 1024
-
-COM_InitTypeDef BspCOMInit;
-static void SystemClock_Config(void);
-static void NPURam_enable(void);
-static void NPUCache_config(void);
 
 static void Security_Config(void);
 static void set_clk_sleep_mode(void);
@@ -121,16 +111,6 @@ int main(void)
 		printf("Error in weights Allocation");
 	}
 
-//	printf("Weights:\n\r");
-//	for (int i = 0; i < nn_in_len; i++) {
-//	    for (int j = 0; j < nn_out_len[0]; j++) {
-//	    	int pointer = i * nn_out_len[0] + j;
-////			printf("%4d:",pointer);
-//	        printf("%4d ", identityWeights[i * nn_out_len[0]  + j]);  // Correct indexing
-//	    }
-//	    printf("\n\r");
-//	}
-
 	size_t weight_size = nn_in_len * nn_out_len[0];  // Based on weight tensor shape in network.c
 	int8_t* nnweights = (int8_t*)(0x34200000UL);
 	size_t loopcount = 0;
@@ -156,13 +136,6 @@ int main(void)
         // Run NPU inference
 		SCB_CleanDCache_by_Addr((void*)nnweights, weight_size);
         ts[0] = HAL_GetTick();
-
-//        printf("NN Instance ptr: %p\n\r", &NN_Instance_Default);
-//        memcpy((void*)&NN_Instance_Default, (void*)&NN_Instance_Default, sizeof(NN_Instance_Default));
-//        uint32_t* ptr = (uint32_t*)&NN_Instance_Default;
-//        for (int i = 0; i < 8; i++) {
-//            printf("Instance [%d]: 0x%08lx\n\r", i, ptr[i]);
-//        }
 
         startTiming_Cyc();
         LL_ATON_RT_Main(&NN_Instance_Default);
