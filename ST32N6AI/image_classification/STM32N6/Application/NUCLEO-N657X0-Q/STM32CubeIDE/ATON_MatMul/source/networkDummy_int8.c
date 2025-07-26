@@ -121,7 +121,7 @@ static void LL_ATON_Start_EpochBlock_int8(const void *epoch_block)
   extern volatile Matmul_info matmulInfo_int;
 
   /* CONV_ACC_V2 configuration */
-  static const LL_Convacc_InitTypeDef conv_init = {
+  LL_Convacc_InitTypeDef conv_init = {
     .simd = 1,
     .fsub = 0,
     .accumulate = 0,
@@ -148,8 +148,8 @@ static void LL_ATON_Start_EpochBlock_int8(const void *epoch_block)
     .fHeight = 1,
     .kernelWidth = 1,
     .kernelHeight = 1,
-    .nKernels = 1,
-    .batchDepth = 1,
+    .nKernels = matmulInfo_int.insize,
+    .batchDepth = matmulInfo_int.outsize,
     .hstride = 1,
     .vstride = 1,
     .left_padding = 0,
@@ -220,6 +220,7 @@ static void LL_ATON_Start_EpochBlock_int8(const void *epoch_block)
     .nbits_out = 8,
   };
   LL_Streng_TensorInit(3, &output_tensor, 1);
+  printf("Output Start: %d",matmulInfo_int.output_start);
 
   /* Setup switches */
   static const LL_Switch_InitTypeDef switch_init[] = {

@@ -100,7 +100,7 @@ int8_t* npu_matvec_int8_run(int8_t *inVec, size_t insizeVec, size_t outSize, int
 
 	LL_ATON_RT_Main(&NN_Instance_int8);
 
-	return (int8_t*)(matmulInfo_int.output_start);
+	return (int8_t*)(0x34200000UL + matmulInfo_int.output_start);
 }
 
 int npu_matvec_float_init(size_t insize,size_t outsize){

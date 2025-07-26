@@ -1,4 +1,6 @@
 "./ATON_MatMul/source/ATON_MatMul.o"
+"./ATON_MatMul/source/networkDummy_Float.o"
+"./ATON_MatMul/source/networkDummy_int8.o"
 "./ATON_MatMul/source/network_32.o"
 "./Application/app_fuseprogramming.o"
 "./Application/crop_img.o"

@@ -6,14 +6,20 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../ATON_MatMul/source/ATON_MatMul.c \
+../ATON_MatMul/source/networkDummy_Float.c \
+../ATON_MatMul/source/networkDummy_int8.c \
 ../ATON_MatMul/source/network_32.c 
 
 OBJS += \
 ./ATON_MatMul/source/ATON_MatMul.o \
+./ATON_MatMul/source/networkDummy_Float.o \
+./ATON_MatMul/source/networkDummy_int8.o \
 ./ATON_MatMul/source/network_32.o 
 
 C_DEPS += \
 ./ATON_MatMul/source/ATON_MatMul.d \
+./ATON_MatMul/source/networkDummy_Float.d \
+./ATON_MatMul/source/networkDummy_int8.d \
 ./ATON_MatMul/source/network_32.d 
 
 
@@ -24,7 +30,7 @@ ATON_MatMul/source/%.o ATON_MatMul/source/%.su ATON_MatMul/source/%.cyclo: ../AT
 clean: clean-ATON_MatMul-2f-source
 
 clean-ATON_MatMul-2f-source:
-	-$(RM) ./ATON_MatMul/source/ATON_MatMul.cyclo ./ATON_MatMul/source/ATON_MatMul.d ./ATON_MatMul/source/ATON_MatMul.o ./ATON_MatMul/source/ATON_MatMul.su ./ATON_MatMul/source/network_32.cyclo ./ATON_MatMul/source/network_32.d ./ATON_MatMul/source/network_32.o ./ATON_MatMul/source/network_32.su
+	-$(RM) ./ATON_MatMul/source/ATON_MatMul.cyclo ./ATON_MatMul/source/ATON_MatMul.d ./ATON_MatMul/source/ATON_MatMul.o ./ATON_MatMul/source/ATON_MatMul.su ./ATON_MatMul/source/networkDummy_Float.cyclo ./ATON_MatMul/source/networkDummy_Float.d ./ATON_MatMul/source/networkDummy_Float.o ./ATON_MatMul/source/networkDummy_Float.su ./ATON_MatMul/source/networkDummy_int8.cyclo ./ATON_MatMul/source/networkDummy_int8.d ./ATON_MatMul/source/networkDummy_int8.o ./ATON_MatMul/source/networkDummy_int8.su ./ATON_MatMul/source/network_32.cyclo ./ATON_MatMul/source/network_32.d ./ATON_MatMul/source/network_32.o ./ATON_MatMul/source/network_32.su
 
 .PHONY: clean-ATON_MatMul-2f-source
 

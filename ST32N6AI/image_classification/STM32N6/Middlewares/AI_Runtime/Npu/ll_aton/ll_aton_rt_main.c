@@ -76,8 +76,8 @@ void LL_ATON_RT_Main(NN_Instance_TypeDef *network_instance)
     { /*** subject to change to fit also user code requirements ***/
       LL_ATON_OSAL_WFE();
     }
-    printf("Epoch: %5d, Return: %d\n\r", epochCount, ll_aton_rt_ret);
-    epochCount++;
+//    printf("Epoch: %5d, Return: %d\n\r", epochCount, ll_aton_rt_ret);
+//    epochCount++;
   } while (ll_aton_rt_ret != LL_ATON_RT_DONE); /*** subject to change to fit also user code requirements ***/
 
   LL_ATON_RT_DeInit_Network(network_instance); // De-initialize the network instance object

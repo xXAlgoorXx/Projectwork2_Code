@@ -29,6 +29,9 @@
 #include "app_config.h"
 #include "arm_math.h"
 
+int main_NPU(void);
+int main_MatMul_int8(void);
+
 COM_InitTypeDef BspCOMInit;
 static void SystemClock_Config(void);
 static void NPURam_enable(void);
@@ -63,13 +66,44 @@ uint32_t getTiming_Cyc(){
 	return cycles;
 }
 
+int main(void)
+{
+	main_MatMul_int8();
+
+}
+
+int main_MatMul_int8(void){
+	Hardware_init();
+	printf("=== MatMul Main ===\n\r");
+	size_t insize = 8;
+	size_t outsize = 8;
+
+    int8_t inVec[insize];
+    for (int i = 0; i < insize; i++) {
+    	inVec[i] = (int8_t)((i) % 256);  // Example input: cycles through -128 to 127
+    }
+    int8_t* identityWeights = getIdentityWeights_int8(insize,outsize);
+    int8_t* outvector;
+
+	npu_matvec_int8_init(insize,outsize);
+	while(1){
+		outvector = npu_matvec_int8_run(inVec,insize,outsize,identityWeights);
+		for(size_t i = 0;i < outsize;i++){
+			int8_t output = outvector[i];
+			printf("Outpus %2d: %4d\n\r",i,output);
+		}
+	}
+
+}
+
+
 /**
   * @brief  Main program
   * @param  None
   * @retval None
   */
 
-int main(void)
+int main_NPU(void)
 {
     uint32_t cyclesInitNPU = 0;
 
