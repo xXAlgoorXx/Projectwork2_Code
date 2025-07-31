@@ -20,6 +20,7 @@ RM := rm -rf
 -include Middlewares/Camera_Middleware/sensors/subdir.mk
 -include Middlewares/Camera_Middleware/subdir.mk
 -include Drivers/STM32N6xx_HAL_Driver/subdir.mk
+-include Drivers/CMSIS/DSP/Source/MatrixFunctions/subdir.mk
 -include Drivers/CMSIS/subdir.mk
 -include Drivers/BSP/STM32N6xx_Nucleo/subdir.mk
 -include Drivers/BSP/Components/subdir.mk
@@ -77,8 +78,8 @@ all: main-build
 main-build: NUCLEO-N657X0-Q_GettingStarted_ImageClassification.elf secondary-outputs
 
 # Tool invocations
-NUCLEO-N657X0-Q_GettingStarted_ImageClassification.elf NUCLEO-N657X0-Q_GettingStarted_ImageClassification.map: $(OBJS) $(USER_OBJS) /home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/image_classification/STM32N6/Application/NUCLEO-N657X0-Q/STM32CubeIDE/STM32N657xx.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "NUCLEO-N657X0-Q_GettingStarted_ImageClassification.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m55 -T"/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/image_classification/STM32N6/Application/NUCLEO-N657X0-Q/STM32CubeIDE/STM32N657xx.ld" --specs=nosys.specs -Wl,-Map="NUCLEO-N657X0-Q_GettingStarted_ImageClassification.map" -Wl,--gc-sections -static -Wl,--cmse-implib -Wl,--out-implib=./secure_nsclib.o -L../../../../Middlewares/AI_Runtime/Lib/GCC/ARMCortexM55 -L../../../../Middlewares/Camera_Middleware/ISP_Library/evision/Lib -Wl,--no-warn-rwx-segments --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+NUCLEO-N657X0-Q_GettingStarted_ImageClassification.elf NUCLEO-N657X0-Q_GettingStarted_ImageClassification.map: $(OBJS) $(USER_OBJS) D:\PA2\Code\Projectwork2_Code\ST32N6AI\image_classification\STM32N6\Application\NUCLEO-N657X0-Q\STM32CubeIDE\STM32N657xx.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "NUCLEO-N657X0-Q_GettingStarted_ImageClassification.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m55 -T"D:\PA2\Code\Projectwork2_Code\ST32N6AI\image_classification\STM32N6\Application\NUCLEO-N657X0-Q\STM32CubeIDE\STM32N657xx.ld" --specs=nosys.specs -Wl,-Map="NUCLEO-N657X0-Q_GettingStarted_ImageClassification.map" -Wl,--gc-sections -static -Wl,--cmse-implib -Wl,--out-implib=./secure_nsclib.o -L../../../../Middlewares/AI_Runtime/Lib/GCC/ARMCortexM55 -L../../../../Middlewares/Camera_Middleware/ISP_Library/evision/Lib -Wl,--no-warn-rwx-segments --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

@@ -69,7 +69,7 @@
 		<link>
 			<name>Application/network.c</name>
 			<type>1</type>
-			<location>/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/image_classification/STM32N6/Model/ownModels/matmulModel_32_int8/NetworkFiles/output/network.c</location>
+			<location>C:/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/image_classification/STM32N6/Model/ownModels/matmulModel_32_int8/NetworkFiles/output/network.c</location>
 		</link>
 		<link>
 			<name>Application/npu_cache.c</name>

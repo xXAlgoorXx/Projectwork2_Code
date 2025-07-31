@@ -113,7 +113,7 @@ int npu_matvec_float_init(size_t insize,size_t outsize){
 	return 0;
 }
 
-float* npu_matvec_float_run(float *inVec, size_t insizeVec, float*outVec, size_t outSize, float *inMat){
+float* npu_matvec_float_run(float *inVec, size_t insizeVec, size_t outSize, float *inMat){
 	//LL_ATON_DECLARE_NAMED_NN_INSTANCE_AND_INTERFACE(int8);
 	extern volatile Matmul_info matmulInfo_Float;
 
@@ -162,6 +162,32 @@ int8_t* getIdentityWeights_int8(size_t insize, size_t outsize) {
 //	    printf("\n\r");
 //	}
 //
+
+    return identity;
+}
+
+float* getIdentityWeights_float(size_t insize, size_t outsize) {
+    int8_t* identity = malloc(insize * outsize * sizeof(float));
+    if (identity == NULL) {
+        return NULL;
+    }
+
+    // Initialize the entire matrix to 0
+    memset(identity, 0, insize * outsize * sizeof(float));
+
+    // Set 1 on the diagonal
+    for (size_t i = 0; i < insize; i++) {
+        for (size_t j = 0; j < outsize; j++) {
+            if (i == j) {
+//            	printf("%4d: 1",i * outsize + j);
+                identity[i * outsize + j] = 1;  // Set diagonal to 1
+            }
+            else{
+//            	printf("%4d: 0",i * outsize + j);
+                identity[i * outsize + j] = 0;  // Set diagonal to 1
+            }
+        }
+    }
 
     return identity;
 }

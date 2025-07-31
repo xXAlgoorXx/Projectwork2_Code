@@ -3,6 +3,7 @@
 	<name>STM32N6</name>
 	<comment></comment>
 	<projects>
+		<project>NUCLEO-N657X0-Q_GettingStarted_ImageClassification</project>
 	</projects>
 	<buildSpec>
 	</buildSpec>

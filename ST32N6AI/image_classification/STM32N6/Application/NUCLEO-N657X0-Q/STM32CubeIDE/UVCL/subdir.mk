@@ -5,7 +5,7 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 S_SRCS += \
-/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/image_classification/STM32N6/STM32Cube_FW_N6/Drivers/CMSIS/Device/ST/STM32N6xx/Source/Templates/gcc/startup_stm32n657xx_fsbl.s 
+D:/PA2/Code/Projectwork2_Code/ST32N6AI/image_classification/STM32N6/STM32Cube_FW_N6/Drivers/CMSIS/Device/ST/STM32N6xx/Source/Templates/gcc/startup_stm32n657xx_fsbl.s 
 
 OBJS += \
 ./startup_stm32n657xx_fsbl.o 
@@ -15,8 +15,8 @@ S_DEPS += \
 
 
 # Each subdirectory must supply rules for building sources it contributes
-startup_stm32n657xx_fsbl.o: /home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/image_classification/STM32N6/STM32Cube_FW_N6/Drivers/CMSIS/Device/ST/STM32N6xx/Source/Templates/gcc/startup_stm32n657xx_fsbl.s subdir.mk
-	arm-none-eabi-gcc -mcpu=cortex-m55 -g3 -DDEBUG -c -x assembler-with-cpp -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "$@" "$<"
+startup_stm32n657xx_fsbl.o: D:/PA2/Code/Projectwork2_Code/ST32N6AI/image_classification/STM32N6/STM32Cube_FW_N6/Drivers/CMSIS/Device/ST/STM32N6xx/Source/Templates/gcc/startup_stm32n657xx_fsbl.s subdir.mk
+	arm-none-eabi-gcc -mcpu=cortex-m55 -g3 -DDEBUG -c -flax-vector-conversions -x assembler-with-cpp -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "$@" "$<"
 
 clean: clean--2e-
 
