@@ -52,10 +52,11 @@ void Error_Handler(void);
 void controllOutput(int8_t* in, int8_t* weights, size_t insize, size_t outsize);
 void setOutputZero(int8_t* outp, size_t size);
 int main_NPU_test(void);
-int main_NPU_int8(void);
-int main_NPU_float(void);
-int main_ARM_int8(void);
-int main_ARM_float(void);
+
+int NPU_MatMul_int8(size_t insize,size_t outsize);
+int NPU_MatMul_float(size_t insize,size_t outsize);
+int ARM_MatMul_int8(size_t insize,size_t outsize);
+int ARM_MatMul_float(size_t insize,size_t outsize);
 
 void enableTiming_Cyc(void){
 	CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
@@ -73,16 +74,17 @@ uint32_t getTiming_Cyc(){
 
 int main(void)
 {
-	Hardware_init();
-	enableTiming_Cyc();
-    main_ARM_int8();
-}
-
-int main_NPU_int8(void){
-	Hardware_init();
-	printf("=== MatMul int8 Main ===\n\r");
+	// define Sizes here and pass to main functions
 	size_t insize = 8;
 	size_t outsize = 8;
+	Hardware_init();
+	enableTiming_Cyc();
+	ARM_MatMul_float(insize,outsize);
+}
+
+int NPU_MatMul_int8(size_t insize,size_t outsize){
+	Hardware_init();
+	printf("=== MatMul int8 Main ===\n\r");
 
     int8_t inVec[insize];
     for (int i = 0; i < insize; i++) {
@@ -99,15 +101,12 @@ int main_NPU_int8(void){
 			printf("Output %2d: %4d\n\r",i,output);
 		}
 	}
-
 }
 
 
-int main_NPU_float(void){
+int NPU_MatMul_float(size_t insize,size_t outsize){
 	Hardware_init();
-	printf("=== MatMul float Main ===\n\r");
-	size_t insize = 8;
-	size_t outsize = 8;
+	printf("=== NPU MatMul float ===\n\r");
 
     float inVec[insize];
     for (int i = 0; i < insize; i++) {
@@ -126,17 +125,8 @@ int main_NPU_float(void){
 	}
 }
 
-int main_ARM_int8(void) {
-//	void simd_matrix_vector_mul_int8(
-//	    const int8_t* matrix,   // Pointer to MxN matrix
-//	    const int8_t* vector,   // Pointer to vector of size N
-//	    int32_t* result,        // Output vector of size M
-//	    uint32_t M,             // Number of rows
-//	    uint32_t N              // Number of columns (must be multiple of 4)
-//	);
 
-    size_t insize = 8;
-    size_t outsize = 8;
+int ARM_MatMul_int8(size_t insize,size_t outsize) {
 
     int8_t inVec[insize];
     for (int i = 0; i < insize; i++) {
@@ -173,53 +163,54 @@ int main_ARM_int8(void) {
     }
     return 0;
 }
-//int main_ARM_float(void) {
-//    size_t insize = 8;
-//    size_t outsize = 8;
-//
-//    float32_t inVec[insize];
-//    for (int i = 0; i < insize; i++) {
-//        inVec[i] = i * 0.1f;  // Example float input values
-//    }
-//
-//    // Identity weight matrix
-//    float32_t* identityWeights = getIdentityWeights_float(insize, outsize);
-//    if (!identityWeights) {
-//        printf("Memory allocation failed\n");
-//        return -1;
-//    }
-//
-//    float32_t dataOut[outsize];
-//
-//    arm_matrix_instance_f32 in;
-//    arm_matrix_instance_f32 weight;
-//    arm_matrix_instance_f32 out;
-//
-//    arm_mat_init_f32(&in, 1, insize, inVec);
-//    arm_mat_init_f32(&weight, insize, outsize, identityWeights);
-//    arm_mat_init_f32(&out, 1, outsize, dataOut);
-//
-//    // Start benchmarking
-//    DWT->CYCCNT = 0;
-//    DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
-//
-//    arm_status status = arm_mat_mult_f32(&in, &weight, &out);
-//
-//    uint32_t cycles = DWT->CYCCNT;
-//    float time = ((float)cycles / SystemCoreClock) * 1000.0f;
-//
-//    if (status == ARM_MATH_SUCCESS) {
-//        printf("Time CMSIS float32: %f ms, Cycles: %lu\n", time, cycles);
-//        for (int i = 0; i < outsize; ++i) {
-//            printf("Out[%d]: %7.4f\n", i, dataOut[i]);
-//        }
-//    } else {
-//        printf("Matrix multiplication failed!\n");
-//    }
-//
-//    free(identityWeights);
-//    return 0;
-//}
+
+int ARM_MatMul_float(size_t insize,size_t outsize) {
+    size_t insize = 8;
+    size_t outsize = 8;
+
+    float32_t inVec[insize];
+    for (int i = 0; i < insize; i++) {
+        inVec[i] = i * 1.0f;  // Example float input values
+    }
+
+    // Identity weight matrix
+    float32_t* identityWeights = getIdentityWeights_float(insize, outsize);
+    if (!identityWeights) {
+        printf("Memory allocation failed\n");
+        return -1;
+    }
+
+    float32_t dataOut[outsize];
+
+    arm_matrix_instance_f32 in;
+    arm_matrix_instance_f32 weight;
+    arm_matrix_instance_f32 out;
+
+    arm_mat_init_f32(&in, 1, insize, inVec);
+    arm_mat_init_f32(&weight, insize, outsize, identityWeights);
+    arm_mat_init_f32(&out, 1, outsize, dataOut);
+
+    while(1){
+    	startTiming_Cyc();
+		arm_status status = arm_mat_mult_f32(&in, &weight, &out);
+
+		uint32_t cycles = getTiming_Cyc();
+		float time = ((float)cycles / SystemCoreClock) * 1000.0f;
+
+		if (status == ARM_MATH_SUCCESS) {
+			printf("Time CMSIS float32: %f ms, Cycles: %lu\n\r", time, cycles);
+			for (int i = 0; i < outsize; ++i) {
+				printf("Out[%d]: %7.4f\n\r", i, dataOut[i]);
+			}
+		}
+		else {
+			printf("Matrix multiplication failed!\n");
+		}
+
+//		free(identityWeights);
+    }
+    return 0;
+}
 
 /**
   * @brief  Main program

@@ -167,30 +167,22 @@ int8_t* getIdentityWeights_int8(size_t insize, size_t outsize) {
 }
 
 float* getIdentityWeights_float(size_t insize, size_t outsize) {
-    int8_t* identity = malloc(insize * outsize * sizeof(float));
+    float* identity = malloc(insize * outsize * sizeof(float));
     if (identity == NULL) {
         return NULL;
     }
 
-    // Initialize the entire matrix to 0
+    // Initialize all elements to 0
     memset(identity, 0, insize * outsize * sizeof(float));
 
-    // Set 1 on the diagonal
-    for (size_t i = 0; i < insize; i++) {
-        for (size_t j = 0; j < outsize; j++) {
-            if (i == j) {
-//            	printf("%4d: 1",i * outsize + j);
-                identity[i * outsize + j] = 1;  // Set diagonal to 1
-            }
-            else{
-//            	printf("%4d: 0",i * outsize + j);
-                identity[i * outsize + j] = 0;  // Set diagonal to 1
-            }
-        }
+    // Set diagonal to 1
+    for (size_t i = 0; i < insize && i < outsize; i++) {
+        identity[i * outsize + i] = 1.0f;
     }
 
     return identity;
 }
+
 
 void NeuralNetwork_init(int8_t **nn_in, uint32_t *nnin_length, int8_t *nn_out[], int *number_output, uint32_t nn_out_len[])
 {

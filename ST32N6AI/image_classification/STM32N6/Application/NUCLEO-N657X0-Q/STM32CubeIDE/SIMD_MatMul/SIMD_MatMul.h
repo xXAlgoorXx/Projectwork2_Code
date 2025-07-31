@@ -19,6 +19,7 @@ void simd_matrix_vector_mul_int8(
     uint32_t N              // Number of columns (must be multiple of 4)(Output Size)
 );
 
+// Helium flag not recognised (-mve)
 //void mve_matrix_vector_mul_int8(
 //    const int8_t* matrix,   // [outsize][insize]
 //    const int8_t* vector,   // [insize]

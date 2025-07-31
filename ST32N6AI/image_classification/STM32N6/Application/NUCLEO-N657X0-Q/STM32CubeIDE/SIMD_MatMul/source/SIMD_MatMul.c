@@ -10,6 +10,8 @@
 #include <arm_math.h>
 #include <arm_mve.h>
 
+// Helium flag not recognised (-mve)
+
 //void mve_matrix_vector_mul_int8(
 //    const int8_t* matrix,   // [outsize][insize]
 //    const int8_t* vector,   // [insize]
