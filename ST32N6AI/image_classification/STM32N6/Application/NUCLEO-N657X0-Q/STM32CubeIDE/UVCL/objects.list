@@ -120,6 +120,7 @@
 "./Middlewares/screenl/uvcl/uvcl_usbx.o"
 "./NN_Sim/source/nn_sim.o"
 "./NN_Sim/source/nn_sim_vars.o"
+"./SIMD_MatMul/source/SIMD_MatMul.o"
 "./STM32Cube_FW_N6/Middlewares/ST/usbx/common/ux_dcd_stm32_callback.o"
 "./STM32Cube_FW_N6/Middlewares/ST/usbx/common/ux_dcd_stm32_endpoint_create.o"
 "./STM32Cube_FW_N6/Middlewares/ST/usbx/common/ux_dcd_stm32_endpoint_destroy.o"

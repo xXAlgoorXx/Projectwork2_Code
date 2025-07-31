@@ -9,4 +9,5 @@
 ../ATON_MatMul/source/ATON_MatMul.c:106:5:npu_matvec_float_init	24	static
 ../ATON_MatMul/source/ATON_MatMul.c:116:8:npu_matvec_float_run	40	static,ignoring_inline_asm
 ../ATON_MatMul/source/ATON_MatMul.c:132:9:getIdentityWeights_int8	32	static
-../ATON_MatMul/source/ATON_MatMul.c:169:6:NeuralNetwork_init	48	static
+../ATON_MatMul/source/ATON_MatMul.c:169:8:getIdentityWeights_float	32	static
+../ATON_MatMul/source/ATON_MatMul.c:195:6:NeuralNetwork_init	48	static

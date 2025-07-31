@@ -1,0 +1,12 @@
+../ATON_MatMul/source/networkDummy_int8.c:255:13:LL_ATON_End_EpochBlock_int8	8	static
+../ATON_MatMul/source/networkDummy_int8.c:117:13:LL_ATON_Start_EpochBlock_int8	288	static
+../ATON_MatMul/source/networkDummy_int8.c:75:26:LL_ATON_Set_User_Input_Buffer_int8	0	static
+../ATON_MatMul/source/networkDummy_int8.c:82:7:LL_ATON_Get_User_Input_Buffer_int8	0	static
+../ATON_MatMul/source/networkDummy_int8.c:89:26:LL_ATON_Set_User_Output_Buffer_int8	0	static
+../ATON_MatMul/source/networkDummy_int8.c:96:7:LL_ATON_Get_User_Output_Buffer_int8	0	static
+../ATON_MatMul/source/networkDummy_int8.c:103:6:LL_ATON_EC_Network_Init_int8	0	static
+../ATON_MatMul/source/networkDummy_int8.c:108:6:LL_ATON_EC_Inference_Init_int8	0	static
+../ATON_MatMul/source/networkDummy_int8.c:283:31:LL_ATON_EpochBlockItems_int8	0	static
+../ATON_MatMul/source/networkDummy_int8.c:309:24:LL_ATON_Input_Buffers_Info_int8	0	static
+../ATON_MatMul/source/networkDummy_int8.c:453:24:LL_ATON_Output_Buffers_Info_int8	0	static
+../ATON_MatMul/source/networkDummy_int8.c:493:24:LL_ATON_Internal_Buffers_Info_int8	0	static

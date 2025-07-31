@@ -1,0 +1,4 @@
+../Drivers/CMSIS/DSP/Source/MatrixFunctions/arm_mat_cmplx_mult_f32.c:71:28:arm_mat_cmplx_mult_f32_2x2_mve	840	static
+../Drivers/CMSIS/DSP/Source/MatrixFunctions/arm_mat_cmplx_mult_f32.c:135:28:arm_mat_cmplx_mult_f32_3x3_mve	3616	static
+../Drivers/CMSIS/DSP/Source/MatrixFunctions/arm_mat_cmplx_mult_f32.c:292:28:arm_mat_cmplx_mult_f32_4x4_mve	6208	static
+../Drivers/CMSIS/DSP/Source/MatrixFunctions/arm_mat_cmplx_mult_f32.c:523:12:arm_mat_cmplx_mult_f32	2464	static

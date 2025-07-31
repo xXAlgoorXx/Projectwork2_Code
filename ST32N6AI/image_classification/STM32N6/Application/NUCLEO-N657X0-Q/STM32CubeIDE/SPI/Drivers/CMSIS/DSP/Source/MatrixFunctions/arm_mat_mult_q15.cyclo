@@ -1,0 +1,4 @@
+../Drivers/CMSIS/DSP/Source/MatrixFunctions/arm_mat_mult_q15.c:68:28:arm_mat_mult_q15_2x2_mve	1
+../Drivers/CMSIS/DSP/Source/MatrixFunctions/arm_mat_mult_q15.c:124:28:arm_mat_mult_q15_3x3_mve	1
+../Drivers/CMSIS/DSP/Source/MatrixFunctions/arm_mat_mult_q15.c:205:28:arm_mat_mult_q15_4x4_mve	1
+../Drivers/CMSIS/DSP/Source/MatrixFunctions/arm_mat_mult_q15.c:319:12:arm_mat_mult_q15	19

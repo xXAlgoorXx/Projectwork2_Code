@@ -1,0 +1,5 @@
+../../../../STM32Cube_FW_N6/Drivers/CMSIS/DSP/Include/arm_helium_utils.h:191:28:arm_mat_trans_32bit_2x2_mve	1
+../../../../STM32Cube_FW_N6/Drivers/CMSIS/DSP/Include/arm_helium_utils.h:208:28:arm_mat_trans_32bit_3x3_mve	1
+../../../../STM32Cube_FW_N6/Drivers/CMSIS/DSP/Include/arm_helium_utils.h:232:28:arm_mat_trans_32bit_4x4_mve	1
+../../../../STM32Cube_FW_N6/Drivers/CMSIS/DSP/Include/arm_helium_utils.h:259:28:arm_mat_trans_32bit_generic_mve	4
+../Drivers/CMSIS/DSP/Source/MatrixFunctions/arm_mat_trans_q31.c:52:12:arm_mat_trans_q31	5

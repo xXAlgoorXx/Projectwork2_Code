@@ -11,6 +11,7 @@ RM := rm -rf
 -include sources.mk
 -include ll_aton/subdir.mk
 -include Utilities/lcd/subdir.mk
+-include SIMD_MatMul/source/subdir.mk
 -include NN_Sim/source/subdir.mk
 -include Middlewares/screenl/ili9341/subdir.mk
 -include Middlewares/screenl/subdir.mk
@@ -19,6 +20,7 @@ RM := rm -rf
 -include Middlewares/Camera_Middleware/sensors/subdir.mk
 -include Middlewares/Camera_Middleware/subdir.mk
 -include Drivers/STM32N6xx_HAL_Driver/subdir.mk
+-include Drivers/CMSIS/DSP/Source/MatrixFunctions/subdir.mk
 -include Drivers/CMSIS/subdir.mk
 -include Drivers/BSP/STM32N6xx_Nucleo/subdir.mk
 -include Drivers/BSP/Components/subdir.mk

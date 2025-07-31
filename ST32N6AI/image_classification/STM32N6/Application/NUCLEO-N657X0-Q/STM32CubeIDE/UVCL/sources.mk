@@ -37,6 +37,7 @@ Middlewares/ISP_Library \
 Middlewares/screenl \
 Middlewares/screenl/uvcl \
 NN_Sim/source \
+SIMD_MatMul/source \
 STM32Cube_FW_N6/Middlewares/ST/usbx/common \
 Utilities/lcd \
 ll_aton \

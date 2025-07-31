@@ -1,0 +1,4 @@
+../Drivers/CMSIS/DSP/Source/MatrixFunctions/arm_mat_mult_q31.c:67:28:arm_mat_mult_q31_2x2_mve	536	static
+../Drivers/CMSIS/DSP/Source/MatrixFunctions/arm_mat_mult_q31.c:126:28:arm_mat_mult_q31_3x3_mve	1000	static
+../Drivers/CMSIS/DSP/Source/MatrixFunctions/arm_mat_mult_q31.c:212:28:arm_mat_mult_q31_4x4_mve	1616	static
+../Drivers/CMSIS/DSP/Source/MatrixFunctions/arm_mat_mult_q31.c:335:12:arm_mat_mult_q31	1416	static

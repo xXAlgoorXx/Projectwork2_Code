@@ -27,6 +27,7 @@ ATON_MatMul/source \
 Application \
 Drivers/BSP/Components \
 Drivers/BSP/STM32N6xx_Nucleo \
+Drivers/CMSIS/DSP/Source/MatrixFunctions \
 Drivers/CMSIS \
 Drivers/STM32N6xx_HAL_Driver \
 Middlewares/Camera_Middleware \
@@ -36,6 +37,7 @@ Middlewares/ISP_Library \
 Middlewares/screenl/ili9341 \
 Middlewares/screenl \
 NN_Sim/source \
+SIMD_MatMul/source \
 Utilities/lcd \
 ll_aton \
 . \

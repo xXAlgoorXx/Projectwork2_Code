@@ -1,8 +1,0 @@
-/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/MatMul/MatMulN6/STM32N6/Middlewares/screenl/Src/scrl_usb.c:287:13:usb_frame_release_cb	0	static
-/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/MatMul/MatMulN6/STM32N6/Middlewares/screenl/Src/scrl_usb.c:223:6:SCRC_Composition_Done_Callback	64	static
-/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/MatMul/MatMulN6/STM32N6/Middlewares/screenl/Src/scrl_usb.c:435:5:SCRL_Init	64	static
-/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/MatMul/MatMulN6/STM32N6/Middlewares/screenl/Src/scrl_usb.c:467:5:SCRL_SetAddress_NoReload	0	static
-/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/MatMul/MatMulN6/STM32N6/Middlewares/screenl/Src/scrl_usb.c:476:5:SCRL_ReloadLayer	0	static
-/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/MatMul/MatMulN6/STM32N6/Middlewares/screenl/Src/scrl_usb.c:485:5:SRCL_Update	8	static
-/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/MatMul/MatMulN6/STM32N6/Middlewares/screenl/Src/scrl_usb.c:501:6:HAL_PCD_MspInit	32	static
-/home/lukasschoepf/Documents/ProjectWork_2/Projectwork2_Code/ST32N6AI/MatMul/MatMulN6/STM32N6/Middlewares/screenl/Src/scrl_usb.c:536:6:USB1_OTG_HS_IRQHandler	0	static

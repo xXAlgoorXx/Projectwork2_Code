@@ -23,13 +23,13 @@
 #include "app_fuseprogramming.h"
 #include "stm32_lcd_ex.h"
 #include "ll_aton_runtime.h"
-#include "app_camerapipeline.h"
 #include "main.h"
 #include <stdio.h>
-#include "app_config.h"
+//#include "app_config.h"
 
 #include "nn_sim.h"
 #include "ATON_MatMul.h"
+#include "SIMD_MatMul.h"
 
 #include "arm_math.h"
 #include "dsp/matrix_functions.h"
@@ -56,6 +56,7 @@ int main_NPU_int8(void);
 int main_NPU_float(void);
 int main_ARM_int8(void);
 int main_ARM_float(void);
+
 void enableTiming_Cyc(void){
 	CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
 	DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;  // Enable cycle counter
@@ -72,8 +73,9 @@ uint32_t getTiming_Cyc(){
 
 int main(void)
 {
-	main_ARM_int8();
-
+	Hardware_init();
+	enableTiming_Cyc();
+    main_ARM_int8();
 }
 
 int main_NPU_int8(void){
@@ -125,63 +127,52 @@ int main_NPU_float(void){
 }
 
 int main_ARM_int8(void) {
+//	void simd_matrix_vector_mul_int8(
+//	    const int8_t* matrix,   // Pointer to MxN matrix
+//	    const int8_t* vector,   // Pointer to vector of size N
+//	    int32_t* result,        // Output vector of size M
+//	    uint32_t M,             // Number of rows
+//	    uint32_t N              // Number of columns (must be multiple of 4)
+//	);
+
     size_t insize = 8;
     size_t outsize = 8;
 
-    q7_t inVec[insize];
+    int8_t inVec[insize];
     for (int i = 0; i < insize; i++) {
-        inVec[i] = (q7_t)((i * 16) % 128);  // Input vector in Q7
-    }
+    	inVec[i] = (int8_t)(i);  // e.g., 0, 16, 32, ..., 112
+    	}
+    int32_t outVec[outsize];
 
     // Identity weight matrix
-    q7_t* identityWeights = getIdentityWeights_int8(insize, outsize);
+    int8_t* identityWeights = getIdentityWeights_int8(insize, outsize);
+
     if (!identityWeights) {
         printf("Memory allocation failed\n");
         return -1;
     }
 
-    q7_t dataOut[outsize];
-    q7_t scratch[insize * outsize];
-
-    arm_matrix_instance_q7 in;
-    arm_matrix_instance_q7 weight;
-    arm_matrix_instance_q7 out;
-
-    in.numCols = insize;
-    in.numRows = 1;
-    in.pData = inVec;
-
-    weight.numCols = outsize;
-    weight.numRows = insize;
-    weight.pData = identityWeights;
-
-    out.numCols = outsize;
-    out.numRows = 1;
-    out.pData = dataOut;
-
-
-    // Start benchmarking
-    DWT->CYCCNT = 0;
-    DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
-
-    arm_status status = arm_mat_mult_q7(&in, &weight, &out, scratch);
-
-    uint32_t cycles = DWT->CYCCNT;
-    float time = ((float)cycles / SystemCoreClock) * 1000.0f;
-
-    if (status == ARM_MATH_SUCCESS) {
-        printf("Time CMSIS Q7: %f ms, Cycles: %lu\n", time, cycles);
-        for (int i = 0; i < outsize; ++i) {
-            printf("Out[%d]: %4d -> %7.4f\n", i, dataOut[i], dataOut[i] / 128.0f);
-        }
-    } else {
-        printf("Matrix multiplication failed!\n");
+    for (int i = 0; i < insize; i++) {
+        printf("inVec[%d] = %4d", i, inVec[i]);
     }
+    printf("\n\r");
 
-    free(identityWeights);
+    while(1){
+		// Start benchmarking
+    	startTiming_Cyc();
+
+    	simd_matrix_vector_mul_int8(identityWeights,inVec,outVec,outsize,insize);
+		uint32_t cycles = getTiming_Cyc();
+
+		printf("Output MatVec ARM\n\r");
+		printf("Cycles: %6d\n\r", cycles);
+		for(int i = 0; i < outsize; i++){
+			printf("Output[%d]: %4d\n\r",i,outVec[i]);
+		}
+		controllOutput(inVec,identityWeights,insize,outsize);
+    }
     return 0;
 }
-
 //int main_ARM_float(void) {
 //    size_t insize = 8;
 //    size_t outsize = 8;

@@ -1,0 +1,10 @@
+../ATON_MatMul/source/ATON_MatMul.c:18:6:update_weights_float	16	static,ignoring_inline_asm
+../ATON_MatMul/source/ATON_MatMul.c:24:6:update_weights_int8	16	static,ignoring_inline_asm
+../ATON_MatMul/source/ATON_MatMul.c:30:6:calcAdresses	0	static
+../ATON_MatMul/source/ATON_MatMul.c:51:5:npu_matvec_int8_init	8	static
+../ATON_MatMul/source/ATON_MatMul.c:90:9:npu_matvec_int8_run	24	static,ignoring_inline_asm
+../ATON_MatMul/source/ATON_MatMul.c:106:5:npu_matvec_float_init	8	static
+../ATON_MatMul/source/ATON_MatMul.c:116:8:npu_matvec_float_run	24	static,ignoring_inline_asm
+../ATON_MatMul/source/ATON_MatMul.c:132:9:getIdentityWeights_int8	24	static
+../ATON_MatMul/source/ATON_MatMul.c:169:8:getIdentityWeights_float	24	static
+../ATON_MatMul/source/ATON_MatMul.c:195:6:NeuralNetwork_init	32	static

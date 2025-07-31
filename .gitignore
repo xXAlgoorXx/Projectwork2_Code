@@ -12,6 +12,46 @@
 /build/
 /out/
 
+# STM32CubeIDE (Eclipse-based)
+.settings/
+.cproject
+.project
+*.launch
+*.metadata/
+Debug/
+Release/
+build/
+Core/Inc/.mxproject
+*.bin
+*.elf
+*.hex
+*.map
+
+# Keil (MDK-ARM)
+*.axf
+*.bak
+*.dep
+*.hex
+*.iex
+*.lst
+*.map
+*.o
+*.plg
+*.tra
+*.uvgui.*
+*.uvoptx
+*.uvprojx
+Objects/
+Listings/
+
+# GCC/Makefile builds
+*.o
+*.d
+*.elf
+*.bin
+*.hex
+*.map
+
 # Generated files
 *.o
 *.d

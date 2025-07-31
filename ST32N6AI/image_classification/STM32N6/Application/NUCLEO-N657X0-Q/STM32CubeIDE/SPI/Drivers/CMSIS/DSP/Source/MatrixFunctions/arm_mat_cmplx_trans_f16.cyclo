@@ -1,0 +1,2 @@
+../../../../STM32Cube_FW_N6/Drivers/CMSIS/DSP/Include/arm_helium_utils.h:512:28:arm_mat_cmplx_trans_16bit	4
+../Drivers/CMSIS/DSP/Source/MatrixFunctions/arm_mat_cmplx_trans_f16.c:56:12:arm_mat_cmplx_trans_f16	1
