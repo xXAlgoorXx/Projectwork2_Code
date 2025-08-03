@@ -79,7 +79,7 @@ int main(void)
 	size_t outsize = 8;
 	Hardware_init();
 	enableTiming_Cyc();
-	ARM_MatMul_float(insize,outsize);
+	NPU_MatMul_int8(insize,outsize);
 }
 
 int NPU_MatMul_int8(size_t insize,size_t outsize){
@@ -95,7 +95,10 @@ int NPU_MatMul_int8(size_t insize,size_t outsize){
 
 	npu_matvec_int8_init(insize,outsize);
 	while(1){
+		startTiming_Cyc();
 		outvector = npu_matvec_int8_run(inVec,insize,outsize,identityWeights);
+		uint32_t cycles =  getTiming_Cyc();
+		printf("NPU int8 Cycles: %4d\n\r",cycles);
 		for(size_t i = 0;i < outsize;i++){
 			int8_t output = outvector[i];
 			printf("Output %2d: %4d\n\r",i,output);
@@ -165,8 +168,6 @@ int ARM_MatMul_int8(size_t insize,size_t outsize) {
 }
 
 int ARM_MatMul_float(size_t insize,size_t outsize) {
-    size_t insize = 8;
-    size_t outsize = 8;
 
     float32_t inVec[insize];
     for (int i = 0; i < insize; i++) {

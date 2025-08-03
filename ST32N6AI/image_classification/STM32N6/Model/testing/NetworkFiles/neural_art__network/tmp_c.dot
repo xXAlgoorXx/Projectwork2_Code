@@ -1,0 +1,52 @@
+digraph G {
+graph [ fontsize=11 ];
+node [ fontsize=11 ];
+edge [ fontsize=10 ];
+rankdir=BU
+ranksep=1.5
+nodesep=1
+splines=spline
+compound=true
+Graphinfo [ label="" shape=plaintext, style=rounded, color=black, fontname="Arial-Bold" ];
+Gemm_3_weights_transposed_3 [ label="{ { <i0> 0} |  [12]\lGemm_3_weights_transposed_3\l(bytes=128 , 87% of total)\l\l 0.835998 0.917378 0.517875 0.155362 ... | { <o0> 0} }", shape=record, color=black, style=rounded  ] ;
+Dequantize_2_x_scale [ label="{ { <i0> 0} |  [4]\lDequantize_2_x_scale\l 0.00742233 | { <o0> 0} }", shape=record, color=black, style=rounded  ] ;
+Quantize_1_y_zero_point [ label="{ { <i0> 0} |  [1]\lQuantize_1_y_zero_point\l 1 | { <o0> 0} }", shape=record, color=black, style=rounded  ] ;
+Quantize_4_y_zero_point [ label="{ { <i0> 0} |  [21]\lQuantize_4_y_zero_point\l 20 | { <o0> 0} }", shape=record, color=black, style=rounded  ] ;
+Gemm_3_conv_4_off_bias_14 [ label="{ { <i0> 0} |  [16]\lGemm_3_conv_4_off_bias_14\l(bytes=2 , 1.4% of total)\l\l 0 | { <o0> 0} }", shape=record, color=black, style=rounded  ] ;
+Input_0_out_0 [ label="{ { <i0> 0} |  [2]\lInput_0_out_0 | { <o0> 0} }", shape=record, color=black, style=rounded  ] ;
+Gemm_3_conv_4_zero_off_8 [ label="{ { <i0> 0} |  [10]\lGemm_3_conv_4_zero_off_8\l(bytes=1 , 0.68% of total)\l\l 0 | { <o0> 0} }", shape=record, color=black, style=rounded  ] ;
+Dequantize_2_x_zero_point [ label="{ { <i0> 0} |  [5]\lDequantize_2_x_zero_point\l 1 | { <o0> 0} }", shape=record, color=black, style=rounded  ] ;
+Gemm_3_conv_4_mul_scale_11 [ label="{ { <i0> 0} |  [14]\lGemm_3_conv_4_mul_scale_11\l(bytes=16 , 11% of total)\l\l 5.4912e-05 5.77126e-05 5.23317e-05 5.74845e-05 ... | { <o0> 0} }", shape=record, color=black, style=rounded  ] ;
+Quantize_4_y_scale [ label="{ { <i0> 0} |  [20]\lQuantize_4_y_scale\l 0.0236586 | { <o0> 0} }", shape=record, color=black, style=rounded  ] ;
+Quantize_1_y_scale [ label="{ { <i0> 0} |  [0]\lQuantize_1_y_scale\l 0.00742233 | { <o0> 0} }", shape=record, color=black, style=rounded  ] ;
+Quantize_1 [ label="{ { < i0>  0 S  | < i1>  1 S  | < i2>  2 S } | id=[3] tid=[11]\lQuantize_1\lkind=QuantizeLinear\lhw unit=NULL_UNIT\l | { < o0>  0 S } }", shape=record, color=black, style=rounded  ] ;
+Dequantize_2 [ label="{ { < i0>  0 S  | < i1>  1 S  | < i2>  2 S } | id=[6] tid=[12]\lDequantize_2\lkind=DequantizeLinear\lhw unit=NULL_UNIT\l | { < o0>  0 S } }", shape=record, color=black, style=rounded  ] ;
+Gemm_3_reshape_x_2 [ label="{ { < i0>  0 S } | id=[9] tid=[13]\lGemm_3_reshape_x_2\lkind=Reshape\lhw unit=NULL_UNIT\l | { < o0>  0 S } }", shape=record, color=black, style=rounded  ] ;
+Gemm_3_conv_4_suboff_6 [ label="{ { < i0>  0 S  | < i1>  1 S } | id=[11] tid=[14]\lGemm_3_conv_4_suboff_6\lkind=Sub\lNUM_OPS = 8 OPS\lhw unit=NULL_UNIT\l | { < o0>  0 S } }", shape=record, color=black, style=rounded  ] ;
+Gemm_3_conv_4 [ label="{ { < i0>  0 S  | < i1>  1 S } | id=[13] tid=[15]\lGemm_3_conv_4\lkind=Conv\lNUM_OPS = 256 OPS( 1e+02% of total )\lhw unit=NULL_UNIT\lkernel_shape is 1 1\lgroup i 1\lstrides is 1 1\lpads is 0 0 0 0\ldilations is 1 1\l | { < o0>  0 S } }", shape=record, color=black, style=rounded  ] ;
+Gemm_3_conv_4_mul_scale_9 [ label="{ { < i0>  0 S  | < i1>  1 S } | id=[15] tid=[16]\lGemm_3_conv_4_mul_scale_9\lkind=Mul\lNUM_OPS = 16 OPS\lhw unit=NULL_UNIT\l | { < o0>  0 S } }", shape=record, color=black, style=rounded  ] ;
+Gemm_3_conv_4_off_bias_12 [ label="{ { < i0>  0 S  | < i1>  1 S } | id=[17] tid=[17]\lGemm_3_conv_4_off_bias_12\lkind=Add\lNUM_OPS = 16 OPS\lhw unit=NULL_UNIT\l | { < o0>  0 S } }", shape=record, color=black, style=rounded  ] ;
+Gemm_3_squeeze_y_5 [ label="{ { < i0>  0 S } | id=[19] tid=[18]\lGemm_3_squeeze_y_5\lkind=Reshape\lhw unit=NULL_UNIT\l | { < o0>  0 S } }", shape=record, color=black, style=rounded  ] ;
+Quantize_4 [ label="{ { < i0>  0 S  | < i1>  1 S  | < i2>  2 S } | id=[22] tid=[19]\lQuantize_4\lkind=QuantizeLinear\lhw unit=NULL_UNIT\l | { < o0>  0 S } }", shape=record, color=black, style=rounded  ] ;
+__NN__RETURN__ [ label="{ { < i0>  0 S } | id=[23] tid=[20]\l__NN__RETURN__\lkind=Return\lhw unit=NULL_UNIT\l}", shape=record, color=black, style=rounded  ] ;
+Input_0_out_0:o0:s->Quantize_1:i0:n [ label="edge id=[0]\ltid=13 14\lbatch: 1(in) 1(out,L) 1(mem,L) \l1x8\lbits=32\lin=out: Float\lInput_0_out_0 FLOAT( 1 8 ) edge bs=32\lout bw=?\l" ]; 
+Quantize_1_y_scale:o0:s->Quantize_1:i1:n [ label="edge id=[1]\ltid=17 18\l1\lbits=32\lin=out: Float\lQuantize_1_y_scale FLOAT( ) edge bs=4\lout bw=?\l" ]; 
+Quantize_1_y_zero_point:o0:s->Quantize_1:i2:n [ label="edge id=[2]\ltid=21 22\l1\lbits=8\lin=out: No format info\lQuantize_1_y_zero_point INT8( ) edge bs=1\lout bw=?\l" ]; 
+Quantize_1:o0:s->Dequantize_2:i0:n [ label="edge id=[3]\ltid=33 34\l1x8\lbits=8\lin=out: (S8)\lscale=(0.00742233, )\loffset=(1, )\lQuantize_1_out_0 INT8( 1 8 ) edge bs=8\lout bw=?\l" ]; 
+Dequantize_2_x_scale:o0:s->Dequantize_2:i1:n [ label="edge id=[4]\ltid=37 38\l1\lbits=32\lin=out: Float\lDequantize_2_x_scale FLOAT( ) edge bs=4\lout bw=?\l" ]; 
+Dequantize_2_x_zero_point:o0:s->Dequantize_2:i2:n [ label="edge id=[5]\ltid=41 42\l1\lbits=8\lin=out: No format info\lDequantize_2_x_zero_point INT8( ) edge bs=1\lout bw=?\l" ]; 
+Gemm_3_reshape_x_2:o0:s->Gemm_3_conv_4_suboff_6:i0:n [ label="edge id=[9]\ltid=69 70\l1x8x1x1\lbits=8\lin=out: (S8)\lscale=(0.00742233, )\loffset=(1, )\lGemm_3_reshape_x_2 FLOAT( 1 8 1 1 ) edge bs=8\lout bw=?\l" ]; 
+Gemm_3_conv_4_zero_off_8:o0:s->Gemm_3_conv_4_suboff_6:i1:n [ label="edge id=[10]\ltid=73 74\l1\lbits=8\lin=out: (S8)\lscale=(0.00742233, )\loffset=(0, )\lGemm_3_conv_4_zero_off_8 FLOAT( 1 ) edge bs=1\lout bw=?\l" ]; 
+Gemm_3_conv_4_suboff_6:o0:s->Gemm_3_conv_4:i0:n [ label="edge id=[11]\ltid=82 83\l1x8x1x1\lbits=8\lin=out: (S8)\lscale=(0.00742233, )\loffset=(0, )\lGemm_3_conv_4_zero_off_out_7 FLOAT( 1 8 1 1 ) edge bs=8\lout bw=?\l" ]; 
+Gemm_3_weights_transposed_3:o0:s->Gemm_3_conv_4:i1:n [ label="edge id=[12]\ltid=86 87\l16x8x1x1\lbits=8\lin=out: (S8)\lscale=(0.00739821, 0.00777553, 0.00705058, 0.0077448, 0.00655379, 0.00763669, 0.00768419, 0.00782014, 0.00783833, 0.00700513, \l0.00742785, 0.00576258, 0.00678008, 0.00754179, 0.00678006, 0.00709008, )\loffset=(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \l0, 0, 0, 0, 0, 0, )\lGemm_3_weights_transposed_3 FLOAT( 16 8 1 1 ) edge bs=128\lout bw=?\l" ]; 
+Gemm_3_conv_4:o0:s->Gemm_3_conv_4_mul_scale_9:i0:n [ label="edge id=[13]\ltid=95 96\l1x16x1x1\lin=out Q[18S.-3]\lin=out: (S8) M=18 N=-3 sign=true\lGemm_3_conv_4 FLOAT( 1 16 1 1 ) edge bs=32\lout bw=?\l" ]; 
+Gemm_3_conv_4_mul_scale_11:o0:s->Gemm_3_conv_4_mul_scale_9:i1:n [ label="edge id=[14]\ltid=99 100\l16x1x1\lin=out Q[-14S.29]\lin=out: (S8) M=-14 N=29 sign=true\lGemm_3_conv_4_mul_scale_11 FLOAT( 16 1 1 ) edge bs=32\lout bw=?\l" ]; 
+Gemm_3_conv_4_mul_scale_9:o0:s->Gemm_3_conv_4_off_bias_12:i0:n [ label="edge id=[15]\ltid=108 109\l1x16x1x1\lin=out Q[4S.11]\lin=out: (S8) M=4 N=11 sign=true\lGemm_3_conv_4_mul_scale_out_10 FLOAT( 1 16 1 1 ) edge bs=32\lout bw=?\l" ]; 
+Gemm_3_conv_4_off_bias_14:o0:s->Gemm_3_conv_4_off_bias_12:i1:n [ label="edge id=[16]\ltid=112 113\l1\lin=out Q[4S.11]\lin=out: (S16) M=4 N=11 sign=true\lGemm_3_conv_4_off_bias_14 FLOAT( 1 ) edge bs=2\lout bw=?\l" ]; 
+Gemm_3_conv_4_off_bias_12:o0:s->Gemm_3_squeeze_y_5:i0:n [ label="edge id=[17]\ltid=121 122\l1x16x1x1\lbits=8\lin=out: (S8)\lscale=(0.0236586, )\loffset=(20, )\lGemm_3_conv_4_off_bias_out_13 FLOAT( 1 16 1 1 ) edge bs=16\lout bw=?\l" ]; 
+Gemm_3_squeeze_y_5:o0:s->Quantize_4:i0:n [ label="edge id=[19]\ltid=137 138\l1x16\lbits=8\lin=out: (S8)\lscale=(0.0236586, )\loffset=(20, )\lGemm_3_out_0 FLOAT( 1 16 ) edge bs=16\lout bw=?\l" ]; 
+Quantize_4_y_scale:o0:s->Quantize_4:i1:n [ label="edge id=[20]\ltid=141 142\l1\lbits=32\lin=out: Float\lQuantize_4_y_scale FLOAT( ) edge bs=4\lout bw=?\l" ]; 
+Quantize_4_y_zero_point:o0:s->Quantize_4:i2:n [ label="edge id=[21]\ltid=145 146\l1\lbits=8\lin=out: No format info\lQuantize_4_y_zero_point INT8( ) edge bs=1\lout bw=?\l" ]; 
+Quantize_4:o0:s->__NN__RETURN__:i0:n [ label="edge id=[22]\ltid=151 152\l1x16\lbits=8\lin=out: (S8)\lscale=(0.0236586, )\loffset=(20, )\lQuantize_4_out_0 INT8( 1 16 ) edge bs=16\lout bw=?\l" ]; 
+Dequantize_2:o0:s->Gemm_3_reshape_x_2:i0:n [ label="edge id=[23]\ltid=153 154\l1x8\lbits=8\lin=out: (S8)\lscale=(0.00742233, )\loffset=(1, )\lDequantize_2_out_0 FLOAT( 1 8 ) edge bs=8\lout bw=?\l" ]; 
+}

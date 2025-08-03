@@ -1,4 +1,5 @@
 "./ATON_MatMul/source/ATON_MatMul.o"
+"./ATON_MatMul/source/Testing.o"
 "./ATON_MatMul/source/networkDummy_Float.o"
 "./ATON_MatMul/source/networkDummy_int8.o"
 "./Application/app_fuseprogramming.o"

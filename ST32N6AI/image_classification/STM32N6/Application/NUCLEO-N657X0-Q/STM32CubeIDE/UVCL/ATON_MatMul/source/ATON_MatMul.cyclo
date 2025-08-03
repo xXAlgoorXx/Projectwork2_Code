@@ -7,4 +7,4 @@
 ../ATON_MatMul/source/ATON_MatMul.c:116:8:npu_matvec_float_run	3
 ../ATON_MatMul/source/ATON_MatMul.c:132:9:getIdentityWeights_int8	4
 ../ATON_MatMul/source/ATON_MatMul.c:169:8:getIdentityWeights_float	4
-../ATON_MatMul/source/ATON_MatMul.c:195:6:NeuralNetwork_init	5
+../ATON_MatMul/source/ATON_MatMul.c:187:6:NeuralNetwork_init	5

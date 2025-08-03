@@ -1,1 +1,1 @@
-../SIMD_MatMul/source/SIMD_MatMul.c:46:6:simd_matrix_vector_mul_int8	3
+../SIMD_MatMul/source/SIMD_MatMul.c:48:6:simd_matrix_vector_mul_int8	3

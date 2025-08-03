@@ -175,7 +175,7 @@ static void LL_ATON_Start_EpochBlock_2(const void *epoch_block)
 
   static const LL_Convacc_InitTypeDef conv_init = {
 	// Perform a 1x1 convolution = matmul: 2 times 16x32 matrix with 32 vector
-    .simd = 1, // 8x8 bit
+    .simd = 0, // 8x8 bit
     .fsub = 0,
     .accumulate = 0,
     .rounding_f = 0,
@@ -185,16 +185,16 @@ static void LL_ATON_Start_EpochBlock_2(const void *epoch_block)
     .k_unsigned = 0,
     .deepmode = 1, // 1x1 convolution requires batchdepth to be >= 32
     .dss2mode = 0, // 0 because deepmode = 1
-    .kseten = 3, // for 1x1
+    .kseten = 0, // for 1x1
     .zfbias = 0,
-    .inbytes_f = 1, // 8 bit in
+    .inbytes_f = 2, // 8 bit in
     .shift_f = 0,
     .shift_a = 0,
     .rounding_o = 0,
     .saturation_o = 0,
     .round_mode_o = 0,
     .relu_mode_o = 0,
-    .outbytes_o = 1, // 8 bit out
+    .outbytes_o = 2, // 8 bit out
     .shift_o = 0,
     .raw_o = 0,
     .fWidth = 1, // 1x1 conv
@@ -227,7 +227,7 @@ static void LL_ATON_Start_EpochBlock_2(const void *epoch_block)
 	.frame_offset = d1,
     .frame_loop_cnt = 0,
     .frame_tot_cnt = 0,
-    .nbits_in = 8,
+    .nbits_in = 16,
     .nbits_out = 16,
   };
   LL_Streng_TensorInit(1, &input_tensor, 1);
@@ -254,8 +254,8 @@ static void LL_ATON_Start_EpochBlock_2(const void *epoch_block)
     .loop_offset = 0,
     .frame_loop_cnt = 0,
     .frame_tot_cnt = 0,
-    .nbits_in = 8,
-    .nbits_out = 8,
+    .nbits_in = 16,
+    .nbits_out = 16,
   };
   LL_Streng_TensorInit(9, &weight_tensor, 1);
 
@@ -280,8 +280,8 @@ static void LL_ATON_Start_EpochBlock_2(const void *epoch_block)
     .loop_offset = 0,
     .frame_loop_cnt = 0,
     .frame_tot_cnt = 2,
-    .nbits_in = 8,
-    .nbits_out = 8,
+    .nbits_in = 16,
+    .nbits_out = 16,
   };
   LL_Streng_TensorInit(3, &output_tensor, 1);
 

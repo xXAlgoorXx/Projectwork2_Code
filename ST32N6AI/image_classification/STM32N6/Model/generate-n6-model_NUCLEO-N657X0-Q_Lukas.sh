@@ -1,13 +1,13 @@
 #!/bin/bash
 #float32,int8,unint8
 
-MODEL_DIR="ownModels/matmulModel_128_64_float"
-MODEL_NAME="matmulModel_128_64_float.tflite"
+MODEL_DIR=testing #"ownModels/matmulModel_128_64_float"
+MODEL_NAME="matmulModel_8_16_int8.tflite"
 
 stedgeai generate \
   --model "$MODEL_DIR"/"$MODEL_NAME" \
   --target stm32n6 \
-  --st-neural-art default@user_neuralart_RamOnlyNUCLEO_N6.json\
+  --st-neural-art default@user_neuralart_NUCLEO-N657X0-Q.json\
   --input-data-type float32 \
   -w "$MODEL_DIR/NetworkFiles/"\
   -o "$MODEL_DIR/NetworkFiles/output/" 
