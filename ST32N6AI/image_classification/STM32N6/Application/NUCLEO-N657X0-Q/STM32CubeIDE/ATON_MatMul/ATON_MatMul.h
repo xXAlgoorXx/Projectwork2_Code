@@ -37,7 +37,10 @@ float* getIdentityWeights_float(size_t insize, size_t outsize);
 void calcAdresses(size_t insize, size_t outsize,size_t bytesOfType,volatile Matmul_info* infoStruct);
 int npu_matvec_int8_init(size_t insize,size_t outsize); // initialize NN with correct size
 int8_t* npu_matvec_int8_run(int8_t *inVec, size_t insizeVec, size_t outSize, int8_t *inMat); // initialize NN with correct size
+
 int npu_matvec_float_init(size_t insize,size_t outsize); // run NN with correct size
 float* npu_matvec_float_run(float *inVec, size_t insizeVec, size_t outSize, float *inMat); // run NN with correct size
 
-
+int npu_tiledmatvec_int8(int8_t* invec,size_t insize,int8_t* outvec, size_t outsize, int8_t* inMat);
+void copy_submatrix(int8_t *dest, int8_t *src,size_t start_row, size_t start_col,size_t src_cols, size_t sub_rows, size_t sub_cols);
+void printNPUData(int8_t* invec,size_t insize,int8_t* outvec,size_t outsize,int8_t*wightvec);

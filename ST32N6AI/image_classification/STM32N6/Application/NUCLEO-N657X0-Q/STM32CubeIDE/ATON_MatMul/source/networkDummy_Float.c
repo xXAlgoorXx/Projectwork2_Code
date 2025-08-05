@@ -220,19 +220,20 @@ const EpochBlock_ItemTypeDef *LL_ATON_EpochBlockItems_Float(void) {
 
 const LL_Buffer_InfoTypeDef *LL_ATON_Input_Buffers_Info_Float(void)
 {
+	extern volatile Matmul_info matmulInfo_Float;
   static const uint32_t buff_info__shape_1_16[] = { 1, 1, 16, 1 };
   static const uint32_t buff_info__mem_shape_U_1_16[] = { 1, 16 };
 #if LL_ATON_DBG_BUFFER_INFO_EXCLUDED == 0
   static const uint32_t buff_info__shape_16_16_1_1[] = { 16, 1, 1, 16 };
   static const uint32_t buff_info__mem_shape_F_16_16_1_1[] = { 16, 16, 1, 1 };
 #endif // LL_ATON_DBG_BUFFER_INFO_EXCLUDED == 0
-  static const LL_Buffer_InfoTypeDef buff_info[] = {
+  LL_Buffer_InfoTypeDef buff_info[] = {
     {
       .name = "Input_0_out_0",
       .addr_base = {(unsigned char *)(0x34200000UL) /* Equivalent hex address = 0x34200000UL */},
-      .offset_start = 1024,
-      .offset_end = 1088,
-      .offset_limit = 1152,
+	  .offset_start = matmulInfo_Float.input_start,
+	  .offset_end = matmulInfo_Float.input_end,
+	  .offset_limit = matmulInfo_Float.input_limit,
       .is_user_allocated = 0,
       .is_param = 0,
       .epoch = 0,
@@ -281,15 +282,16 @@ const LL_Buffer_InfoTypeDef *LL_ATON_Input_Buffers_Info_Float(void)
 
 const LL_Buffer_InfoTypeDef *LL_ATON_Output_Buffers_Info_Float(void)
 {
+	extern volatile Matmul_info matmulInfo_Float;
   static const uint32_t buff_info__shape_1_16[] = { 1, 1, 16, 1 };
   static const uint32_t buff_info__mem_shape_U_1_16[] = { 1, 16 };
-  static const LL_Buffer_InfoTypeDef buff_info[] = {
+  LL_Buffer_InfoTypeDef buff_info[] = {
     {
       .name = "Gemm_1_out_0",
       .addr_base = {(unsigned char *)(0x34200000UL) /* Equivalent hex address = 0x34200000UL */},
-      .offset_start = 1088,
-      .offset_end = 1152,
-      .offset_limit = 1216,
+	  .offset_start = matmulInfo_Float.output_start,
+	   .offset_end = matmulInfo_Float.output_end,
+	  .offset_limit = matmulInfo_Float.output_limit,
       .is_user_allocated = 0,
       .is_param = 0,
       .epoch = 3,

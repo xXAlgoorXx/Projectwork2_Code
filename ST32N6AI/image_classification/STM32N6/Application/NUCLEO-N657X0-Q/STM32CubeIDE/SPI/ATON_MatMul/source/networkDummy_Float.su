@@ -7,6 +7,6 @@
 ../ATON_MatMul/source/networkDummy_Float.c:114:6:LL_ATON_EC_Inference_Init_Float	4	static
 ../ATON_MatMul/source/networkDummy_Float.c:125:13:LL_ATON_End_EpochBlock_Float	328	static
 ../ATON_MatMul/source/networkDummy_Float.c:195:31:LL_ATON_EpochBlockItems_Float	4	static
-../ATON_MatMul/source/networkDummy_Float.c:221:30:LL_ATON_Input_Buffers_Info_Float	4	static
-../ATON_MatMul/source/networkDummy_Float.c:282:30:LL_ATON_Output_Buffers_Info_Float	4	static
-../ATON_MatMul/source/networkDummy_Float.c:316:30:LL_ATON_Internal_Buffers_Info_Float	4	static
+../ATON_MatMul/source/networkDummy_Float.c:221:30:LL_ATON_Input_Buffers_Info_Float	120	static
+../ATON_MatMul/source/networkDummy_Float.c:283:30:LL_ATON_Output_Buffers_Info_Float	120	static
+../ATON_MatMul/source/networkDummy_Float.c:318:30:LL_ATON_Internal_Buffers_Info_Float	4	static

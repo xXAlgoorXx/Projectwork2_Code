@@ -127,10 +127,10 @@ static void LL_ATON_Start_EpochBlock_3(const void *epoch_block)
     .shift_f = 0,
     .shift_a = 0,
     .rounding_o = 1,
-    .saturation_o = 1,
-    .round_mode_o = 1,
+    .saturation_o = 0,
+    .round_mode_o = 0,
     .relu_mode_o = 0,
-    .outbytes_o = 2, // 8 bit out
+    .outbytes_o = 1, // 8 bit out
     .shift_o = 0,
     .raw_o = 0,
     .fWidth = 1, // 1x1 conv

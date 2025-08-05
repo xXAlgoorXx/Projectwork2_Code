@@ -52,7 +52,9 @@ void Error_Handler(void);
 void controllOutput(int8_t* in, int8_t* weights, size_t insize, size_t outsize);
 void setOutputZero(int8_t* outp, size_t size);
 int main_NPU_test(void);
+int tiledMatVec(void);
 
+int preformanceMeasurment_int8(void);
 int NPU_MatMul_int8(size_t insize,size_t outsize);
 int NPU_MatMul_float(size_t insize,size_t outsize);
 int ARM_MatMul_int8(size_t insize,size_t outsize);
@@ -74,17 +76,54 @@ uint32_t getTiming_Cyc(){
 
 int main(void)
 {
-	// define Sizes here and pass to main functions
-	size_t insize = 8;
-	size_t outsize = 8;
 	Hardware_init();
 	enableTiming_Cyc();
-	NPU_MatMul_int8(insize,outsize);
+//	preformanceMeasurment_int8();
+	tiledMatVec();
+
 }
+int tiledMatVec(void){
+//	int npu_tiledmatvec_int8(int8_t* invec,size_t insize,int8_t* outvec, size_t outsize, int8_t* inMat)
+	size_t insize = 96;
+	size_t outsize = 96;
+    int8_t inVec[insize];
+    int8_t outVec[outsize];
+
+
+    for (int i = 0; i < insize; i++) {
+    	inVec[i] = (int8_t)((i) % 256);  // Example input: cycles through -128 to 127
+    }
+    int8_t* identityWeights = getIdentityWeights_int8(insize,outsize);
+
+	npu_tiledmatvec_int8(inVec,insize,outVec,outsize,identityWeights);
+	for(size_t i = 0;i < outsize;i++){
+		float output = outVec[i];
+		printf("Output %2d: %4.0f\n\r",i,output);
+	}
+}
+
+
+int preformanceMeasurment_int8(void){
+	size_t insize = 64;
+	size_t outsize = 64;
+	size_t base = 16;
+	for(int i  = 0; i< 7;i++){
+
+		insize  = base << i;
+		outsize = base << i;
+		printf("========");
+		printf("Size: %4d\n\r",insize);
+//		ARM_MatMul_int8(insize,outsize);
+//		NPU_MatMul_int8(insize,outsize);
+//		ARM_MatMul_float(insize,outsize);
+//		NPU_MatMul_float(insize,outsize);
+	}
+}
+
 
 int NPU_MatMul_int8(size_t insize,size_t outsize){
 	Hardware_init();
-	printf("=== MatMul int8 Main ===\n\r");
+//	printf("=== MatMul int8 Main ===\n\r");
 
     int8_t inVec[insize];
     for (int i = 0; i < insize; i++) {
@@ -94,22 +133,23 @@ int NPU_MatMul_int8(size_t insize,size_t outsize){
     int8_t* outvector;
 
 	npu_matvec_int8_init(insize,outsize);
-	while(1){
-		startTiming_Cyc();
-		outvector = npu_matvec_int8_run(inVec,insize,outsize,identityWeights);
-		uint32_t cycles =  getTiming_Cyc();
-		printf("NPU int8 Cycles: %4d\n\r",cycles);
-		for(size_t i = 0;i < outsize;i++){
-			int8_t output = outvector[i];
-			printf("Output %2d: %4d\n\r",i,output);
-		}
-	}
+//	while(1){
+	startTiming_Cyc();
+	outvector = npu_matvec_int8_run(inVec,insize,outsize,identityWeights);
+	uint32_t cycles =  getTiming_Cyc();
+	printf("NPU int8 Cycles: %4d\n\r",cycles);
+//		for(size_t i = 0;i < outsize;i++){
+//			int8_t output = outvector[i];
+//			printf("Output %2d: %4d\n\r",i,output);
+//		}
+//		printf("\n\r");
+//	}
+	free(identityWeights);
 }
 
 
 int NPU_MatMul_float(size_t insize,size_t outsize){
-	Hardware_init();
-	printf("=== NPU MatMul float ===\n\r");
+//	printf("=== NPU MatMul float ===\n\r");
 
     float inVec[insize];
     for (int i = 0; i < insize; i++) {
@@ -119,13 +159,21 @@ int NPU_MatMul_float(size_t insize,size_t outsize){
     float* outvector;
 
     npu_matvec_float_init(insize,outsize);
-	while(1){
+//	while(1){
+    	startTiming_Cyc();
 		outvector = npu_matvec_float_run(inVec,insize,outsize,identityWeights);
-		for(size_t i = 0;i < outsize;i++){
-			float output = outvector[i];
-			printf("Output %2d: %4.0f\n\r",i,output);
-		}
-	}
+		uint32_t cycles =  getTiming_Cyc();
+		printf("NPU float Cycles first: %4d\n\r",cycles);
+		startTiming_Cyc();
+		outvector = npu_matvec_float_run(inVec,insize,outsize,identityWeights);
+		cycles =  getTiming_Cyc();
+		printf("NPU float Cycles second: %4d\n\r",cycles);
+//		for(size_t i = 0;i < outsize;i++){
+//			float output = outvector[i];
+//			printf("Output %2d: %4.0f\n\r",i,output);
+//		}
+//	}
+	free(identityWeights);
 }
 
 
@@ -145,25 +193,28 @@ int ARM_MatMul_int8(size_t insize,size_t outsize) {
         return -1;
     }
 
-    for (int i = 0; i < insize; i++) {
-        printf("inVec[%d] = %4d", i, inVec[i]);
-    }
-    printf("\n\r");
+//    for (int i = 0; i < insize; i++) {
+//        printf("inVec[%d] = %4d", i, inVec[i]);
+//    }
+//    printf("\n\r");
 
-    while(1){
+//    while(1){
 		// Start benchmarking
     	startTiming_Cyc();
-
     	simd_matrix_vector_mul_int8(identityWeights,inVec,outVec,outsize,insize);
 		uint32_t cycles = getTiming_Cyc();
 
 		printf("Output MatVec ARM\n\r");
-		printf("Cycles: %6d\n\r", cycles);
-		for(int i = 0; i < outsize; i++){
-			printf("Output[%d]: %4d\n\r",i,outVec[i]);
-		}
+		printf("Cycles ARM int8: %6d\n\r", cycles);
+//		for(int i = 0; i < outsize; i++){
+//			printf("Output[%d]: %4d\n\r",i,outVec[i]);
+//		}
+		startTiming_Cyc();
 		controllOutput(inVec,identityWeights,insize,outsize);
-    }
+		cycles = getTiming_Cyc();
+		printf("Cycles Controll ARM int8: %6d\n\r", cycles);
+//    }
+	free(identityWeights);
     return 0;
 }
 
@@ -191,25 +242,27 @@ int ARM_MatMul_float(size_t insize,size_t outsize) {
     arm_mat_init_f32(&weight, insize, outsize, identityWeights);
     arm_mat_init_f32(&out, 1, outsize, dataOut);
 
-    while(1){
+//    while(1){
     	startTiming_Cyc();
 		arm_status status = arm_mat_mult_f32(&in, &weight, &out);
 
 		uint32_t cycles = getTiming_Cyc();
+		printf("Cycles ARM float: %6d\n\r", cycles);
 		float time = ((float)cycles / SystemCoreClock) * 1000.0f;
 
-		if (status == ARM_MATH_SUCCESS) {
-			printf("Time CMSIS float32: %f ms, Cycles: %lu\n\r", time, cycles);
-			for (int i = 0; i < outsize; ++i) {
-				printf("Out[%d]: %7.4f\n\r", i, dataOut[i]);
-			}
-		}
-		else {
-			printf("Matrix multiplication failed!\n");
-		}
+//		if (status == ARM_MATH_SUCCESS) {
+//			printf("Time CMSIS float32: %f ms, Cycles: %lu\n\r", time, cycles);
+//			for (int i = 0; i < outsize; ++i) {
+//				printf("Out[%d]: %7.4f\n\r", i, dataOut[i]);
+//			}
+//		}
+//		else {
+//			printf("Matrix multiplication failed!\n");
+//		}
 
 //		free(identityWeights);
-    }
+//    }
+	free(identityWeights);
     return 0;
 }
 
@@ -227,7 +280,7 @@ int main_NPU_test(void)
     BSP_LED_Init(LED_BLUE);
     Hardware_init();
     BSP_LED_On(LED_BLUE);
-    printf("\n\r== Begin measurement ==\n\r");
+    printf("\n\r== Begin NPU Testing ==\n\r");
 
     /*** NN Init ****************************************************************/
     uint32_t nn_in_len = 0;
@@ -294,8 +347,14 @@ int main_NPU_test(void)
 
         // Print output
         printf("NPU Output: %p\n\r",nn_out[0]);
+        int j = 1;
 		for (int i = 0; i < nn_out_len[0]; i++) {
 			printf("%4d", nn_out[0][i]);
+			if(j ==8){
+				printf("\n\r");
+				j = 0;
+			}
+			j++;
 		}
 		printf("\n\r");
 
@@ -354,9 +413,9 @@ void controllOutput(int8_t* in, int8_t* weights, size_t insize, size_t outsize) 
 //        	printf("In: %3d, Weight: %3d\n\r",(int32_t)in[j],(int32_t)weights[i * outsize + j]);
             acc += in[j] * weights[i + outsize * j];  // Correct indexing
         }
-        printf("%3d ", acc);  // Print the result as a 32-bit integer
+//        printf("%3d ", acc);  // Print the result as a 32-bit integer
     }
-    printf("\n\r");
+//    printf("\n\r");
 }
 
 

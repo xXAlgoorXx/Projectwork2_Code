@@ -220,7 +220,7 @@ static void LL_ATON_Start_EpochBlock_int8(const void *epoch_block)
     .nbits_out = 8,
   };
   LL_Streng_TensorInit(3, &output_tensor, 1);
-  printf("Output Start: %d",matmulInfo_int.output_start);
+//  printf("Output Start: %d",matmulInfo_int.output_start);
 
   /* Setup switches */
   static const LL_Switch_InitTypeDef switch_init[] = {

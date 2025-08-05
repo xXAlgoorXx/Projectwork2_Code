@@ -12,18 +12,18 @@
 volatile Matmul_info matmulInfo_int;
 volatile Matmul_info matmulInfo_Float;
 
-LL_ATON_DECLARE_NAMED_NN_INSTANCE_AND_INTERFACE(int8);
-LL_ATON_DECLARE_NAMED_NN_INSTANCE_AND_INTERFACE(Float);
+LL_ATON_DECLARE_NAMED_NN_INSTANCE_AND_INTERFACE(int8); //Initializes NN with name int8
+LL_ATON_DECLARE_NAMED_NN_INSTANCE_AND_INTERFACE(Float);//Initializes NN with name Float
 
 void update_weights_float(float* NNweights, const float *new_weights,size_t Num_weights) {
     memcpy(NNweights, new_weights, Num_weights * sizeof(float));
-    printf("Cleaning weights at %p, size %d\n\r", NNweights, Num_weights);
+//    printf("Cleaning weights at %p, size %d\n\r", NNweights, Num_weights);
     SCB_CleanDCache_by_Addr(NNweights, Num_weights * sizeof(float));
 }
 
 void update_weights_int8(int8_t* NNweights, const int8_t *new_weights,size_t Num_weights) {
     memcpy(NNweights, new_weights, Num_weights * sizeof(int8_t));
-    printf("Cleaning weights at %p, size %d\n\r", NNweights, Num_weights);
+//    printf("Cleaning weights at %p, size %d\n\r", NNweights, Num_weights);
 	SCB_CleanDCache_by_Addr(NNweights, Num_weights * sizeof(int8_t));
 }
 
@@ -55,12 +55,12 @@ int npu_matvec_int8_init(size_t insize,size_t outsize){
 
 	// Calculate valid insize and outsize. At the moment only 8,16,24 are valid
 	if((insize > 24) || (outsize > 24)){
-		printf("Insize or Outsize too big. Has to be lower or equal to 24");
+		printf("Insize or Outsize too big. Has to be lower or equal to 24\n\r");
 		return -1;
 	}
 
 	if((insize < 1) || (outsize < 1)){
-		printf("Insize or Outsize too small. Has to be higher or equal to 1");
+		printf("Insize or Outsize too small. Has to be higher or equal to 1\n\r");
 		return -1;
 	}
 
@@ -152,17 +152,6 @@ int8_t* getIdentityWeights_int8(size_t insize, size_t outsize) {
         }
 //    printf("\n\r");
     }
-
-//	for (int i = 0; i < nn_in_len; i++) {
-//	    for (int j = 0; j < nn_out_len[0]; j++) {
-//	    	int pointer = i * nn_out_len[0] + j;
-//			printf("%4d:",pointer);
-//	        printf("%4d ", identityWeights[i * nn_in_len + j]);  // Correct indexing
-//	    }
-//	    printf("\n\r");
-//	}
-//
-
     return identity;
 }
 
@@ -211,5 +200,80 @@ void NeuralNetwork_init(int8_t **nn_in, uint32_t *nnin_length, int8_t *nn_out[],
     *nnin_length = LL_Buffer_len(&nn_in_info[0]);
 }
 
+int npu_tiledmatvec_int8(int8_t* invec,size_t insize,int8_t* outvec, size_t outsize, int8_t* inMat){
+	// outsize = rows, insize = cols
+	// invec mat and outvec should be zeropadded to align 8,16 or 24
+	// Prepare Matrix
+	size_t refSize = 24;
+	extern volatile Matmul_info matmulInfo_int;
 
+	// Calculate Adresses
+	calcAdresses(refSize,refSize,1,&matmulInfo_int);
+	int8_t* outp = (int8_t*)(0x34200000UL + matmulInfo_int.output_start);
+
+    for (size_t i = 0; i < outsize / refSize; i++) {
+        int8_t acc[24] = {0};
+        memcpy((int8_t*)(0x34200000UL + matmulInfo_int.input_start), &invec[i * refSize], refSize);
+        for (size_t j = 0; j < insize / refSize; j++) {
+
+            // --- Upload input vector tile to NPU memory ---
+        	copy_submatrix(
+        	    (int8_t*)(0x34200000UL + matmulInfo_int.weight_start),
+        	    inMat,
+        	    i * refSize,        // start_row
+        	    j * refSize,        // start_col
+        	    insize,             // total number of columns in inMat
+        	    refSize,            // sub_rows
+        	    refSize             // sub_cols
+        	);
+
+            // --- Launch NPU ---
+            LL_ATON_RT_Main(&NN_Instance_int8);
+            printNPUData(
+            		(int8_t*)(0x34200000UL + matmulInfo_int.input_start),
+            		refSize,
+					(int8_t*)(0x34200000UL + matmulInfo_int.output_start),
+					refSize,
+					(int8_t*)(0x34200000UL + matmulInfo_int.weight_start)
+            );
+            // --- Accumulate result from this tile ---
+            for (int k = 0; k < refSize; k++) {
+                acc[k] += outp[k];
+            }
+        }
+
+        // --- Store final accumulated result in outvec ---
+        memcpy(&outvec[i * refSize], acc, refSize);
+    }
+    return 0; // success
+}
+
+
+void copy_submatrix(int8_t *dest, int8_t *src,
+                    size_t start_row, size_t start_col,
+                    size_t src_cols, size_t sub_rows, size_t sub_cols) {
+    for (size_t i = 0; i < sub_rows; i++) {
+        size_t src_index = (start_row + i) * src_cols + start_col;
+        size_t dest_index = i * sub_cols;
+        memcpy(&dest[dest_index], &src[src_index], sub_cols * sizeof(int8_t));
+    }
+}
+
+void printNPUData(int8_t* invec,size_t insize,int8_t* outvec,size_t outsize,int8_t*wightvec){
+	for(int i = 0; i<insize;i++){
+		printf("Input[%2d]:%4d",i,invec[i]);
+	}
+	printf("\n\r");
+	printf("Weights:\n\r");
+	for(int i = 0; i<outsize;i++){
+		for(int j = 0; j < insize;j++){
+			printf("%4d",wightvec[i*outsize + j]);
+		}
+		printf("\n\r");
+	}
+
+	for(int i = 0; i<outsize;i++){
+			printf("Output[%2d]:%4d",i,outvec[i]);
+	}
+}
 
