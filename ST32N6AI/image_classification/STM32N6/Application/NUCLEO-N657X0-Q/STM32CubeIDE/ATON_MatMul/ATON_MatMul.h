@@ -8,20 +8,15 @@
 extern int8_t *nn_in;
 
 typedef struct
-{
-	int bytes;
-
+{	int bytes;
 	int insize;
 	int outsize;
-
 	int weight_start;
 	int weight_end;
 	int weight_limit;
-
 	int input_start;
 	int input_end;
 	int input_limit;
-
 	int output_start;
 	int output_end;
 	int output_limit;

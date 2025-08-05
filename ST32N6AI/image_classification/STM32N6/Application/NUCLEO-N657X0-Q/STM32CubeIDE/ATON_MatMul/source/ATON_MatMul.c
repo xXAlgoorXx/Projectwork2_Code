@@ -135,23 +135,17 @@ int8_t* getIdentityWeights_int8(size_t insize, size_t outsize) {
         return NULL;
     }
 
-    // Initialize the entire matrix to 0
+    // Initialize to 0
     memset(identity, 0, insize * outsize * sizeof(int8_t));
 
-    // Set 1 on the diagonal
-    for (size_t i = 0; i < insize; i++) {
-        for (size_t j = 0; j < outsize; j++) {
-            if (i == j) {
-//            	printf("%4d: 1",i * outsize + j);
-                identity[i * outsize + j] = 1;  // Set diagonal to 1
-            }
-            else{
-//            	printf("%4d: 0",i * outsize + j);
-                identity[i * outsize + j] = 0;  // Set diagonal to 1
-            }
-        }
-//    printf("\n\r");
+    // Identity matrix is defined by: out[i] = in[i]
+    // So we need to set W[i][i] = 1, which is at index: i * insize + i
+    size_t min_dim = (insize < outsize) ? insize : outsize;
+
+    for (size_t i = 0; i < min_dim; i++) {
+        identity[i * insize + i] = 1;
     }
+
     return identity;
 }
 
@@ -200,53 +194,71 @@ void NeuralNetwork_init(int8_t **nn_in, uint32_t *nnin_length, int8_t *nn_out[],
     *nnin_length = LL_Buffer_len(&nn_in_info[0]);
 }
 
-int npu_tiledmatvec_int8(int8_t* invec,size_t insize,int8_t* outvec, size_t outsize, int8_t* inMat){
-	// outsize = rows, insize = cols
-	// invec mat and outvec should be zeropadded to align 8,16 or 24
-	// Prepare Matrix
-	size_t refSize = 24;
-	extern volatile Matmul_info matmulInfo_int;
+int npu_tiledmatvec_int8(int8_t* invec, size_t insize, int8_t* outvec, size_t outsize, int8_t* inMat) {
+    size_t refSize = 16;
 
-	// Calculate Adresses
-	calcAdresses(refSize,refSize,1,&matmulInfo_int);
-	int8_t* outp = (int8_t*)(0x34200000UL + matmulInfo_int.output_start);
+    extern volatile Matmul_info matmulInfo_int;
 
-    for (size_t i = 0; i < outsize / refSize; i++) {
-        int8_t acc[24] = {0};
-        memcpy((int8_t*)(0x34200000UL + matmulInfo_int.input_start), &invec[i * refSize], refSize);
-        for (size_t j = 0; j < insize / refSize; j++) {
+    // Calculate addresses
+    calcAdresses(refSize, refSize, 1, &matmulInfo_int);
+    int8_t* outp = (int8_t*)(0x34200000UL + matmulInfo_int.output_start);
 
-            // --- Upload input vector tile to NPU memory ---
-        	copy_submatrix(
-        	    (int8_t*)(0x34200000UL + matmulInfo_int.weight_start),
-        	    inMat,
-        	    i * refSize,        // start_row
-        	    j * refSize,        // start_col
-        	    insize,             // total number of columns in inMat
-        	    refSize,            // sub_rows
-        	    refSize             // sub_cols
-        	);
+    // Initialize output vector to 0
+    memset(outvec, 0, outsize * sizeof(int8_t));
+
+    size_t num_tiles_out = (outsize + refSize - 1) / refSize;
+    size_t num_tiles_in  = (insize + refSize - 1) / refSize;
+
+    for (size_t i = 0; i < num_tiles_out; i++) {
+        int8_t acc[16] = {0};  // Accumulator for output tile
+
+        for (size_t j = 0; j < num_tiles_in; j++) {
+            // --- Load vector tile (handle partial tiles safely) ---
+            int8_t vecTile[16] = {0};
+            size_t vecCopy = (j * refSize + refSize <= insize) ? refSize : (insize - j * refSize);
+            memcpy(vecTile, &invec[j * refSize], vecCopy);
+            memcpy((int8_t*)(0x34200000UL + matmulInfo_int.input_start), vecTile, refSize);
+
+            // --- Load matrix sub-tile (handle edges) ---
+            int8_t matTile[16*16] = {0};
+            size_t sub_rows = (i * refSize + refSize <= outsize) ? refSize : (outsize - i * refSize);
+            size_t sub_cols = (j * refSize + refSize <= insize) ? refSize : (insize - j * refSize);
+
+            copy_submatrix(
+                matTile,             // destination buffer
+                inMat,               // source matrix (outsize x insize)
+                i * refSize,         // start_row
+                j * refSize,         // start_col
+                insize,              // full row width
+                sub_rows,            // rows in this tile
+                sub_cols             // cols in this tile
+            );
+
+            memcpy((int8_t*)(0x34200000UL + matmulInfo_int.weight_start), matTile, refSize * refSize);
 
             // --- Launch NPU ---
             LL_ATON_RT_Main(&NN_Instance_int8);
             printNPUData(
             		(int8_t*)(0x34200000UL + matmulInfo_int.input_start),
-            		refSize,
+					refSize,
 					(int8_t*)(0x34200000UL + matmulInfo_int.output_start),
 					refSize,
 					(int8_t*)(0x34200000UL + matmulInfo_int.weight_start)
-            );
-            // --- Accumulate result from this tile ---
-            for (int k = 0; k < refSize; k++) {
+            		);
+            // --- Accumulate output from this tile ---
+            for (size_t k = 0; k < sub_rows; k++) {
                 acc[k] += outp[k];
             }
         }
 
-        // --- Store final accumulated result in outvec ---
-        memcpy(&outvec[i * refSize], acc, refSize);
+        // --- Write back the accumulated result to outvec ---
+        size_t write_count = (i * refSize + refSize <= outsize) ? refSize : (outsize - i * refSize);
+        memcpy(&outvec[i * refSize], acc, write_count);
     }
-    return 0; // success
+
+    return 0; // Success
 }
+
 
 
 void copy_submatrix(int8_t *dest, int8_t *src,
@@ -267,7 +279,7 @@ void printNPUData(int8_t* invec,size_t insize,int8_t* outvec,size_t outsize,int8
 	printf("Weights:\n\r");
 	for(int i = 0; i<outsize;i++){
 		for(int j = 0; j < insize;j++){
-			printf("%4d",wightvec[i*outsize + j]);
+			printf("%4d", wightvec[i * insize + j]);
 		}
 		printf("\n\r");
 	}

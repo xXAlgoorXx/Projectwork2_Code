@@ -42,4 +42,5 @@ STM32Cube_FW_N6/Middlewares/ST/usbx/common \
 Utilities/lcd \
 ll_aton \
 . \
+tiledFFT/source \
 

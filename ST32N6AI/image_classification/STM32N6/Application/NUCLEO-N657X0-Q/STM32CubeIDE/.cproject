@@ -97,6 +97,7 @@
 									<listOptionValue builtIn="false" value="../../../../STM32Cube_FW_N6/Drivers/CMSIS/DSP/Include"/>
 									<listOptionValue builtIn="false" value="../../../../STM32Cube_FW_N6/Drivers/CMSIS/DSP/PrivateInclude"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/SIMD_MatMul}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/tiledFFT}&quot;"/>
 								</option>
 								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.fdata.150731404" name="Place data in their own sections (-fdata-sections)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.fdata" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="true" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.includefiles.342858588" name="Include files (-include)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.includefiles" useByScannerDiscovery="false" valueType="includeFiles"/>
@@ -144,13 +145,14 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="SIMD_MatMul/source|ATON_MatMul/source|ATON_MatMul/source/network_dummy.c|ATON_MatMul/source/network_64.c|ATON_MatMul/source/network_512.c|ATON_MatMul/source/network_32.c|ATON_MatMul/source/network_32_v2.c|ATON_MatMul/source/network_256.c|ATON_MatMul/source/network_16.c|ATON_MatMul/source/network_16_float.c|ATON_MatMul/source/network_128.c|ATON_MatMul/source/network_1024.c|Drivers/CMSIS/DSP/Source|MatrixFunctions|ATON_MatMul/networkFiles|NN_Sim/source|Application|Drivers/STM32N6xx_HAL_Driver|Application/app_camerapipeline.c|Middlewares/screenl/scrl_spi.c|Middlewares/screenl/ili9341/ili9341.c|Middlewares/screenl/ili9341/ili9341_reg.c|Inc|Src|Startup" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
+						<entry excluding="tiledFFT/source|SIMD_MatMul/source|ATON_MatMul/source|ATON_MatMul/source/network_dummy.c|ATON_MatMul/source/network_64.c|ATON_MatMul/source/network_512.c|ATON_MatMul/source/network_32.c|ATON_MatMul/source/network_32_v2.c|ATON_MatMul/source/network_256.c|ATON_MatMul/source/network_16.c|ATON_MatMul/source/network_16_float.c|ATON_MatMul/source/network_128.c|ATON_MatMul/source/network_1024.c|Drivers/CMSIS/DSP/Source|MatrixFunctions|ATON_MatMul/networkFiles|NN_Sim/source|Application|Drivers/STM32N6xx_HAL_Driver|Application/app_camerapipeline.c|Middlewares/screenl/scrl_spi.c|Middlewares/screenl/ili9341/ili9341.c|Middlewares/screenl/ili9341/ili9341_reg.c|Inc|Src|Startup" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
 						<entry excluding="network_64.c|Testing.c|network_dummy.c|network_512.c|network_32_v2.c|network_256.c|network_16.c|network_16_float.c|network_128.c|network_1024.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="ATON_MatMul/source"/>
 						<entry excluding="network.c|app_camerapipeline.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Application"/>
 						<entry excluding="MatrixFunctions/MatrixFunctionsF16.c|MatrixFunctions/MatrixFunctions.c|InterpolationFunctions|FilteringFunctions|FastMathFunctions|DistanceFunctions|ControllerFunctions|ComplexMathFunctions|CommonTables|BayesFunctions|BasicMathFunctions|TransformFunctions|SVMFunctions|SupportFunctions|StatisticsFunctions|QuaternionMathFunctions" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Drivers/CMSIS/DSP/Source"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Drivers/STM32N6xx_HAL_Driver"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="NN_Sim/source"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="SIMD_MatMul/source"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="tiledFFT/source"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -248,6 +250,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/NN_Sim}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/ATON_MatMul}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/SIMD_MatMul}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/tiledFFT}&quot;"/>
 								</option>
 								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.fdata.443205889" name="Place data in their own sections (-fdata-sections)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.fdata" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="true" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.includefiles.146609508" name="Include files (-include)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.includefiles" useByScannerDiscovery="false" valueType="includeFiles"/>

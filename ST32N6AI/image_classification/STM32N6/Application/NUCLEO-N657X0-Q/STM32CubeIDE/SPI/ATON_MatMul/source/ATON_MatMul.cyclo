@@ -8,9 +8,9 @@
 ../ATON_MatMul/source/ATON_MatMul.c:90:9:npu_matvec_int8_run	3
 ../ATON_MatMul/source/ATON_MatMul.c:106:5:npu_matvec_float_init	1
 ../ATON_MatMul/source/ATON_MatMul.c:116:8:npu_matvec_float_run	3
-../ATON_MatMul/source/ATON_MatMul.c:132:9:getIdentityWeights_int8	5
-../ATON_MatMul/source/ATON_MatMul.c:158:8:getIdentityWeights_float	4
-../ATON_MatMul/source/ATON_MatMul.c:176:6:NeuralNetwork_init	3
-../ATON_MatMul/source/ATON_MatMul.c:203:5:npu_tiledmatvec_int8	4
-../ATON_MatMul/source/ATON_MatMul.c:252:6:copy_submatrix	2
-../ATON_MatMul/source/ATON_MatMul.c:262:6:printNPUData	5
+../ATON_MatMul/source/ATON_MatMul.c:132:9:getIdentityWeights_int8	3
+../ATON_MatMul/source/ATON_MatMul.c:152:8:getIdentityWeights_float	4
+../ATON_MatMul/source/ATON_MatMul.c:170:6:NeuralNetwork_init	3
+../ATON_MatMul/source/ATON_MatMul.c:197:5:npu_tiledmatvec_int8	8
+../ATON_MatMul/source/ATON_MatMul.c:264:6:copy_submatrix	2
+../ATON_MatMul/source/ATON_MatMul.c:274:6:printNPUData	5

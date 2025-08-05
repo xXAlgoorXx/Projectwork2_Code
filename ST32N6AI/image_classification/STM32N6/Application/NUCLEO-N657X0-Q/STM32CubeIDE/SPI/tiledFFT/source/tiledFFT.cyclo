@@ -1,0 +1,3 @@
+../tiledFFT/source/tiledFFT.c:11:6:tiledDFT	1
+../tiledFFT/source/tiledFFT.c:27:6:generateDFTMatrices	3
+../tiledFFT/source/tiledFFT.c:37:6:quantizeMatrix	4

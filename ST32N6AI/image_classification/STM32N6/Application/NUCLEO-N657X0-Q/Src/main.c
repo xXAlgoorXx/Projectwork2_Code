@@ -30,7 +30,7 @@
 #include "nn_sim.h"
 #include "ATON_MatMul.h"
 #include "SIMD_MatMul.h"
-
+#include "tiledFFT.h"
 #include "arm_math.h"
 #include "dsp/matrix_functions.h"
 
@@ -53,6 +53,8 @@ void controllOutput(int8_t* in, int8_t* weights, size_t insize, size_t outsize);
 void setOutputZero(int8_t* outp, size_t size);
 int main_NPU_test(void);
 int tiledMatVec(void);
+void printMatrix_int8(const int8_t* mat, size_t rows, size_t cols);
+void printVector_int8(const char* message, const int8_t* vec, size_t size);
 
 int preformanceMeasurment_int8(void);
 int NPU_MatMul_int8(size_t insize,size_t outsize);
@@ -82,24 +84,47 @@ int main(void)
 	tiledMatVec();
 
 }
+
+int tiledFFT_test(void){
+	size_t N = 8;
+	int8_t in[N];
+	int8_t outReal[N];
+	int8_t outImag[N];
+
+    for (int i = 0; i < N; i++) {
+    	in[i] = (int8_t)((i) % 256);  // Example input: cycles through -128 to 127
+    }
+
+    tiledDFT(in,outReal,outImag,N);
+	printVector_int8("DFT Real:",outReal,N);
+	printVector_int8("DFT Imag:",outImag,N);
+}
+
+
 int tiledMatVec(void){
 //	int npu_tiledmatvec_int8(int8_t* invec,size_t insize,int8_t* outvec, size_t outsize, int8_t* inMat)
-	size_t insize = 96;
-	size_t outsize = 96;
+	size_t insize = 7;
+	size_t outsize = 7;
     int8_t inVec[insize];
     int8_t outVec[outsize];
 
-
+    printf("Tiled MatVec Size: %4d\n\r",insize);
     for (int i = 0; i < insize; i++) {
     	inVec[i] = (int8_t)((i) % 256);  // Example input: cycles through -128 to 127
     }
-    int8_t* identityWeights = getIdentityWeights_int8(insize,outsize);
 
-	npu_tiledmatvec_int8(inVec,insize,outVec,outsize,identityWeights);
-	for(size_t i = 0;i < outsize;i++){
-		float output = outVec[i];
-		printf("Output %2d: %4.0f\n\r",i,output);
-	}
+    int8_t* identityWeights = getIdentityWeights_int8(insize,outsize);
+    printMatrix_int8(identityWeights,outsize,insize);
+    while(1){
+    	startTiming_Cyc();
+    	npu_tiledmatvec_int8(inVec,insize,outVec,outsize,identityWeights);
+    	uint32_t cycles = getTiming_Cyc();
+    	printf("Cycles: %4d\n\r", cycles);
+    	for(size_t i = 0;i < outsize;i++){
+    		float output = outVec[i];
+    		printf("Output %2d: %4.0f\n\r",i,output);
+    	}
+    }
 }
 
 
@@ -379,24 +404,6 @@ int main_NPU_test(void)
         BSP_LED_Toggle(LED_BLUE);
         HAL_Delay(1000);
 
-//        // Print weights
-//        printf("Weights:\n\r");
-//        for (int i = 0; i < nn_out_len[0]; i++) {
-//            for (int j = 0; j < nn_in_len; j++) {
-//                printf("%4d ", nnweights[i * nn_in_len + j]);  // Correct indexing
-//            }
-//            printf("\n\r");
-//        }
-//    	printf("Weights:\n\r");
-//    	for (int i = 0; i < nn_in_len; i++) {
-//    	    for (int j = 0; j < nn_out_len[0]; j++) {
-//    	    	int pointer = i * nn_out_len[0] + j;
-//    			printf("%4d:",pointer);
-//    	    	printf("%4d ", nnweights[i * nn_out_len[0] + j]);  // Correct indexing
-//    	    }
-//    	    printf("\n\r");
-//    	}
-
         // Set weights of NN to identity matrix
 		update_weights_int8(nnweights, identityWeights, weight_size);
 		loopcount++;
@@ -426,6 +433,24 @@ void setOutputZero(int8_t* outp, size_t size){
 	}
 }
 
+void printMatrix_int8(const int8_t* mat, size_t rows, size_t cols) {
+    printf("Matrix [%d x %d]:\n\r", rows, cols);
+    for (size_t i = 0; i < rows; i++) {
+        printf("Row %2d: ", i);
+        for (size_t j = 0; j < cols; j++) {
+            printf("%4d ", mat[i * cols + j]);
+        }
+        printf("\n\r");
+    }
+}
+
+
+void printVector_int8(const char* message, const int8_t* vec, size_t size) {
+    printf("%s\n\r", message);
+    for (size_t i = 0; i < size; i++) {
+        printf("%3d: %4d\n\r",i, vec[i]);
+    }
+}
 
 static void Hardware_init(void)
 {

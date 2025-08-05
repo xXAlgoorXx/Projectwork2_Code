@@ -9,6 +9,7 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
+-include tiledFFT/source/subdir.mk
 -include ll_aton/subdir.mk
 -include Utilities/lcd/subdir.mk
 -include SIMD_MatMul/source/subdir.mk

@@ -1,0 +1,3 @@
+../tiledFFT/source/tiledFFT.c:11:6:tiledDFT	144	dynamic
+../tiledFFT/source/tiledFFT.c:27:6:generateDFTMatrices	48	static
+../tiledFFT/source/tiledFFT.c:37:6:quantizeMatrix	40	static
