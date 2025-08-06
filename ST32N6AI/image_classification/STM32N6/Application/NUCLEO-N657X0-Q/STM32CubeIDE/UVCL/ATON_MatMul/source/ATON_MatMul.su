@@ -8,6 +8,6 @@
 ../ATON_MatMul/source/ATON_MatMul.c:132:9:getIdentityWeights_int8	24	static
 ../ATON_MatMul/source/ATON_MatMul.c:152:8:getIdentityWeights_float	24	static
 ../ATON_MatMul/source/ATON_MatMul.c:170:6:NeuralNetwork_init	32	static
-../ATON_MatMul/source/ATON_MatMul.c:258:6:copy_submatrix	24	static
+../ATON_MatMul/source/ATON_MatMul.c:264:6:copy_submatrix	24	static
+../ATON_MatMul/source/ATON_MatMul.c:274:6:printNPUData	40	static
 ../ATON_MatMul/source/ATON_MatMul.c:197:5:npu_tiledmatvec_int8	376	static
-../ATON_MatMul/source/ATON_MatMul.c:268:6:printNPUData	40	static

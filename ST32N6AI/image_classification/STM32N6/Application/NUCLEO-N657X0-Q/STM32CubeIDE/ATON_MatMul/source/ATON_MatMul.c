@@ -195,7 +195,7 @@ void NeuralNetwork_init(int8_t **nn_in, uint32_t *nnin_length, int8_t *nn_out[],
 }
 
 int npu_tiledmatvec_int8(int8_t* invec, size_t insize, int8_t* outvec, size_t outsize, int8_t* inMat) {
-    size_t refSize = 16;
+    size_t refSize = 24;
 
     extern volatile Matmul_info matmulInfo_int;
 
@@ -210,17 +210,17 @@ int npu_tiledmatvec_int8(int8_t* invec, size_t insize, int8_t* outvec, size_t ou
     size_t num_tiles_in  = (insize + refSize - 1) / refSize;
 
     for (size_t i = 0; i < num_tiles_out; i++) {
-        int8_t acc[16] = {0};  // Accumulator for output tile
+        int8_t acc[24] = {0};  // Accumulator for output tile
 
         for (size_t j = 0; j < num_tiles_in; j++) {
             // --- Load vector tile (handle partial tiles safely) ---
-            int8_t vecTile[16] = {0};
+            int8_t vecTile[24] = {0};
             size_t vecCopy = (j * refSize + refSize <= insize) ? refSize : (insize - j * refSize);
             memcpy(vecTile, &invec[j * refSize], vecCopy);
             memcpy((int8_t*)(0x34200000UL + matmulInfo_int.input_start), vecTile, refSize);
 
             // --- Load matrix sub-tile (handle edges) ---
-            int8_t matTile[16*16] = {0};
+            int8_t matTile[24*24] = {0};
             size_t sub_rows = (i * refSize + refSize <= outsize) ? refSize : (outsize - i * refSize);
             size_t sub_cols = (j * refSize + refSize <= insize) ? refSize : (insize - j * refSize);
 
@@ -238,13 +238,13 @@ int npu_tiledmatvec_int8(int8_t* invec, size_t insize, int8_t* outvec, size_t ou
 
             // --- Launch NPU ---
             LL_ATON_RT_Main(&NN_Instance_int8);
-            printNPUData(
-            		(int8_t*)(0x34200000UL + matmulInfo_int.input_start),
-					refSize,
-					(int8_t*)(0x34200000UL + matmulInfo_int.output_start),
-					refSize,
-					(int8_t*)(0x34200000UL + matmulInfo_int.weight_start)
-            		);
+//            printNPUData(
+//            		(int8_t*)(0x34200000UL + matmulInfo_int.input_start),
+//					refSize,
+//					(int8_t*)(0x34200000UL + matmulInfo_int.output_start),
+//					refSize,
+//					(int8_t*)(0x34200000UL + matmulInfo_int.weight_start)
+//            );
             // --- Accumulate output from this tile ---
             for (size_t k = 0; k < sub_rows; k++) {
                 acc[k] += outp[k];

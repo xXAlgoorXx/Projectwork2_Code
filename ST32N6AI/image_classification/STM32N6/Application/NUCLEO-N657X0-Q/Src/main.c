@@ -1,20 +1,3 @@
- /**
- ******************************************************************************
- * @file    main.c
- * @author  GPM Application Team
- *
- ******************************************************************************
- * @attention
- *
- * Copyright (c) 2023 STMicroelectronics.
- * All rights reserved.
- *
- * This software is licensed under terms that can be found in the LICENSE file
- * in the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- *
- ******************************************************************************
- */
 #include "stm32n6xx_hal.h"
 #include "stm32n6xx_nucleo_bus.h"
 #include "stm32n6xx_nucleo_xspi.h"
@@ -52,7 +35,7 @@ void Error_Handler(void);
 void controllOutput(int8_t* in, int8_t* weights, size_t insize, size_t outsize);
 void setOutputZero(int8_t* outp, size_t size);
 int main_NPU_test(void);
-int tiledMatVec(void);
+int tiledMatVec(size_t insize,size_t outsize);
 void printMatrix_int8(const int8_t* mat, size_t rows, size_t cols);
 void printVector_int8(const char* message, const int8_t* vec, size_t size);
 
@@ -80,8 +63,8 @@ int main(void)
 {
 	Hardware_init();
 	enableTiming_Cyc();
-//	preformanceMeasurment_int8();
-	tiledMatVec();
+	preformanceMeasurment_int8();
+//	tiledMatVec();
 
 }
 
@@ -101,10 +84,7 @@ int tiledFFT_test(void){
 }
 
 
-int tiledMatVec(void){
-//	int npu_tiledmatvec_int8(int8_t* invec,size_t insize,int8_t* outvec, size_t outsize, int8_t* inMat)
-	size_t insize = 7;
-	size_t outsize = 7;
+int tiledMatVec(size_t insize,size_t outsize){
     int8_t inVec[insize];
     int8_t outVec[outsize];
 
@@ -114,17 +94,16 @@ int tiledMatVec(void){
     }
 
     int8_t* identityWeights = getIdentityWeights_int8(insize,outsize);
-    printMatrix_int8(identityWeights,outsize,insize);
-    while(1){
-    	startTiming_Cyc();
-    	npu_tiledmatvec_int8(inVec,insize,outVec,outsize,identityWeights);
-    	uint32_t cycles = getTiming_Cyc();
-    	printf("Cycles: %4d\n\r", cycles);
-    	for(size_t i = 0;i < outsize;i++){
-    		float output = outVec[i];
-    		printf("Output %2d: %4.0f\n\r",i,output);
-    	}
-    }
+	startTiming_Cyc();
+	npu_tiledmatvec_int8(inVec,insize,outVec,outsize,identityWeights);
+	uint32_t cycles = getTiming_Cyc();
+	printf("Cycles Tiled MatVec: %4d\n\r", cycles);
+
+//	for(size_t i = 0;i < outsize;i++){
+//		float output = outVec[i];
+//		printf("Output %2d: %4.0f\n\r",i,output);
+//	}
+
 }
 
 
@@ -138,8 +117,9 @@ int preformanceMeasurment_int8(void){
 		outsize = base << i;
 		printf("========");
 		printf("Size: %4d\n\r",insize);
-//		ARM_MatMul_int8(insize,outsize);
+		ARM_MatMul_int8(insize,outsize);
 //		NPU_MatMul_int8(insize,outsize);
+		tiledMatVec(insize,outsize);
 //		ARM_MatMul_float(insize,outsize);
 //		NPU_MatMul_float(insize,outsize);
 	}
@@ -229,7 +209,7 @@ int ARM_MatMul_int8(size_t insize,size_t outsize) {
     	simd_matrix_vector_mul_int8(identityWeights,inVec,outVec,outsize,insize);
 		uint32_t cycles = getTiming_Cyc();
 
-		printf("Output MatVec ARM\n\r");
+//		printf("Output MatVec ARM\n\r");
 		printf("Cycles ARM int8: %6d\n\r", cycles);
 //		for(int i = 0; i < outsize; i++){
 //			printf("Output[%d]: %4d\n\r",i,outVec[i]);
@@ -237,7 +217,7 @@ int ARM_MatMul_int8(size_t insize,size_t outsize) {
 		startTiming_Cyc();
 		controllOutput(inVec,identityWeights,insize,outsize);
 		cycles = getTiming_Cyc();
-		printf("Cycles Controll ARM int8: %6d\n\r", cycles);
+		printf("Cycles Controll CPU int8: %6d\n\r", cycles);
 //    }
 	free(identityWeights);
     return 0;
@@ -413,7 +393,7 @@ int main_NPU_test(void)
 }
 
 void controllOutput(int8_t* in, int8_t* weights, size_t insize, size_t outsize) {
-    printf("Controll Output:\n\r ");
+//    printf("Controll Output:\n\r ");
     for (size_t i = 0; i < outsize; i++) {  // Iterate over output size
         int32_t acc = 0;
         for (size_t j = 0; j < insize; j++) {  // Iterate over input size
