@@ -1,0 +1,24 @@
+digraph G {
+graph [ fontsize=11 ];
+node [ fontsize=11 ];
+edge [ fontsize=10 ];
+rankdir=BU
+ranksep=1.5
+nodesep=1
+splines=spline
+compound=true
+Graphinfo [ label="" shape=plaintext, style=rounded, color=black, fontname="Arial-Bold" ];
+Input_1_out_0 [ label="{ { <i0> 0} |  [0]\lInput_1_out_0 | { <o0> 0} }", shape=record, color=black, style=rounded  ] ;
+Input_0_out_0 [ label="{ { <i0> 0} |  [4]\lInput_0_out_0 | { <o0> 0} }", shape=record, color=black, style=rounded  ] ;
+Gemm_2_reshape_x_2 [ label="{ { < i0>  0 S } | id=[3] tid=[2]\lGemm_2_reshape_x_2\lkind=Reshape\lhw unit=NULL_UNIT\l | { < o0>  0 S } }", shape=record, color=black, style=rounded  ] ;
+Gemm_2_reshape_w_5 [ label="{ { < i0>  0 S } | id=[7] tid=[3]\lGemm_2_reshape_w_5\lkind=Reshape\lhw unit=NULL_UNIT\l | { < o0>  0 S } }", shape=record, color=black, style=rounded  ] ;
+Gemm_2_conv_6 [ label="{ { < i0>  0 S  | < i1>  1 S } | id=[8] tid=[4]\lGemm_2_conv_6\lkind=Conv\lNUM_OPS = 2 OPS( 1e+02% of total )\lhw unit=NULL_UNIT\lkernel_shape is 1 1\lgroup i 1\lstrides is 1 1\lpads is 0 0 0 0\ldilations is 1 1\l | { < o0>  0 S } }", shape=record, color=black, style=rounded  ] ;
+Gemm_2_squeeze_y_7 [ label="{ { < i0>  0 S } | id=[10] tid=[5]\lGemm_2_squeeze_y_7\lkind=Reshape\lhw unit=NULL_UNIT\l | { < o0>  0 S } }", shape=record, color=black, style=rounded  ] ;
+__NN__RETURN__ [ label="{ { < i0>  0 S } | id=[11] tid=[6]\l__NN__RETURN__\lkind=Return\lhw unit=NULL_UNIT\l}", shape=record, color=black, style=rounded  ] ;
+Gemm_2_reshape_x_2:o0:s->Gemm_2_conv_6:i0:n [ label="edge id=[6]\ltid=47 48\l1x1x1x1\lbits=32\lin=out: Float\lGemm_2_reshape_x_2 FLOAT( 1 1 1 1 ) edge bs=4\lout bw=?\l" ]; 
+Gemm_2_reshape_w_5:o0:s->Gemm_2_conv_6:i1:n [ label="edge id=[7]\ltid=51 52\l1x1x1x1\lbits=32\lin=out: Float\lGemm_2_reshape_w_5 FLOAT( 1 1 1 1 ) edge bs=4\lout bw=?\l" ]; 
+Gemm_2_conv_6:o0:s->Gemm_2_squeeze_y_7:i0:n [ label="edge id=[8]\ltid=60 61\l1x1x1x1\lbits=32\lin=out: Float\lGemm_2_conv_6 FLOAT( 1 1 1 1 ) edge bs=4\lout bw=?\l" ]; 
+Gemm_2_squeeze_y_7:o0:s->__NN__RETURN__:i0:n [ label="edge id=[10]\ltid=70 71\l1x1\lbits=32\lin=out: Float\lGemm_2_out_0 FLOAT( 1 1 ) edge bs=4\lout bw=?\l" ]; 
+Input_1_out_0:o0:s->Gemm_2_reshape_x_2:i0:n [ label="edge id=[11]\ltid=72 73\lbatch: 1(in) 1(out,L) 1(mem,L) \l1x1\lbits=32\lin=out: Float\lInput_1_out_0 FLOAT( 1 1 ) edge bs=4\lout bw=?\l" ]; 
+Input_0_out_0:o0:s->Gemm_2_reshape_w_5:i0:n [ label="edge id=[12]\ltid=74 75\lbatch: 1(in) 1(out,L) 1(mem,L) \l1x1\lbits=32\lin=out: Float\lInput_0_out_0 FLOAT( 1 1 ) edge bs=4\lout bw=?\l" ]; 
+}

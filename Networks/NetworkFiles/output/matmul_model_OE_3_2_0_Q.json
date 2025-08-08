@@ -1,0 +1,157 @@
+{
+    "version": "4.0",
+    "environment": {
+        "generated_model": {
+            "model_files": [
+                {
+                    "name": "matmul_model_OE_3_2_0.onnx",
+                    "signature": "0x785a7b1fb753e6cc3fdbadcf41998dea"
+                }
+            ],
+            "name": "network",
+            "generated_time": "2025-07-18T10:32:19+0200"
+        },
+        "tools": [
+            {
+                "name": "ST.EdgeAI.Core",
+                "version": "2.1.0-20194 329b0e98d",
+                "arguments": "generate --model ONNX/matmul_model.onnx --target stm32n6 --st-neural-art default@STNetworkGeneration/user_neuralart_RamOnlyNUCLEO_N6.json --input-data-type float32 -w NetworkFiles/ -o NetworkFiles/output/",
+                "environment": [],
+                "input_model": {
+                    "model_files": [
+                        {
+                            "name": "matmul_model.onnx",
+                            "signature": "0xaa1147b991a256dff9384d82f917262f"
+                        }
+                    ],
+                    "name": "matmul_model",
+                    "type": "onnx",
+                    "size": 0,
+                    "n_params": 0
+                }
+            }
+        ],
+        "test_name": "",
+        "network_signature": "0xd02492b0eca13a57"
+    },
+    "model_info": {
+        "original_inputs": [
+            {
+                "name": "input_A",
+                "data_format": {
+                    "type": "FLOAT",
+                    "size": 32,
+                    "scale": [],
+                    "zero": [],
+                    "quantizer": "NONE"
+                },
+                "shape": [
+                    1,
+                    1
+                ],
+                "shape_map": [
+                    "BATCH",
+                    "CH"
+                ],
+                "c_shape_map": [
+                    "BATCH",
+                    "CH"
+                ]
+            },
+            {
+                "name": "input_B",
+                "data_format": {
+                    "type": "FLOAT",
+                    "size": 32,
+                    "scale": [],
+                    "zero": [],
+                    "quantizer": "NONE"
+                },
+                "shape": [
+                    1,
+                    1
+                ],
+                "shape_map": [
+                    "BATCH",
+                    "CH"
+                ],
+                "c_shape_map": [
+                    "BATCH",
+                    "CH"
+                ]
+            }
+        ],
+        "original_outputs": [
+            {
+                "name": "output_Y",
+                "data_format": {
+                    "type": "FLOAT",
+                    "size": 32,
+                    "scale": [],
+                    "zero": [],
+                    "quantizer": "NONE"
+                },
+                "shape": [
+                    1,
+                    1
+                ],
+                "shape_map": [
+                    "BATCH",
+                    "CH"
+                ],
+                "c_shape_map": [
+                    "BATCH",
+                    "CH"
+                ]
+            }
+        ]
+    },
+    "tensors": {
+        "Input_0_out_0": {
+            "format": {
+                "params": [
+                    null,
+                    null
+                ],
+                "class": "float32",
+                "type": "FLOAT32"
+            },
+            "data_channel_position": "CHFIRST",
+            "data_channel_batch": 1,
+            "user_allocated": false
+        },
+        "Input_1_out_0": {
+            "format": {
+                "params": [
+                    null,
+                    null
+                ],
+                "class": "float32",
+                "type": "FLOAT32"
+            },
+            "data_channel_position": "CHFIRST",
+            "data_channel_batch": 1,
+            "user_allocated": false
+        },
+        "Gemm_2_out_0": {
+            "format": {
+                "params": [
+                    null,
+                    null
+                ],
+                "class": "float32",
+                "type": "FLOAT32"
+            },
+            "data_channel_position": "CHFIRST",
+            "data_channel_batch": 1,
+            "user_allocated": false
+        }
+    },
+    "nodes": {
+        "Gemm_2": {
+            "names": [
+                "output_Y"
+            ]
+        }
+    }
+}

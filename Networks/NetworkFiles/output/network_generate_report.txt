@@ -1,0 +1,51 @@
+ST Edge AI Core v2.1.0-20194 329b0e98d
+Created date          : 2025-07-18 10:32:19
+Parameters            : generate --model ONNX/matmul_model.onnx --target stm32n6 --st-neural-art default@STNetworkGeneration/user_neuralart_RamOnlyNUCLEO_N6.json --input-data-type float32 -w NetworkFiles/ -o NetworkFiles/output/
+
+Model name - matmul_model
+------ ------------------- ----------- ------------ ------ -------------- 
+m_id   layer (original)    oshape      param/size     macc   connected to 
+------ ------------------- ----------- ------------ ------ -------------- 
+0      input_A ()          [b:1,c:1]                                      
+       input_B ()          [b:1,c:1]                                      
+------ ------------------- ----------- ------------ ------ -------------- 
+1      output_Y (MatMul)   [b:1,c:1]                     2        input_A 
+                                                                  input_B 
+------ ------------------- ----------- ------------ ------ -------------- 
+model: macc=2 weights=0 activations=-- io=--
+
+
+
+
+
+Compilation details
+------------------------------------------------------------------------------------
+Compiler version: 1.1.0-31
+Compiler arguments:  -i /home/lukasschoepf/Documents/ProjectWork_2/Networks/NetworkFiles/output/matmul_model_OE_3_2_0.onnx --json-quant-file /home/lukasschoepf/Documents/ProjectWork_2/Networks/NetworkFiles/output/matmul_model_OE_3_2_0_Q.json -g network.c --load-mdesc /opt/ST/STEdgeAI/2.1/Utilities/configs/stm32n6.mdesc --load-mpool /home/lukasschoepf/Documents/ProjectWork_2/Networks/STNetworkGeneration/my_mpools/ramOnly_NUCLEO-N657X0-Q.mpool --save-mpool-file /home/lukasschoepf/Documents/ProjectWork_2/Networks/NetworkFiles/neural_art__network/ramOnly_NUCLEO-N657X0-Q.mpool --out-dir-prefix /home/lukasschoepf/Documents/ProjectWork_2/Networks/NetworkFiles/neural_art__network/ -O3 --fake-Qmn --w-bits 8 --f-bits 8 --all-buffers-info --mvei --cache-maintenance --Oalt-sched --enable-virtual-mem-pools --Omax-ca-pipe 4 --Ocache-opt --Os --output-info-file c_info.json
+====================================================================================
+
+Memory usage information  (input/output buffers are included in activations)
+------------------------------------------------------------------------------------
+	npuRAM3    [0x34200000 - 0x34270000]:         36  B /    448.000 kB  (  0.01 % used) -- weights:          0  B (  0.00 % used)  activations:         36  B (  0.01 % used)
+	npuRAM4    [0x34270000 - 0x342E0000]:          0  B /    448.000 kB  (  0.00 % used) -- weights:          0  B (  0.00 % used)  activations:          0  B (  0.00 % used)
+	npuRAM5    [0x342E0000 - 0x34350000]:          0  B /    448.000 kB  (  0.00 % used) -- weights:          0  B (  0.00 % used)  activations:          0  B (  0.00 % used)
+	npuRAM6    [0x34350000 - 0x343C0000]:          0  B /    448.000 kB  (  0.00 % used) -- weights:          0  B (  0.00 % used)  activations:          0  B (  0.00 % used)
+---
+Total:                                                36  B                                  -- weights:          0  B                  activations:         36  B                   
+====================================================================================
+
+
+Used memory ranges
+------------------------------------------------------------------------------------
+	npuRAM3    [0x34200000 - 0x34270000]: 0x34200000-0x34200030
+====================================================================================
+
+Epochs details
+------------------------------------------------------------------------------------
+Total number of epochs: 3 of which 1 implemented in software
+---
+epoch ID   HW/SW/EC Operation (SW only)
+epoch 1       HW    
+epoch 2      -SW-   (        Conv        )
+epoch 3       HW    
+====================================================================================

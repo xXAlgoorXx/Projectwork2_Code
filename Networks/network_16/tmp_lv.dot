@@ -1,0 +1,57 @@
+digraph G {
+graph [ fontsize=11 ];
+node [ fontsize=11 ];
+edge [ fontsize=10 ];
+rankdir=BU
+ranksep=1.5
+nodesep=1
+splines=spline
+compound=true
+Graphinfo [ label="" shape=plaintext, style=rounded, color=black, fontname="Arial-Bold" ];
+subgraph cluster_1 { label="epoch 1"; fontsize=14; 
+subgraph cluster_1_nodes { label="nodes "; peripheries=0;
+"/MatMul_reshape_x_2" ;  }
+
+subgraph cluster_dma_1_in { label=""; peripheries=0;
+dummy_1[ style=invis ];  };
+ }
+subgraph cluster_2 { label="epoch 2"; fontsize=14; 
+subgraph cluster_2_nodes { label="nodes "; peripheries=0;
+"/MatMul_conv_4" ; "/MatMul_squeeze_y_5" ;  }
+
+subgraph cluster_dma_2_in { label="dma inputs "; peripheries=0;
+dma_1i2 ; dma_0i2 ;  };
+
+subgraph cluster_dma_2_out { label="dma outputs "; peripheries=0;
+dma_2i2 ;  }
+ }
+"/MatMul_reshape_x_2":s -> dma_1i2:n [ltail="cluster_1" lhead=cluster_2 strength=1000 penwidth=5];
+subgraph cluster_3 { label="epoch 3"; fontsize=14; 
+subgraph cluster_3_nodes { label="nodes "; peripheries=0;
+__NN__RETURN__ ;  }
+
+subgraph cluster_dma_3_in { label=""; peripheries=0;
+dummy_3[ style=invis ];  };
+ }
+dma_2i2:s -> dummy_3:n [ltail="cluster_2" lhead=cluster_3 strength=1000 penwidth=5];
+"onnx::MatMul_4_transposed_3" [ label="{ { <i0> 0} |  [4]\lonnx::MatMul_4_transposed_3\l(bytes=256 , 1e+02% of total)\l\l 64 -73 52 -106 ... | { <o0> 0} }", shape=record, fillcolor="aliceblue", style="rounded,filled"  ] ;
+input [ label="{ { <i0> 0} |  [0]\linput | { <o0> 0} }", shape=record, fillcolor="aliceblue", style="rounded,filled"  ] ;
+"/MatMul_reshape_x_2" [ label="{ { < i0>  0 M } | id=[3] tid=[2]\l/MatMul_reshape_x_2\lkind=Reshape\lsched epoch=1.\lhw unit=NULL_UNIT\l | { < o0>  0 M } }", shape=record, fillcolor="aquamarine", style="rounded,filled"  ] ;
+dma_2i2 [ label="Dma out\nepoch=2.\nsw=16-> mem=16
+ axi port=0\nSTREAM_ENG_V2 2", shape=ellipse, width=0.1, fillcolor="burlywood1", style="rounded,filled"  ]
+"/MatMul_conv_4":o0:s->dma_2i2:n [ label="edge id=[5]\ltid=42 43\lbatch: 16(in) 16(out,L) 0(mem,L) \l1x16x1x1\lin=out Q[7S.0]\lin=out: (S8) M=7 N=0 sign=true\l/MatMul_conv_4 FLOAT( 1 16 1 1 )\l/MatMul_conv_4 live(2, 3, id=3) edge bs=16\l context[0](1,0)\lout bw=16 B\l" ]; 
+dma_0i2 [ label="Dma in\nepoch=2.\nmem=16-> sw=16
+ axi port=0\nSTREAM_ENG_V2 0", shape=ellipse, width=0.1, fillcolor="burlywood1", style="rounded,filled"  ]
+dma_1i2 [ label="Dma in\nepoch=2.\nmem=16-> sw=16
+ axi port=0\nSTREAM_ENG_V2 1", shape=ellipse, width=0.1, fillcolor="burlywood1", style="rounded,filled"  ]
+"/MatMul_conv_4" [ label="{ { < i0>  0 M  | < i1>  1 M } | id=[5] tid=[3]\l/MatMul_conv_4\lkind=Conv\lNUM_OPS = 512 OPS( 1e+02% of total )\llatency = 256 cycles\lOPS/cycle = 2\lsched epoch=2.\lsched unit= CONV_ACC_V2 0\lconv mode=K outer, F inner\lchoked ports=( weights  )\lshifts: f=0 a=0 o=0\lsimd mode:8x8\lunit max power % 34\lkernel_shape is 1 1\lgroup i 1\lstrides is 1 1\lpads is 0 0 0 0\ldilations is 1 1\l | { < o0>  0 M } }", shape=record, fillcolor="burlywood1", style="rounded,filled"  ] ;
+"/MatMul_squeeze_y_5" [ label="{ { < i0>  0 M } | id=[7] tid=[4]\l/MatMul_squeeze_y_5\lkind=Reshape\lsched epoch=2.\lhw unit=NULL_UNIT\l | { < o0>  0 M } }", shape=record, fillcolor="burlywood1", style="rounded,filled"  ] ;
+__NN__RETURN__ [ label="{ { < i0>  0 M } | id=[8] tid=[5]\l__NN__RETURN__\lkind=Return\lsched epoch=3.\lsched unit= PROCESSOR 0\l}", shape=record, fillcolor="cadetblue1", style="rounded,filled"  ] ;
+"/MatMul_reshape_x_2":o0:s->dma_0i2:n [ penwidth=2, style=dashed  ]; 
+dma_0i2:s->"/MatMul_conv_4":i0:n [ label="cloned=0\ledge id=[3]\ltid=29 30\lbatch: 16(in,L) 0(out,L) 0(mem,L) \l1x16x1x1\lin=out Q[7S.0]\lin=out: (S8) M=7 N=0 sign=true\l/MatMul_reshape_x_2 FLOAT( 1 16 1 1 )\l/MatMul_reshape_x_2 live(0, 2, id=1) edge bs=16\l context[0](1,0)\lin bw=16 B\lbatch depth=16\lbatch iter=1\ltotal iter=1\l"   ]; 
+"onnx::MatMul_4_transposed_3":o0:s->dma_1i2:n [ penwidth=2, style=dashed  ]; 
+dma_1i2:s->"/MatMul_conv_4":i1:n [ label="cloned=0\ledge id=[4]\ltid=33 34\lbatch: 16(in,L) 16(out,L) 16(mem,L) \l16(nkern) \l16x16x1x1\lin=out Q[7S.0]\lin=out: (S8) M=7 N=0 sign=true\lonnx::MatMul_4_transposed_3 FLOAT( 16 16 1 1 )\lonnx::MatMul_4_transposed_3 live(0, inf, id=2) edge bs=256\l context[0](1,0)\lin bw=256 B\l"   ]; 
+"/MatMul_conv_4":o0:s->"/MatMul_squeeze_y_5":i0:n [ label="edge id=[5]\ltid=42 43\lbatch: 16(in) 16(out,L) 0(mem,L) \l1x16x1x1\lin=out Q[7S.0]\lin=out: (S8) M=7 N=0 sign=true\l/MatMul_conv_4 FLOAT( 1 16 1 1 )\l/MatMul_conv_4 live(2, 3, id=3) edge bs=16\lout bw=16 B\l" ]; 
+"/MatMul_squeeze_y_5":o0:s->__NN__RETURN__:i0:n [ label="edge id=[7]\ltid=52 53\lbatch: 0(out,L) 0(mem,L) \l1x16\lin=out Q[7S.0]\lin=out: (S8) M=7 N=0 sign=true\loutput FLOAT( 1 16 )\loutput live(2, 3, id=3) edge bs=16\l context[0](1,0)\lout bw=?\l" ]; 
+input:o0:s->"/MatMul_reshape_x_2":i0:n [ label="edge id=[8]\ltid=54 55\lbatch: 0(out,L) 0(mem,L) \l1x16\lin=out Q[7S.0]\lin=out: (S8) M=7 N=0 sign=true\linput FLOAT( 1 16 )\linput live(0, 2, id=1) edge bs=16\lout bw=?\l" ]; 
+}

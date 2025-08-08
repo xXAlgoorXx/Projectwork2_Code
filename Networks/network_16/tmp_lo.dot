@@ -1,0 +1,22 @@
+digraph G {
+graph [ fontsize=11 ];
+node [ fontsize=11 ];
+edge [ fontsize=10 ];
+rankdir=BU
+ranksep=1.5
+nodesep=1
+splines=spline
+compound=true
+Graphinfo [ label="" shape=plaintext, style=rounded, color=black, fontname="Arial-Bold" ];
+"onnx::MatMul_4_transposed_3" [ label="{ { <i0> 0} |  [4]\lonnx::MatMul_4_transposed_3\l(bytes=256 , 1e+02% of total)\l\l 64 -73 52 -106 ... | { <o0> 0} }", shape=record, color=black, style=rounded  ] ;
+input [ label="{ { <i0> 0} |  [0]\linput | { <o0> 0} }", shape=record, color=black, style=rounded  ] ;
+"/MatMul_reshape_x_2" [ label="{ { < i0>  0 S } | id=[3] tid=[2]\l/MatMul_reshape_x_2\lkind=Reshape\lhw unit=NULL_UNIT\l | { < o0>  0 S } }", shape=record, color=black, style=rounded  ] ;
+"/MatMul_conv_4" [ label="{ { < i0>  0 S  | < i1>  1 S } | id=[5] tid=[3]\l/MatMul_conv_4\lkind=Conv\lNUM_OPS = 512 OPS( 1e+02% of total )\lhw conf name=3a\lhw unit=CONV_ACC_V2\lkernel_shape is 1 1\lgroup i 1\lstrides is 1 1\lpads is 0 0 0 0\ldilations is 1 1\l | { < o0>  0 S } }", shape=record, color=black, style=rounded  ] ;
+"/MatMul_squeeze_y_5" [ label="{ { < i0>  0 S } | id=[7] tid=[4]\l/MatMul_squeeze_y_5\lkind=Reshape\lhw unit=NULL_UNIT\l | { < o0>  0 S } }", shape=record, color=black, style=rounded  ] ;
+__NN__RETURN__ [ label="{ { < i0>  0 M } | id=[8] tid=[5]\l__NN__RETURN__\lkind=Return\lhw unit=NULL_UNIT\l}", shape=record, color=black, style=rounded  ] ;
+"/MatMul_reshape_x_2":o0:s->"/MatMul_conv_4":i0:n [ label="edge id=[3]\ltid=29 30\lbatch: 16(in,L) 0(out,L) 0(mem,L) \l1x16x1x1\lin=out Q[7S.0]\lin=out: (S8) M=7 N=0 sign=true\l/MatMul_reshape_x_2 FLOAT( 1 16 1 1 ) edge bs=16\lout bw=?\l" ]; 
+"onnx::MatMul_4_transposed_3":o0:s->"/MatMul_conv_4":i1:n [ label="edge id=[4]\ltid=33 34\lbatch: 16(in,L) 16(out,L) 16(mem,L) \l16(nkern) \l16x16x1x1\lin=out Q[7S.0]\lin=out: (S8) M=7 N=0 sign=true\lonnx::MatMul_4_transposed_3 FLOAT( 16 16 1 1 ) edge bs=256\lout bw=?\l" ]; 
+"/MatMul_conv_4":o0:s->"/MatMul_squeeze_y_5":i0:n [ label="edge id=[5]\ltid=42 43\lbatch: 16(in) 16(out,L) 0(mem,L) \l1x16x1x1\lin=out Q[7S.0]\lin=out: (S8) M=7 N=0 sign=true\l/MatMul_conv_4 FLOAT( 1 16 1 1 ) edge bs=16\lout bw=?\l" ]; 
+"/MatMul_squeeze_y_5":o0:s->__NN__RETURN__:i0:n [ label="edge id=[7]\ltid=52 53\lbatch: 0(out,L) 0(mem,L) \l1x16\lin=out Q[7S.0]\lin=out: (S8) M=7 N=0 sign=true\loutput FLOAT( 1 16 ) edge bs=16\lout bw=?\l" ]; 
+input:o0:s->"/MatMul_reshape_x_2":i0:n [ label="edge id=[8]\ltid=54 55\lbatch: 0(out,L) 0(mem,L) \l1x16\lin=out Q[7S.0]\lin=out: (S8) M=7 N=0 sign=true\linput FLOAT( 1 16 ) edge bs=16\lout bw=?\l" ]; 
+}

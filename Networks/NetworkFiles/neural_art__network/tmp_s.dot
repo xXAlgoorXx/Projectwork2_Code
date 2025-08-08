@@ -1,0 +1,55 @@
+digraph G {
+graph [ fontsize=11 ];
+node [ fontsize=11 ];
+edge [ fontsize=10 ];
+rankdir=BU
+ranksep=1.5
+nodesep=1
+splines=spline
+compound=true
+Graphinfo [ label="" shape=plaintext, style=rounded, color=black, fontname="Arial-Bold" ];
+subgraph cluster_1 { label="epoch 1"; fontsize=14; 
+subgraph cluster_1_nodes { label="nodes "; peripheries=0;
+Gemm_2_reshape_x_2 ; Gemm_2_reshape_w_5 ;  }
+
+subgraph cluster_dma_1_in { label=""; peripheries=0;
+dummy_1[ style=invis ];  };
+ }
+subgraph cluster_2 { label="epoch 2"; fontsize=14; 
+subgraph cluster_2_nodes { label="nodes "; peripheries=0;
+Gemm_2_conv_6 ;  }
+
+subgraph cluster_dma_2_in { label=""; peripheries=0;
+dummy_2[ style=invis ];  };
+ }
+Gemm_2_reshape_x_2:s -> dummy_2:n [ltail="cluster_1" lhead=cluster_2 strength=1000 penwidth=5];
+subgraph cluster_3 { label="epoch 3"; fontsize=14; 
+subgraph cluster_3_nodes { label="nodes "; peripheries=0;
+Gemm_2_squeeze_y_7 ;  }
+
+subgraph cluster_dma_3_in { label=""; peripheries=0;
+dummy_3[ style=invis ];  };
+ }
+Gemm_2_conv_6:s -> dummy_3:n [ltail="cluster_2" lhead=cluster_3 strength=1000 penwidth=5];
+subgraph cluster_4 { label="epoch 4"; fontsize=14; 
+subgraph cluster_4_nodes { label="nodes "; peripheries=0;
+__NN__RETURN__ ;  }
+
+subgraph cluster_dma_4_in { label=""; peripheries=0;
+dummy_4[ style=invis ];  };
+ }
+Gemm_2_squeeze_y_7:s -> dummy_4:n [ltail="cluster_3" lhead=cluster_4 strength=1000 penwidth=5];
+Input_1_out_0 [ label="{ { <i0> 0} |  [0]\lInput_1_out_0 | { <o0> 0} }", shape=record, fillcolor="aliceblue", style="rounded,filled"  ] ;
+Input_0_out_0 [ label="{ { <i0> 0} |  [4]\lInput_0_out_0 | { <o0> 0} }", shape=record, fillcolor="aliceblue", style="rounded,filled"  ] ;
+Gemm_2_reshape_x_2 [ label="{ { < i0>  0 M } | id=[3] tid=[2]\lGemm_2_reshape_x_2\lkind=Reshape\lsched epoch=1.\lhw unit=NULL_UNIT\l | { < o0>  0 M } }", shape=record, fillcolor="aquamarine", style="rounded,filled"  ] ;
+Gemm_2_reshape_w_5 [ label="{ { < i0>  0 M } | id=[7] tid=[3]\lGemm_2_reshape_w_5\lkind=Reshape\lsched epoch=1.\lhw unit=NULL_UNIT\l | { < o0>  0 M } }", shape=record, fillcolor="aquamarine", style="rounded,filled"  ] ;
+Gemm_2_conv_6 [ label="{ { < i0>  0 M  | < i1>  1 M } | id=[8] tid=[4]\lGemm_2_conv_6\lkind=Conv\lNUM_OPS = 2 OPS( 1e+02% of total )\lsched epoch=2.\lsched unit= PROCESSOR 0\lkernel_shape is 1 1\lgroup i 1\lstrides is 1 1\lpads is 0 0 0 0\ldilations is 1 1\l | { < o0>  0 M } }", shape=record, fillcolor="burlywood1", style="rounded,filled"  ] ;
+Gemm_2_squeeze_y_7 [ label="{ { < i0>  0 M } | id=[10] tid=[5]\lGemm_2_squeeze_y_7\lkind=Reshape\lsched epoch=3.\lhw unit=NULL_UNIT\l | { < o0>  0 M } }", shape=record, fillcolor="cadetblue1", style="rounded,filled"  ] ;
+__NN__RETURN__ [ label="{ { < i0>  0 M } | id=[11] tid=[6]\l__NN__RETURN__\lkind=Return\lsched epoch=4.\lsched unit= PROCESSOR 0\l}", shape=record, fillcolor="chartreuse", style="rounded,filled"  ] ;
+Gemm_2_reshape_x_2:o0:s->Gemm_2_conv_6:i0:n [ label="edge id=[6]\ltid=47 48\lbatch: 0(in,L) 0(out,L) 0(mem,L) \l1x1x1x1\lbits=32\lin=out: Float\lGemm_2_reshape_x_2 FLOAT( 1 1 1 1 ) edge bs=4\l context[0](1,0)\lout bw=?\l" ]; 
+Gemm_2_reshape_w_5:o0:s->Gemm_2_conv_6:i1:n [ label="edge id=[7]\ltid=51 52\lbatch: 0(in,L) 0(out,L) 0(mem,L) \l1x1x1x1\lbits=32\lin=out: Float\lGemm_2_reshape_w_5 FLOAT( 1 1 1 1 ) edge bs=4\l context[0](1,0)\lout bw=?\l" ]; 
+Gemm_2_conv_6:o0:s->Gemm_2_squeeze_y_7:i0:n [ label="edge id=[8]\ltid=60 61\lbatch: 0(out,L) 0(mem,L) \l1x1x1x1\lbits=32\lin=out: Float\lGemm_2_conv_6 FLOAT( 1 1 1 1 ) edge bs=4\lout bw=4 B\l" ]; 
+Gemm_2_squeeze_y_7:o0:s->__NN__RETURN__:i0:n [ label="edge id=[10]\ltid=70 71\lbatch: 0(out,L) 0(mem,L) \l1x1\lbits=32\lin=out: Float\lGemm_2_out_0 FLOAT( 1 1 ) edge bs=4\l context[0](1,0)\lout bw=?\l" ]; 
+Input_1_out_0:o0:s->Gemm_2_reshape_x_2:i0:n [ label="edge id=[11]\ltid=72 73\lbatch: 1(in) 1(out,L) 1(mem,L) \l1x1\lbits=32\lin=out: Float\lInput_1_out_0 FLOAT( 1 1 ) edge bs=4\lout bw=?\l" ]; 
+Input_0_out_0:o0:s->Gemm_2_reshape_w_5:i0:n [ label="edge id=[12]\ltid=74 75\lbatch: 1(in) 1(out,L) 1(mem,L) \l1x1\lbits=32\lin=out: Float\lInput_0_out_0 FLOAT( 1 1 ) edge bs=4\lout bw=?\l" ]; 
+}
